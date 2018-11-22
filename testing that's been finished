@@ -1,0 +1,149 @@
+DONE reanme [1] search_this_list_for_changes
+DONE - put in comments and blank lines in the config file, describe what file does
+DONE - change binary to search for exact config file name
+DONE - change binary to accept blank and comment lines
+DONE - test
+
+DONE rename [2] username_and_domain
+DONE - put in comments and blank lines in the config file, describe what file does
+DONE - create a blank file if it doesn't exist (before reading the values)
+DONE - change binary to search for exact config file name
+DONE - change binary to accept blank and comment lines
+DONE - test
+
+DONE rename [3] landing_directory
+DONE - put in comments and blank lines in the config file, describe what file does
+DONE - create a blank file if it doesn't exist (before reading the values)
+DONE - change binary to search for exact config file name
+DONE - change binary to accept blank and comment lines
+DONE - test
+
+DONE rename [4] computer_name
+DONE - put in comments and blank lines in the config file, describe what file does
+DONE - create a blank file if it doesn't exist (before reading the values)
+DONE - change binary to search for exact config file name
+DONE - change binary to accept blank and comment lines
+DONE - test
+
+DONE rename [5] don't_backup_files_that_start_with_this
+DONE - put in comments and blank lines in the config file, describe what file does
+DONE - change binary to search for exact config file name
+DONE - change binary to accept blank and comment lines
+DONE - test
+
+DONE rename [6] don't_backup_files_that_end_with_this
+DONE - put in comments and blank lines in the config file, describe what file does
+DONE - change binary to search for exact config file name
+DONE - change binary to accept blank and comment lines
+DONE - test
+
+DONE rename [7] don't_backup_files_that_contain_this
+DONE - put in comments and blank lines in the config file, describe what file does
+DONE - change binary to search for exact config file name
+DONE - change binary to accept blank and comment lines.  Remove tags <user_with_domain> </user_with_domain>
+DONE - test
+
+bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
+{
+    // Question: do need unwanted endings and unwanted catch all?
+    // Yes, because the catch all typically has to specify more of what comes
+    // before and/or after the unwanted part of the string.  With the starting
+    // and ending filters, the unique position just allows the user
+    // to have to define the unwanted part without having to specify what comes
+    // before or after it.
+    // here is an example
+    // say there was these three lines
+    // "debugabcd"
+    // "123debug"
+    // "123/debug/abcd"
+    // lets say we wanted 1 and 2 but not 3.
+    // 1 would pass the unwanted beginnings, because "debug" wouldn't be in the list
+    // 2 would pass the unwanted endings, because "debug" wouldn't be in the list
+    // 3 would not pass because what would be specified is "/debug/"
+    // ensured that this function was called last in the sequence as a catch all
+    // in case the user gets sloppy and doesn't specify what is supposed to
+    // come before or after.  If this were the case it would filter something
+    // out that shouldn't have been
+
+    // WORKS test where file is empty
+    // WORKS test where first line xxx.layout is filtered out & the 2nd line isn't filtered out
+    // WORKS multi space
+    // WORKS test where the second line xxx.o is filtered out
+
+At the beginning of
+void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
+{
+    /* testing for dontBackupPathsThatStartWithThis works perfectly
+    DONE gut config files [3][4]
+    DONE - compare the before and after files, since '.' won't represent any of the paths, there should be no change
+    DONE - run until the filtering begins.  add '.file' to the first and 10th lines of the input file.
+    DONE - the after files should have these two lines stripped with the rest of the file being the same
+    DONE - also test with .t to ensure more than one character works.
+		*/
+		
+At the beginning of
+bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
+{
+		/* this entire function has been tested and works */
+		// WORKS test with blank file
+    // WORKS touch if file does not exist
+    // tested: when there is a starting match with something unwanted
+    //. then /home was tested.  So, the loop works. and the varying order
+    // combination works.
+    //works for positive case. Now put in /home to file and make sure it filters it out
+    // WORKS multi space
+
+At the beginning of
+bool fileIsWantedBecauseEndingPathIsOk(string &lineToKeepOrPitch)
+{
+		/* this entire function has been tested and works */
+    // WORKS test where file is empty
+    // WORKS test where first line xxx.layout is filtered out & the 2nd line isn't filtered out
+    // WORKS test where the second line xxx.o is filtered out
+    // WORKS test where 5th line (no extension on filename) .../cloudBuddyCleanupOfTempFiles is retained
+    //   & the 2nd line is retained
+    // WORKS multi space
+
+The command line arguments were tested at the beginning of
+void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
+{    
+		/*
+			string debugMsg="argc = "+convertNumberToString(argc)+"\n";
+			for (int i=0;i<argc;++i)	
+			{
+        debugMsg+="s"+convertNumberToString(i)+" = \""+argv[i]+"\"\n";
+			}
+			cout<<debugMsg<<endl;
+    */
+
+From within
+void checkThatTheComputerNameIsOk(string &computerName)
+{
+  .
+  .
+  .
+    for (unsigned int i=0;i<computerName.length();++i)
+    {
+        /* These all work: any letter (upper or lower case), any number, underscore, hypen */
+        /*
+        // by themselves, these are a problem
+        # & * ( ) | \ ; " ' < > `
+        // combined they are a still a problem
+        2# - closes terminal window completely
+        2& - tries to launch another process
+        2* - everything clears and just displays prompt
+        2( - bash: syntax error near unexpected token `('
+        2) - bash: syntax error near unexpected token `)'
+        2| - 2ndparam: command not found
+        2\ - does print usage but doesn't say that anything was wrong
+        2; - does print usage, then says: 2ndparam: command not found
+        2" - get >
+        2' - get >
+        2< - does print usage but doesn't say that anything was wrong
+        2> - does print usage but doesn't say that anything was wrong
+        2` - get >
+        //
+        // Conclusion: All of these failure cases are acceptable
+        */
+		}
+}		
