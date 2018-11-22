@@ -1,0 +1,28 @@
+# depslib dependency file v1.0
+1529925040 source:/home/scott/codeBlockProjects/open source/staticLibrary__fileUtilities/main.c
+	"fileUtilities.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<sstream>
+
+1541465792 /home/scott/codeBlockProjects/open source/staticLibrary__fileUtilities/fileUtilities.h
+	<string>
+
+1541465792 source:/home/scott/codeBlockProjects/open source/staticLibrary__fileUtilities/main.cpp
+	"fileUtilities.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<sstream>
+
+1542853571 source:/home/scott/codeBlockProjects/open source/Client-Side-Encrypted-Backups/staticLibrary__fileUtilities/main.cpp
+	"fileUtilities.h"
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	<sstream>
+
+1542853554 /home/scott/codeBlockProjects/open source/Client-Side-Encrypted-Backups/staticLibrary__fileUtilities/fileUtilities.h
+	<string>
+
