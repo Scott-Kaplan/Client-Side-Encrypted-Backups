@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1536576466 source:/home/scott/codeBlockProjects/open source/actOnTarStatus/main.cpp
+	<iostream>
+	"../staticLibrary__fileUtilities/fileUtilities.h"
+	<stdlib.h>
+	<fstream>
+	<sstream>
+	<iomanip>
+	<sys/stat.h>
+
+1536228355 /home/scott/codeBlockProjects/open source/staticLibrary__fileUtilities/fileUtilities.h
+	<string>
+
+1542853316 source:/home/scott/codeBlockProjects/open source/Client-Side-Encrypted-Backups/actOnTarStatus/main.cpp
+	<iostream>
+	"../staticLibrary__fileUtilities/fileUtilities.h"
+	<stdlib.h>
+	<fstream>
+	<sstream>
+	<iomanip>
+	<sys/stat.h>
+
+1542640316 /home/scott/codeBlockProjects/open source/Client-Side-Encrypted-Backups/staticLibrary__fileUtilities/fileUtilities.h
+	<string>
+
