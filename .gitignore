@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+#ignore directories
+bin/
+history/
+
+#ignore files
+github
+todo
