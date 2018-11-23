@@ -1,0 +1,7 @@
+./backup/bin/Release/backup no-label
+./backup/bin/Release/backup e6230 label
+
+2nd parameter too long, 1st parameter fine
+clear;./backup/bin/Release/backup 9999999999999999999999999999999 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+
+clear;./restore/bin/Release/restore
