@@ -1,8 +1,15 @@
+mkdir $HOME/.cloudbuddy1
+mkdir $HOME/.cloudbuddy1/backup
+mkdir $HOME/.cloudbuddy1/input
+mkdir $HOME/.cloudbuddy1/log
+mkdir $HOME/.cloudbuddy1/restore
+
+
+
 change path of binaryThatShowsTarStatus
 change path of binaryThatShowsCcryptStatus
-mkdir -p $HOME/.cloudbuddy/input
-mkdir $HOME/.cloudbuddy/log
-mkdir $HOME/.cloudbuddy/backup
+
+
 mkdir $HOME/.cloudbuddy/restore
 pull down blank of files [1]-[7]
 pull down source, then build it, then put binary in PATH

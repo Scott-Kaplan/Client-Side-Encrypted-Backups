@@ -179,26 +179,17 @@ void clearTheOutputDirectory()
 
 void saveTheTerminalPid()
 {
+    /* the purpose of this function is to have the ability to check whether */
+    /* the user closed the terminal window during an encryption/decryption. */
+    /* In that case, the background process showing the encryption/decryption */
+    /* status will get canceled (killed) */
     ostringstream terminalPidStream;
     terminalPidStream<<getppid()<<endl;
-
     ofstream terminalPidHandle;
     openForWriting(globalString.processIdOfThisTerminalSessionPath,
                    __FILE__,__LINE__,terminalPidHandle,NEW_FILE);
     terminalPidHandle<<terminalPidStream.str()<<endl;
     terminalPidHandle.close();
-
-//LEFT OFF HERE
-///* check if the terminal window is still present.  If not kill the background process */
-//put this is other file
-//// source https://stackoverflow.com/questions/12601759/determine-if-a-process-exists-from-its-process-id
-//// don't worry about a zombie process because once the terminal window is closed there can't be a zombie process
-//if (0 == kill(pid, 0))
-//{
-//    // Process exists.
-//}
-
-
 }
 
 void filterUnwantedFilesSoThatTheyWontBeInTheBackup()

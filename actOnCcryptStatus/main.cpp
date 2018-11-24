@@ -36,6 +36,8 @@ using namespace std;
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 #include <sstream> // needed for ostringstream
 #include <iomanip> // setw() - sets column width of a field
+#include <sys/types.h>
+#include <signal.h>
 
 /********************************/
 /******* Static Libraries *******/
@@ -249,92 +251,20 @@ void extractPaths()
 
 void checkThatTheTerminalWindowIsStillOpen()
 {
-    string pid="";
+    string pidString="";
     ifstream terminalPidHandle;
     openForReading(globalString.processIdOfThisTerminalSessionPath,
                    __FILE__,__LINE__,terminalPidHandle);
-    getline(terminalPidHandle,pid);
+    getline(terminalPidHandle,pidString);
     terminalPidHandle.close();
-//LEFT OFF HERE
-//get this to build
-//    if (kill(atoi(pid.c_str()),0 != 0)
-//    {
-//        /* kill this Ccrypt status process */
-//        if(system(globalString.killTheCcryptStatusProcess.c_str()));
-//    }
-
-
-/*
-echo $$
-30467
-
-Then this is the confirmation that the terminal window is still open
-pmap 30467 | head -1
-30467:   bash
-
-And when its closed it is this:
-pmap 30467 | head -1
-nothing here
-*/
-
-/*
-LEFT OFF HERE
-replace everything in this function with
-do in backup and restore binaries (common so put in fileUtilities)
-string cmd="echo $$ > globalString.pidOfThisTerminal";
-the just need to check in this function that "pmap "+globalString.pidOfThisTerminal+" | head -1 > "+globalString.doesTerminalPidExist
-if fileIsEmpty(globalString.doesTerminalPidExist)
-{
-    // kill this Ccrypt status process
-    if(system(globalString.killTheCcryptStatusProcess.c_str()));
-}
-
-*/
-
-
-
-//cout<<__LINE__<<endl;
-    /* This function solely exists to kill this background process in the */
-    /* case where the user closed the terminal window before encryption of the*/
-    /* backup finsihed. */
-    // To have gotten here, the user has entered their encryption password (and
-    // successfully re-typed it).  So there are 3 possibilities at this point:
-
-    // #1 encryption of the backup finished
-    //    (i.e. backup.cpt exists & ccrypt is not in the process table)
-    //    or decryption of the backup finished
-
-    // #2 the user closed the terminal while ccrypt was still going and hadn't
-    //    finished.
-    //    (i.e. ccrypt is absent from the process table ccrypt halted when the
-    //    terminal closed since it was run from the foreground.  Also  for
-    //    encrypting the backup tar ball still exists because ccrypt hadn't
-    //    finished.
-
-    // #3 encryption of the backup is still going
-    //    (i.e. backup.cpt exists & the backup tarball still exists and ccrypt
-    //    is in the process table)
-    //    or decryption of the backup is still going
-
-    if (!ccryptIsInProcessTable() && !ccryptFinished())
+    // source https://stackoverflow.com/questions/12601759/determine-if-a-process-exists-from-its-process-id
+    if (kill(atoi(pidString.c_str()), 0) != 0)
     {
-        // Case #1
-        if (((purpose == "restore") && decryptHadStarted()) ||
-            ((purpose == "backup") && encryptHadStarted()))
-        {
-            // todo: remove this comment line before deploying - this solves the two race conditions in the todo file
-            // encrypting/decrypting finished gracefully
-            // Note: the function on this next line kills the Ccrypt status process
-            display(100);
-        }
-        else // Case #2
-        {
-            /* kill this Ccrypt status process */
-            if(system(globalString.killTheCcryptStatusProcess.c_str()));
-        }
-        //exit(EXIT_SUCCESS);
+        /* the user closed the terminal window, */
+        /* so kill this ccrypt status process   */
+        if(system(globalString.killTheCcryptStatusProcess.c_str()));
+        exit(EXIT_SUCCESS);
     }
-    // Case #3
 }
 
 bool decryptHadStarted()
