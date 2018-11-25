@@ -183,7 +183,7 @@ echo
 
 echo "Building Client-Side-Encrypted-Backups ..."
 ./build.sh
-echo 
+echo
 
 #todo - consider exiting if there was an error from building.  An error would be the absense 
 #Put binary in PATH
