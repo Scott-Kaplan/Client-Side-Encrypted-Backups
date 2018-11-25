@@ -1,3 +1,6 @@
+clear
+echo
+
 echo "Beginning the Client-Side-Encrypted-Backups installation ..."
 echo
 echo "Creating directories"
@@ -179,7 +182,7 @@ touch $HOME/.cloudbuddy/input/timeStampMarker
 echo
 
 echo "Building Client-Side-Encrypted-Backups ..."
-./install.sh
+./build.sh
 echo 
 
 #todo - consider exiting if there was an error from building.  An error would be the absense 
