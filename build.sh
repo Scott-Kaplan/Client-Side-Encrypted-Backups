@@ -1,4 +1,4 @@
-clear
+#clear
 echo
 
 echo building the fileUtilities static library
@@ -25,7 +25,7 @@ cd ../actOnCcryptStatus
 g++ -Wall -fexceptions -O2  -c main.cpp -o obj/Release/main.o
 g++  -o bin/Release/actOnCcryptStatus obj/Release/main.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 
-echo howdy
+echo
 echo building the restore binary
 cd ../restore
 g++ -Wall -fexceptions -O2  -c main.cpp -o obj/Release/main.o

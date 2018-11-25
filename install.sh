@@ -1,9 +1,9 @@
 clear
 echo
 
-echo "Beginning the Client-Side-Encrypted-Backups installation ..."
+echo " Beginning the Client-Side-Encrypted-Backups installation ..."
 echo
-echo "Creating directories"
+echo " Creating the directories ..."
 mkdir -p $HOME/.cloudbuddy
 mkdir -p $HOME/.cloudbuddy/backup
 mkdir -p $HOME/.cloudbuddy/input
@@ -11,7 +11,8 @@ mkdir -p $HOME/.cloudbuddy/log
 mkdir -p $HOME/.cloudbuddy/restore
 echo
 
-echo "Creating configuration files.  These will all be located in $HOME/.cloudbuddy/input"
+echo " Creating the configuration files ..."
+echo " Done.  These are located in $HOME/.cloudbuddy/input"
 
 cat > "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes" << EOF
 # Place the full path of files or directories that you would like to have checked for changes, so that they can be backed up.
@@ -177,11 +178,12 @@ cat > "$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this" << EOF
 EOF
 
 echo
-echo "Create the timeStampMarker file.  This will be located in $HOME/.cloudbuddy/input"
+echo " Creating the timeStampMarker file ..."
+echo " Done.  This is located in $HOME/.cloudbuddy/input"
 touch $HOME/.cloudbuddy/input/timeStampMarker
 echo
 
-echo "Building Client-Side-Encrypted-Backups ..."
+echo " Building Client-Side-Encrypted-Backups static libraries and binaries ..."
 ./build.sh
 echo
 
