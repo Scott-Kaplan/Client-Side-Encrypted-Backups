@@ -251,9 +251,11 @@ void getGlobalStrings(globalStringS &globalString, string &reason)
     globalString.ccryptFinishedGracefully = globalString.basePath+"ccryptFinished";
 
     globalString.binaryThatShowsTheTarStatus =
-    "\"$HOME/codeBlockProjects/open source/actOnTarStatus/bin/Release/actOnTarStatus\"";
+    "/usr/local/bin/actOnTarStatus";
+    //"\"$HOME/codeBlockProjects/open source/actOnTarStatus/bin/Release/actOnTarStatus\"";
     globalString.binaryThatShowsTheCcryptStatus =
-    "\"$HOME/codeBlockProjects/open source/actOnCcryptStatus/bin/Release/actOnCcryptStatus\"";
+    //"\"$HOME/codeBlockProjects/open source/actOnCcryptStatus/bin/Release/actOnCcryptStatus\"";
+    "/usr/local/bin/actOnTarStatus";
 
     globalString.processIdOfThisTerminalSessionPath = globalString.basePath+
     "fileContainingprocessIdOfThisTerminalSession";

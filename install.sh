@@ -1,3 +1,5 @@
+# Usage: sudo ./install.sh
+
 clear
 echo
 
@@ -186,6 +188,41 @@ echo
 echo "Starting to build the Client-Side-Encrypted-Backups static libraries and binaries ..."
 ./build.sh
 echo
+
+#TODO remove.  Just for testing
+# works rm ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+# works rm ./backup/bin/Release/backup
+# works rm ./actOnTarStatus/bin/Release/actOnTarStatus
+# works rm ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
+# works rm ./restore/bin/Release/restore
+# test 2 deletes
+# works
+#rm ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+#rm ./backup/bin/Release/backup
+
+# copy the backup and restore binaries to /usr/local/bin/ if all the builds worked.  Otherwise, exit this script
+# look for these 5 to build successfully
+# ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+# ./backup/bin/Release/backup
+# ./actOnTarStatus/bin/Release/actOnTarStatus
+# ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
+# ./restore/bin/Release/restore
+if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a ] ||
+   [ ! -e ./backup/bin/Release/backup ] ||
+   [ ! -e ./actOnTarStatus/bin/Release/actOnTarStatus ] ||
+   [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
+   [ ! -e ./restore/bin/Release/restore ];
+then
+  echo The build failed, so exiting ...
+  echo
+  exit
+else
+  cp ./backup/bin/Release/backup /usr/local/bin
+  cp ./actOnTarStatus/bin/Release/actOnTarStatus /usr/local/bin
+  cp ./actOnCcryptStatus/bin/Release/actOnCcryptStatus /usr/local/bin
+  cp ./restore/bin/Release/restore /usr/local/bin
+fi
+
 
 #todo - consider exiting if there was an error from building.  An error would be the absense 
 #Put binary in PATH
