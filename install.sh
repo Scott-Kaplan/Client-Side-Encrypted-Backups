@@ -3,6 +3,9 @@
 clear
 echo
 
+LOH
+# If this installation has occurred before, the "$HOME/.cloudbuddy/input" directory will already contain the users settings.  Create a directory off of this directory named "./inputDir_as_of_mm.dd.yy_
+
 echo "Starting the Client-Side-Encrypted-Backups installation ..."
 echo
 echo "Creating the directories ..."
@@ -187,21 +190,8 @@ echo
 
 echo "Starting to build the Client-Side-Encrypted-Backups static libraries and binaries ..."
 ./build.sh
-echo
 
-#TODO remove.  Just for testing
-# works rm ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
-# works rm ./backup/bin/Release/backup
-# works rm ./actOnTarStatus/bin/Release/actOnTarStatus
-# works rm ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
-# works rm ./restore/bin/Release/restore
-# test 2 deletes
-# works
-#rm ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
-#rm ./backup/bin/Release/backup
-
-# copy the backup and restore binaries to /usr/local/bin/ if all the builds worked.  Otherwise, exit this script
-# look for these 5 to build successfully
+# copy the backup and restore binaries to /usr/local/bin/ if all of these build
 # ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 # ./backup/bin/Release/backup
 # ./actOnTarStatus/bin/Release/actOnTarStatus
@@ -213,7 +203,9 @@ if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtili
    [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
    [ ! -e ./restore/bin/Release/restore ];
 then
-  echo The build failed, so exiting ...
+  echo
+  echo The build failed.  Once you have fixed the errors, rerun the install script again
+  echo
   echo
   exit
 else
@@ -223,17 +215,22 @@ else
   cp ./restore/bin/Release/restore /usr/local/bin
 fi
 
-
-#todo - consider exiting if there was an error from building.  An error would be the absense 
-#Put binary in PATH
-
-#run the backup
-
-# todo - install
+# The following software needs to be installed
 # g++
 # ccrypt
+echo Installing the necessary software, which is: g++, ccrypt, ...
+echo
+# Note: This next line assumes that you are running on Ubuntu.  If not, adjust for your distribution
+sudo apt-get install -y g++ ccrypt
+echo
 
-
+# Verify that the necessary software was installed.  Othwise, exit this script
+if (! which g++ | grep -q g++) ||
+   (! which ccrypt | grep -q ccrypt);
+then
+  echo The necessary software was not installed.  Once you have fixed the errors, rerun the install script again.
+  echo
+fi
 
 
 
