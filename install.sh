@@ -4,7 +4,7 @@ clear
 echo
 
 LOH
-# If this installation has occurred before, the "$HOME/.cloudbuddy/input" directory will already contain the users settings.  Create a directory off of this directory named "./inputDir_as_of_mm.dd.yy_
+# If this installation has occurred before, the "$HOME/.cloudbuddy/input" directory will already contain the users settings.  Save these off into "./inputDir_as_of_mm.dd.yy_mm_ss otherwise the settings will be lost forever.
 
 echo "Starting the Client-Side-Encrypted-Backups installation ..."
 echo
