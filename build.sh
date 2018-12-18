@@ -1,4 +1,9 @@
 #clear
+
+# Usage: sudo ./build.sh
+
+#!/bin/bash
+
 echo
 
 echo Building the fileUtilities static library ...
@@ -31,4 +36,27 @@ cd ../restore
 g++ -Wall -fexceptions -O2  -c main.cpp -o obj/Release/main.o
 g++  -o bin/Release/restore obj/Release/main.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 
+# copy the backup and restore binaries to /usr/local/bin/ if all of these build
+# ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+# ./backup/bin/Release/backup
+# ./actOnTarStatus/bin/Release/actOnTarStatus
+# ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
+# ./restore/bin/Release/restore
 echo
+cd ..
+if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a ] ||
+   [ ! -e ./backup/bin/Release/backup ] ||
+   [ ! -e ./actOnTarStatus/bin/Release/actOnTarStatus ] ||
+   [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
+   [ ! -e ./restore/bin/Release/restore ];
+then
+  echo The build failed.  Once you have fixed the errors, rerun the install script again
+  echo
+  echo
+  exit
+else
+  cp ./backup/bin/Release/backup /usr/local/bin
+  cp ./actOnTarStatus/bin/Release/actOnTarStatus /usr/local/bin
+  cp ./actOnCcryptStatus/bin/Release/actOnCcryptStatus /usr/local/bin
+  cp ./restore/bin/Release/restore /usr/local/bin
+fi

@@ -244,7 +244,7 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
 
     if (fileIsEmpty(filteredChangedAndNewFilesPath))
     {
-        cout<<"\nAfter applying the filter, there were no files found that "
+        cout<<"\nAfter filtering, there were no files found that "
               "needed to be backed up.  Exiting ...\n"<<endl;
         exit(EXIT_SUCCESS);
     }
@@ -951,6 +951,7 @@ void createAScriptThatWillPerformTheBackup()
 
     /* Kick off a background process that runs every second that displays the */
     /* ccrypt command progress */
+//<<"echo "<<globalString.binaryThatShowsTheCcryptStatus<<endl
     <<tab0<<"(while sleep 1; "
     <<"do "<<globalString.binaryThatShowsTheCcryptStatus<<" "<<purpose<<"; "
     <<"done & echo $! > "<<globalString.fileThatContainsTheCcryptStatusProcessId

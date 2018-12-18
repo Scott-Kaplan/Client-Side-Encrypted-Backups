@@ -1,3 +1,6 @@
+DONE run with tiny backup
+run with ~150-200MB backup
+
 actOnTarStatus looks good when doing a backup for a tiny backup and a larger backup
 actOnCcryptStatus looks good when doing a backup for a tiny backup and a larger backup
 LEFT OFF HERE

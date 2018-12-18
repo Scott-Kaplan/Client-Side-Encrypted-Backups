@@ -86,7 +86,7 @@ void displayTitleOfCcryptProgress();
 void extractPaths();
 void displayCcryptStatus();
 bool ccryptFinished();
-void print(int lineNumber); // delete after debugging
+void print(int lineNumber); // todo - delete after done debugging
 bool decryptionInProgress();
 bool encryptionInProgress();
 bool decryptHadStarted();
@@ -97,17 +97,18 @@ bool encryptHadStarted();
 /*****************************/
 int main(int argc, char * const argv[])
 {
+//cout<<"howdy"<<endl;
     checkTheCommandLineArguments(argc,argv);
     getGlobalStrings(globalString,purpose);
-//print(__LINE__);
+print(__LINE__);
     extractPaths();
-//print(__LINE__);
+print(__LINE__);
     checkThatTheUserFinishedEnteringTheirCcryptPassword();
-//print(__LINE__);
+print(__LINE__);
     checkThatTheTerminalWindowIsStillOpen();
-//print(__LINE__);
+print(__LINE__);
     displayCcryptStatus();
-//print(__LINE__);
+print(__LINE__);
     return 0;
 }
 
@@ -153,7 +154,7 @@ void checkThatTheUserFinishedEnteringTheirCcryptPassword()
 
 bool ccryptHasStarted()
 {
-    //print(__LINE__);
+print(__LINE__);
     bool ccryptHasStartedFlag = false;
 
     if ((purpose == "backup") && encryptionInProgress())
@@ -191,7 +192,7 @@ bool encryptionInProgress()
 
 bool ccryptIsInProcessTable()
 {
-//print(__LINE__);
+print(__LINE__);
     string isCcryptGoingResultsPath = globalString.basePath
     //string isCcryptGoingResultsPath = globalString.outputDirectoryPath
                                       +"isCcryptGoingResults";
@@ -294,7 +295,7 @@ bool encryptHadStarted()
 
 bool ccryptFinished()
 {
-//print(__LINE__);
+print(__LINE__);
     bool ccryptIsDone=false;
     if (purpose == "backup")
     {
@@ -320,7 +321,7 @@ cout<<__LINE__<<endl;
 
 bool decryptionInProgress()
 {
-//print(__LINE__);
+print(__LINE__);
     // example) ls encryptedBackupPath* -1 | wc -l
     // this command yields 1 or 2
     // 1 means that decrypting has finished
@@ -348,7 +349,7 @@ bool decryptionInProgress()
 
 void displayCcryptStatus()
 {
-//print(__LINE__);
+print(__LINE__);
     if (ccryptFinished())
     {
 //prints 3 spaces prior
@@ -372,7 +373,7 @@ void displayCcryptStatus()
         }
         else // purpose = restore
         {
-//print(__LINE__);
+print(__LINE__);
             // encryption hasn't finished yet, so calculate % completed so far
 
             /* save the temporary decrypted backup name */
@@ -381,7 +382,7 @@ void displayCcryptStatus()
             string cmd="ls "+encryptedBackupPath+".* > "+
                                         fileContainingNameOfTempDecryptedBackup;
             if(system(cmd.c_str()));
-//print(__LINE__);
+print(__LINE__);
             /* extract the name of the temporary decrypted backup */
             string tempDecryptedBackupPath="";
             ifstream fileContainingNameOfTempDecryptedBackupHandle;
@@ -389,17 +390,17 @@ void displayCcryptStatus()
                __FILE__,__LINE__,fileContainingNameOfTempDecryptedBackupHandle);
             getline(fileContainingNameOfTempDecryptedBackupHandle,tempDecryptedBackupPath);
             fileContainingNameOfTempDecryptedBackupHandle.close();
-//print(__LINE__);
+print(__LINE__);
             /* build the temporary decrypted backup path */
             //string tempDecryptedBackupPath=globalString.basePath+fileName;
 //cout<<"tempDecryptedBackupPath = "<<tempDecryptedBackupPath<<endl;
             /* calculate the percentage complete for decryption */
             double sizeofTheTemporaryDecryptedBackup =
                                         getSizeOfFile(tempDecryptedBackupPath);
-//print(__LINE__);
+print(__LINE__);
             ccryptPercentageComplete =
                             (sizeofTheTemporaryDecryptedBackup/(getSizeOfFile(encryptedBackupPath)))*100;
-//print(__LINE__);
+print(__LINE__);
         }
         display(ccryptPercentageComplete);
     }
@@ -407,7 +408,7 @@ void displayCcryptStatus()
 
 void display(double ccryptPercentageComplete)
 {
-//print(__LINE__);
+print(__LINE__);
 //cout<<endl<<endl<<ccryptPercentageComplete<<endl<<endl;
     bool killThisProcess=false;
     // display title if haven't already
@@ -458,7 +459,7 @@ void display(double ccryptPercentageComplete)
 
 void displayTitleOfCcryptProgress()
 {
-//print(__LINE__);
+print(__LINE__);
     string lookupFileResults=
                 globalString.basePath+
                 "testIfTheccryptStatusTitleAlreadyPrintedResults";
@@ -482,5 +483,5 @@ void displayTitleOfCcryptProgress()
 
 void print(int lineNumber)
 {
-    cout<<lineNumber<<endl;
+//    cout<<lineNumber<<endl;
 }

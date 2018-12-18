@@ -255,7 +255,7 @@ void getGlobalStrings(globalStringS &globalString, string &reason)
     //"\"$HOME/codeBlockProjects/open source/actOnTarStatus/bin/Release/actOnTarStatus\"";
     globalString.binaryThatShowsTheCcryptStatus =
     //"\"$HOME/codeBlockProjects/open source/actOnCcryptStatus/bin/Release/actOnCcryptStatus\"";
-    "/usr/local/bin/actOnTarStatus";
+    "/usr/local/bin/actOnCcryptStatus";
 
     globalString.processIdOfThisTerminalSessionPath = globalString.basePath+
     "fileContainingprocessIdOfThisTerminalSession";
@@ -517,6 +517,10 @@ void writeCleanUpAndExitFunction(string &reason, ofstream &scriptHandle)
     /* so that the progress percentage wouldn't show the cursor blinking. */
     /* This brings it back. */
     <<f.tab1<<"tput cnorm"<<endl
+
+    /* in case echo'ing of what's typed in ceases, this brings it back */
+    /* note that 'reset' clears the screen and that's disruptive*/
+    <<f.tab1<<"tset"<<endl
 
     // exit the script
     <<f.tab1<<"echo"<<endl
