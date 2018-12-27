@@ -1,4 +1,4 @@
-# Usage: sudo ./smallBackup.sh
+# Usage: ./smallBackup.sh
 
 #!/bin/bash
 touch -d '-1 min' $HOME/.cloudbuddy/input/timeStampMarker

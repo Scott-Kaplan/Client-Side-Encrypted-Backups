@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Scott Kaplan
+Copyright (c) 2018-2019 Scott Kaplan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ using namespace std;
 #include <fstream>
 #include <stdlib.h>
 #include <sstream>
+#include <unistd.h>
 
 /****************************************/
 /************** Share these *************/
@@ -48,23 +49,18 @@ extern "C" void openForWriting(string &path,
                                int lineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
-//extern "C" string convertNumberToString(int number);
 extern "C" void convert$HOME(string &path);
 extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
 extern "C" void deleteFile(string &filename);
-//extern "C" void getGlobalStrings(globalStringS &globalString);
-extern "C" void getGlobalStrings(globalStringS &globalString, string &reason);
+extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 extern "C" bool fileIsEmpty(string &path);
 extern "C" string getStringUnder(int columnNumberWanted,
                                  int totalNumberOfColumns,
                                  string &lineToBeParsed);
 extern "C" double getTotalLinesInFile(string &pathToCountLines);
-//extern "C" long int getTotalLinesInFile(string &pathToCountLines);
 extern "C" double getSizeOfFile(string &path);
-//extern "C" long long int getSizeOfFile(string &path);
 extern "C" string getFileName(string &path);
 extern "C" string getTimestamp();
-//extern "C" void retrieveUsernameAndDomain(string &username, string &domain);
 extern "C" void retrieveUsernameAndDomain(string &username, string &domain,
                                           string &retrieveUsernameAndDomain);
 extern "C" void removeLeadingWhiteSpaces(string &line);
@@ -72,7 +68,18 @@ extern "C" void clearTheTerminalWindow();
 extern "C" void extractPathAndFileName(string &stringToParse, string &path,
                                        string &fileName);
 extern "C" void writeCleanUpAndExitFunction
-                                 (string &reason, ofstream &scriptHandle);
+                                 (string &purpose, ofstream &scriptHandle);
+extern "C" void writeCleanUpFunction
+                                 (string &purpose, ofstream &scriptHandle);
+extern "C" void saveTheTerminalPid(string &purpose);
+
+///*******************************/
+///***** Function Prototypes *****/
+///*******************************/
+//void writeCleanUpBodyOfFunction(string &purpose,
+//                                ofstream &scriptHandle,
+//                                scriptLineFormatterS &f,
+//                                globalStringS &globalString);
 
 /*****************************/
 /********* Functions *********/
@@ -91,15 +98,12 @@ void openForReading(string &path,
         cout<<"ERROR: Could not open this file for reading: "<<path
             <<"\nfrom file = "<<fromFileName
             <<"\nfrom line # "<<lineNumber
-            //<<"\nThe error enumerated value = "
-            //<<convertNumberToString(errorNumIfFails)<<endl;
             <<endl;
         exit(EXIT_SUCCESS);
     }
 }
 
 void openForWriting(string &path,
-                    //OfstreamErrorType errorNumIfFails,
                     string fromFileName,
                     int lineNumber,
                     ofstream &writeFileHandle,
@@ -120,20 +124,10 @@ void openForWriting(string &path,
         cout<<"ERROR: Could not open this file for writing: "<<path
         <<"\nfrom file = "<<fromFileName
         <<"\nfrom line # "<<lineNumber
-        //<<"\nThe error enumerated value = "
-        //<<convertNumberToString(errorNumIfFails)<<endl;
         <<endl;
         exit(EXIT_SUCCESS);
     }
 }
-/*
-string convertNumberToString(int number)
-{
-    stringstream converter;
-    converter << number;
-    return converter.str();
-}
-*/
 
 void convert$HOME(string &path)
 {
@@ -161,7 +155,6 @@ bool fileExists(string &lookupFile,string &lookupFileResults)
     ifstream lsOutputHandle;
     string line="";
     openForReading(lookupFileResults,__FILE__,__LINE__,lsOutputHandle);
-    //openForReading(lookupFileResults,errorIfFails,lsOutputHandle);
     getline(lsOutputHandle,line);
     deleteFile(lookupFileResults);
     if (line.substr(0,17)!="ls: cannot access")
@@ -188,77 +181,83 @@ void getGlobalScriptLineFormatter(scriptLineFormatterS &f)
     f.tab3="      ";
 }
 
-void getGlobalStrings(globalStringS &globalString, string &reason)
+void getGlobalStrings(globalStringS &globalString, string &purpose)
 {
     /* examples for the next line */
     /* "$HOME/.cloudbuddy/backup/" - if it's backing up */
     /* "$HOME/.cloudbuddy/restore/" -  if it's restoring */
-    globalString.basePath = "$HOME/.cloudbuddy/"+reason+"/";
-    //globalString.outputDirectoryPath = "$HOME/.cloudbuddy/output/";
+    globalString.basePath = "$HOME/.cloudbuddy/"+purpose+"/";
 
     globalString.theTarCommandIsDone =
-                                globalString.basePath+ "theTarCommandIsDone";
-                            //"$HOME/.cloudbuddy/output/theTarCommandIsDone";
+            globalString.basePath+ "theTarCommandIsDone";
 
     globalString.fileContainingTheBackupTarBallPath =
-        globalString.basePath
-        +"fileContainingTheBackupTarBallPath";
+            globalString.basePath+"fileContainingTheBackupTarBallPath";
 
     globalString.fileContainingTheEncryptedBackupPath =
-        globalString.basePath
-        +"fileContainingTheEncryptedBackupPath";
-//        +"fileContainingTheNameOfTheEncryptedBackup";
+            globalString.basePath+"fileContainingTheEncryptedBackupPath";
 
     globalString.fileThatContainsTheTarProcessId =
-        globalString.basePath+"fileThatContainsTheTarProcessId";
-        //"$HOME/.cloudbuddy/output/fileThatContainsTheTarProcessId";
+            globalString.basePath+"fileThatContainsTheTarProcessId";
 
     globalString.fileThatContainsTheTarStatusProcessId =
-        globalString.basePath+"fileThatContainsTheTarStatusProcessId";
-        //"$HOME/.cloudbuddy/output/fileThatContainsTheTarStatusProcessId";
+            globalString.basePath+"fileThatContainsTheTarStatusProcessId";
 
     globalString.fileThatContainsTheCcryptStatusProcessId =
-        globalString.basePath+"fileThatContainsTheCcryptStatusProcessId";
-        //"$HOME/.cloudbuddy/output/fileThatContainsTheCcryptStatusProcessId";
+            globalString.basePath+"fileThatContainsTheCcryptStatusProcessId";
 
     globalString.killTheTarProcess =
-                "kill \"$(head -n 1 "+
-                globalString.fileThatContainsTheTarProcessId+
-                ")\" >/dev/null 2>&1"; // if the process doesn't exist don't output a message
+            "kill \"$(head -n 1 "+
+            globalString.fileThatContainsTheTarProcessId+
+            // if the process doesn't exist don't output a message
+            ")\" >/dev/null 2>&1";
 
     globalString.killTheTarStatusProcess =
-                "kill \"$(head -n 1 "+
-                globalString.fileThatContainsTheTarStatusProcessId+
-                ")\" >/dev/null 2>&1"; // if the process doesn't exist don't output a message
+            "kill \"$(head -n 1 "+
+            globalString.fileThatContainsTheTarStatusProcessId+
+            // if the process doesn't exist don't output a message
+            ")\" >/dev/null 2>&1";
 
     globalString.killTheCcryptStatusProcess=
-                "kill \"$(head -n 1 "+
-                globalString.fileThatContainsTheCcryptStatusProcessId+
-                ")\" >/dev/null 2>&1"; // if the process doesn't exist don't output a message
+            "kill \"$(head -n 1 "+
+            globalString.fileThatContainsTheCcryptStatusProcessId+
+            // if the process doesn't exist don't output a message
+            ")\" >/dev/null 2>&1";
 
     globalString.projectedSizeOfTheTarBallPath =
-                globalString.basePath+"projectedSizeOfTheTarBall";
-                //globalString.outputDirectoryPath+"projectedSizeOfTheTarBall";
+            globalString.basePath+"projectedSizeOfTheTarBall";
 
     globalString.usernameAndDomainPath =
-                            "$HOME/.cloudbuddy/input/[2] username_and_domain";
+            "$HOME/.cloudbuddy/input/[2] username_and_domain";
 
     globalString.ccryptTitlePrintedPath =
-                        globalString.basePath+"ccryptStatusTitleAlreadyPrinted";
+            globalString.basePath+"ccryptStatusTitleAlreadyPrinted";
 
-    globalString.deleteOnlyFilesInSubDirectory = "rm -f $HOME/.cloudbuddy/"+reason+"/*";
+    globalString.deleteAllFilesInTheBackupDirectory =
+//            "/bin/bash rm -f $HOME/.cloudbuddy/backup/*";
+            "rm -f $HOME/.cloudbuddy/backup/*";
 
-    globalString.ccryptFinishedGracefully = globalString.basePath+"ccryptFinished";
+    globalString.deleteAllFilesInTheRestoreDirectory =
+            "rm -f $HOME/.cloudbuddy/restore/*";
+
+    globalString.ccryptFinishedGracefully =
+            globalString.basePath+"ccryptFinished";
 
     globalString.binaryThatShowsTheTarStatus =
-    "/usr/local/bin/actOnTarStatus";
-    //"\"$HOME/codeBlockProjects/open source/actOnTarStatus/bin/Release/actOnTarStatus\"";
-    globalString.binaryThatShowsTheCcryptStatus =
-    //"\"$HOME/codeBlockProjects/open source/actOnCcryptStatus/bin/Release/actOnCcryptStatus\"";
-    "/usr/local/bin/actOnCcryptStatus";
+            "/usr/local/bin/actOnTarStatus";
 
-    globalString.processIdOfThisTerminalSessionPath = globalString.basePath+
-    "fileContainingprocessIdOfThisTerminalSession";
+    globalString.binaryThatShowsTheCcryptStatus =
+            "/usr/local/bin/actOnCcryptStatus";
+
+    globalString.processIdOfThisTerminalSessionPath =
+            globalString.basePath+
+            "fileContainingprocessIdOfThisTerminalSession";
+
+    globalString.resultsOfTarCommand =
+            globalString.basePath+"resultsOfTarCommand";
+
+    globalString.sizeOfBackupThatIsADecryptedTarBallPath =
+            globalString.basePath +"sizeOfBackupThatIsADecryptedTarBall";
 }
 
 bool fileIsEmpty(string &path)
@@ -300,7 +299,6 @@ string getStringUnder(int columnNumberWanted,
 }
 
 double getTotalLinesInFile(string &pathToCountLines)
-//long int getTotalLinesInFile(string &pathToCountLines)
 {
     string line="";
     ifstream fileHandle;
@@ -309,7 +307,6 @@ double getTotalLinesInFile(string &pathToCountLines)
                    __LINE__,
                    fileHandle);
     double totalLines=0;
-    //long int totalLines=0;
     while (getline(fileHandle,line))
     {
         ++totalLines;
@@ -319,12 +316,10 @@ double getTotalLinesInFile(string &pathToCountLines)
 }
 
 double getSizeOfFile(string &path)
-//long long int getSizeOfFile(string &path)
 {
     convert$HOME(path);
     FILE *p_file = NULL;
     double size = 0;
-    //long long int size = 0;
     p_file = fopen(path.c_str(),"rb");
     fseek(p_file,0,SEEK_END);
     size = ftell(p_file);
@@ -363,31 +358,13 @@ string getTimestamp()
     // Convert local time representation
     loctime = localtime (&secondsSince1970);
 
-    /* get the month.  It might have a leading zero.  Remove it if it does */
-    strftime (month,4,"%m",loctime);
-//    if (month[0] == '0')
-//    {
-//        sprintf(month,"%c",month[1]);
-//    }
-
-    /* get the day.  It might have a leading zero.  Remove it if it does */
-    strftime (day, 4, "%d", loctime);
-//    if (day[0] == '0')
-//    {
-//        sprintf(day,"%c",day[1]);
-//    }
-
-    /* get the hour.  It might have a leading zero.  Remove it if it does */
-    strftime(hour, 4, "%I", loctime);
-//    if (hour[0] == '0')
-//    {
-//        sprintf(hour,"%c",hour[1]);
-//    }
-
-    strftime(minute, 4, "%M", loctime); // get the minute(s)
-    strftime(second, 4, "%S", loctime); // get the second(s)
-    strftime(middayMarking, 4, "%P", loctime); // get am or pm
-    strftime (year, 6, "%Y", loctime); // get the year
+    strftime (month,4,"%m",loctime);            // get the month
+    strftime (day, 4, "%d", loctime);           // get the day
+    strftime(hour, 4, "%I", loctime);           // get the hour
+    strftime(minute, 4, "%M", loctime);         // get the minute(s)
+    strftime(second, 4, "%S", loctime);         // get the second(s)
+    strftime(middayMarking, 4, "%P", loctime);  // get am or pm
+    strftime (year, 6, "%Y", loctime);          // get the year
 
     ostringstream currentTime;
     currentTime<<   year<<"_"<<
@@ -401,17 +378,12 @@ string getTimestamp()
 }
 
 void retrieveUsernameAndDomain(string &username, string &domain, string &usernameAndDomainPath)
-//void retrieveUsernameAndDomain(string &username, string &domain)
 {
-//    globalStringS globalString;
-//    getGlobalStrings(globalString);
-
     bool usernameAndDomainFound = false;
     string line="";
     ifstream fillUsernameAndDomainHandle;
 
     openForReading(usernameAndDomainPath,
-//    openForReading(globalString.usernameAndDomainPath,
                    __FILE__,
                    __LINE__,
                    fillUsernameAndDomainHandle);
@@ -474,16 +446,33 @@ void extractPathAndFileName
     }
 }
 
-void writeCleanUpAndExitFunction(string &reason, ofstream &scriptHandle)
+void saveTheTerminalPid(string &purpose)
+{
+    /* the purpose of this function is to have the ability to check whether */
+    /* the user closed the terminal window during an encryption/decryption. */
+    /* In this case, the background process showing the encryption/decryption */
+    /* status will get canceled (killed) */
+
+    globalStringS globalString;
+    getGlobalStrings(globalString,purpose);
+    ostringstream terminalPidStream;
+    terminalPidStream<<getppid()<<endl;
+    ofstream terminalPidHandle;
+    openForWriting(globalString.processIdOfThisTerminalSessionPath,
+                   __FILE__,__LINE__,terminalPidHandle,NEW_FILE);
+    terminalPidHandle<<terminalPidStream.str()<<endl;
+    terminalPidHandle.close();
+}
+
+void writeCleanUpFunction(string &purpose, ofstream &scriptHandle)
 {
     scriptLineFormatterS f;
     getGlobalScriptLineFormatter(f);
     globalStringS globalString;
-    getGlobalStrings(globalString,reason);
+    getGlobalStrings(globalString,purpose);
 
     /* begin the cleanUpAndExit function */
-    scriptHandle
-    <<f.tab0<<"cleanUpAndExit()"<<endl
+    scriptHandle<<f.tab0<<"cleanUp()"<<endl
     <<f.tab0<<"{"<<endl
 
     // kill the tar process if it is active
@@ -503,15 +492,20 @@ void writeCleanUpAndExitFunction(string &reason, ofstream &scriptHandle)
           <<globalString.fileThatContainsTheCcryptStatusProcessId
           <<"\" ]; then"<<endl
     <<f.tab2<<globalString.killTheCcryptStatusProcess<<endl
-    <<f.tab1<<"fi"<<endl
+    <<f.tab1<<"fi"<<endl;
 
-    // delete all files (non recursive, non directories) in the backup or
-    // restore directory
-    // It will be one of these
-    // "rm -f $HOME/.cloudbuddy/backup/*";
-    // "rm -f $HOME/.cloudbuddy/restore/*";
-    <<f.tab1<<globalString.deleteOnlyFilesInSubDirectory<<endl
+    if (purpose == "backup")
+    {
+        // delete all files in the backup directory
+        scriptHandle<<f.tab1<<globalString.deleteAllFilesInTheBackupDirectory<<endl;
+    }
+    else // purpose == "restore"
+    {
+        // delete all files in the restore directory
+        scriptHandle<<f.tab1<<globalString.deleteAllFilesInTheRestoreDirectory<<endl;
+    }
 
+    scriptHandle
     /* if the user Ctrl-C'd while either tar or ccrypt was going the */
     /* terminal window won't show the cursor because it was explicity removed */
     /* so that the progress percentage wouldn't show the cursor blinking. */
@@ -519,91 +513,30 @@ void writeCleanUpAndExitFunction(string &reason, ofstream &scriptHandle)
     <<f.tab1<<"tput cnorm"<<endl
 
     /* in case echo'ing of what's typed in ceases, this brings it back */
-    /* note that 'reset' clears the screen and that's disruptive*/
     <<f.tab1<<"tset"<<endl
 
-    // exit the script
-    <<f.tab1<<"echo"<<endl
+    /* end the cleanUp function*/
+    <<f.tab0<<"}"<<endl<<endl;
+}
+
+void writeCleanUpAndExitFunction(string &purpose, ofstream &scriptHandle)
+{
+    scriptLineFormatterS f;
+    getGlobalScriptLineFormatter(f);
+
+    /* begin the cleanUpAndExit function */
+    scriptHandle
+    <<f.tab0<<"cleanUpAndExit()"<<endl
+
+    <<f.tab0<<"{"<<endl
+
+    /* call the cleanUp function */
+    <<f.tab1<<"cleanUp"<<endl
+
     <<f.tab1<<"echo"<<endl
     <<f.tab1<<"echo Exiting ..."<<endl
     <<f.tab1<<"echo"<<endl
     <<f.tab1<<"echo"<<endl
     <<f.tab1<<"exit 1"<<endl
-
-    /* end the cleanUpAndExit function*/
     <<f.tab0<<"}"<<endl<<endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

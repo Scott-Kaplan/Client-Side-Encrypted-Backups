@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Scott Kaplan
+Copyright (c) 2018-2019 Scott Kaplan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,6 +67,7 @@ globalStringS globalString;
 string backupTarBallPath="";
 string purpose="";
 string encryptedBackupPath="";
+string encryptedBackupPathWithCptExtension="";
 string decryptionStartedPath="";
 string encryptionStartedPath="";
 //string nameOfTheEncryptedBackup="";
@@ -190,6 +191,48 @@ bool encryptionInProgress()
     return encryptionIsInProgress;
 }
 
+bool decryptionInProgress()
+{
+    bool decryptionIsInProgress = false;
+    string lookupFileResults=
+            globalString.basePath+
+            "checkThatTheUserFinishedEnteringTheirDecryptionPasswordResults";
+    //cout<<encryptedBackupPath<<endl;
+    /* As soon as decryption begins, a backup without the .cpt file is created */
+    /* if not started a backup without the .cpt file will be absent */
+    if (fileExists(encryptedBackupPath,lookupFileResults))
+    {
+      decryptionIsInProgress = true;
+    }
+    return decryptionIsInProgress;
+}
+
+//    print(__LINE__);
+//    // example) ls encryptedBackupPath* -1 | wc -l
+//    // this command yields 1 or 2
+//    // 1 means that decrypting has finished
+//    // 2 means that decrypting has not finished as a temporary file also
+//    //   exists along with the original encrypted backup
+//    //   the temporary file always has a different suffix everytime this runs
+//    //   ccrypt -d -f -T <encrypted backup>
+//    //   once decrypting has finished, the temporary file is deleted
+//    bool decryptionInProgressFlag = true;
+//    string qtyOfFilesPath=globalString.basePath+"qtyOfFiles";
+//    string qtyOfFiles="";
+//    string cmd="ls "+encryptedBackupPath+"* -1 | wc -l > "+qtyOfFilesPath;
+//    if(system(cmd.c_str()));
+//    ifstream qtyOfFilesHandle;
+//    openForReading(qtyOfFilesPath,__FILE__,__LINE__,qtyOfFilesHandle);
+//    getline(qtyOfFilesHandle,qtyOfFiles);
+//    qtyOfFilesHandle.close();
+//    if (qtyOfFiles == "1")
+//    {
+//        //decryption is done
+//        decryptionInProgressFlag = false;
+//    }
+//    return decryptionInProgressFlag;
+//}
+
 bool ccryptIsInProcessTable()
 {
 print(__LINE__);
@@ -235,6 +278,7 @@ void extractPaths()
                 encryptedBackupPath);
         fileContainingTheEncryptedBackupHandle.close();
         decryptionStartedPath = globalString.basePath+"decryptionStarted";
+        encryptedBackupPathWithCptExtension = encryptedBackupPath+".cpt";
         //cout<<"encryptedBackupPath = "<<encryptedBackupPath<<endl;
 //        ifstream fileContainingTheNameOfTheEncryptedBackupHandle;
 //        openForReading
@@ -310,45 +354,25 @@ print(__LINE__);
     }
     else // purpose = restore
     {
-        if (!decryptionInProgress())
+        //if (!decryptionInProgress())
+        string lookupFileResults=globalString.basePath+
+                                 "testIfTheBackupHasBeenFullyDecryptedResults";
+        /* the absence of *.cpt means that decryption has finished */
+        //cout<<encryptedBackupPathWithCptExtension<<endl;
+        if (!fileExists(encryptedBackupPathWithCptExtension,lookupFileResults))
         {
-cout<<__LINE__<<endl;
-            ccryptIsDone = true;
+            ccryptIsDone=true;
         }
     }
     return ccryptIsDone;
 }
 
-bool decryptionInProgress()
-{
-print(__LINE__);
-    // example) ls encryptedBackupPath* -1 | wc -l
-    // this command yields 1 or 2
-    // 1 means that decrypting has finished
-    // 2 means that decrypting has not finished as a temporary file also
-    //   exists along with the original encrypted backup
-    //   the temporary file always has a different suffix everytime this runs
-    //   ccrypt -d -f -T <encrypted backup>
-    //   once decrypting has finished, the temporary file is deleted
-    bool decryptionInProgressFlag = true;
-    string qtyOfFilesPath=globalString.basePath+"qtyOfFiles";
-    string qtyOfFiles="";
-    string cmd="ls "+encryptedBackupPath+"* -1 | wc -l > "+qtyOfFilesPath;
-    if(system(cmd.c_str()));
-    ifstream qtyOfFilesHandle;
-    openForReading(qtyOfFilesPath,__FILE__,__LINE__,qtyOfFilesHandle);
-    getline(qtyOfFilesHandle,qtyOfFiles);
-    qtyOfFilesHandle.close();
-    if (qtyOfFiles == "1")
-    {
-        //decryption is done
-        decryptionInProgressFlag = false;
-    }
-    return decryptionInProgressFlag;
-}
-
 void displayCcryptStatus()
 {
+//    left off here - if enter the wrong decryption password, ccryptFinished() is true but need someway to confirm that the
+//    decryption password was entered correctly.  Maybe check extension of what was decrypted
+//    then check that the backup with a failed re-entry of the encrypt password exists gracefully
+
 print(__LINE__);
     if (ccryptFinished())
     {
@@ -373,35 +397,46 @@ print(__LINE__);
         }
         else // purpose = restore
         {
-print(__LINE__);
-            // encryption hasn't finished yet, so calculate % completed so far
+            // decryption hasn't finished yet, so calculate % completed so far
+            double sizeOfBackupThatsToBeDecrypted =
+                            getSizeOfFile(encryptedBackupPathWithCptExtension);
 
-            /* save the temporary decrypted backup name */
-            string fileContainingNameOfTempDecryptedBackup =
-                globalString.basePath+"fileContainingNameOfTempDecryptedBackup";
-            string cmd="ls "+encryptedBackupPath+".* > "+
-                                        fileContainingNameOfTempDecryptedBackup;
-            if(system(cmd.c_str()));
-print(__LINE__);
-            /* extract the name of the temporary decrypted backup */
-            string tempDecryptedBackupPath="";
-            ifstream fileContainingNameOfTempDecryptedBackupHandle;
-            openForReading(fileContainingNameOfTempDecryptedBackup,
-               __FILE__,__LINE__,fileContainingNameOfTempDecryptedBackupHandle);
-            getline(fileContainingNameOfTempDecryptedBackupHandle,tempDecryptedBackupPath);
-            fileContainingNameOfTempDecryptedBackupHandle.close();
-print(__LINE__);
-            /* build the temporary decrypted backup path */
-            //string tempDecryptedBackupPath=globalString.basePath+fileName;
-//cout<<"tempDecryptedBackupPath = "<<tempDecryptedBackupPath<<endl;
-            /* calculate the percentage complete for decryption */
-            double sizeofTheTemporaryDecryptedBackup =
-                                        getSizeOfFile(tempDecryptedBackupPath);
-print(__LINE__);
             ccryptPercentageComplete =
-                            (sizeofTheTemporaryDecryptedBackup/(getSizeOfFile(encryptedBackupPath)))*100;
-print(__LINE__);
+                                    (getSizeOfFile(encryptedBackupPath)/
+                                     sizeOfBackupThatsToBeDecrypted)*100;
+
+
+//            print(__LINE__);
+//            // encryption hasn't finished yet, so calculate % completed so far
+//
+//            /* save the temporary decrypted backup name */
+//            string fileContainingNameOfTempDecryptedBackup =
+//                globalString.basePath+"fileContainingNameOfTempDecryptedBackup";
+//            string cmd="ls "+encryptedBackupPath+".* > "+
+//                                        fileContainingNameOfTempDecryptedBackup;
+//            if(system(cmd.c_str()));
+//            print(__LINE__);
+//            /* extract the name of the temporary decrypted backup */
+//            string tempDecryptedBackupPath="";
+//            ifstream fileContainingNameOfTempDecryptedBackupHandle;
+//            openForReading(fileContainingNameOfTempDecryptedBackup,
+//               __FILE__,__LINE__,fileContainingNameOfTempDecryptedBackupHandle);
+//            getline(fileContainingNameOfTempDecryptedBackupHandle,tempDecryptedBackupPath);
+//            fileContainingNameOfTempDecryptedBackupHandle.close();
+//            print(__LINE__);
+//            /* build the temporary decrypted backup path */
+//            //string tempDecryptedBackupPath=globalString.basePath+fileName;
+//            //cout<<"tempDecryptedBackupPath = "<<tempDecryptedBackupPath<<endl;
+//            /* calculate the percentage complete for decryption */
+//            double sizeofTheTemporaryDecryptedBackup =
+//                                        getSizeOfFile(tempDecryptedBackupPath);
+//            print(__LINE__);
+//            ccryptPercentageComplete =
+//                            (sizeofTheTemporaryDecryptedBackup/(getSizeOfFile(encryptedBackupPath)))*100;
+//            print(__LINE__);
         }
+
+
         display(ccryptPercentageComplete);
     }
 }
@@ -472,6 +507,7 @@ print(__LINE__);
         }
         else // purpose = "restore"
         {
+            //cout<<startUnderline<<"Progress of decrypting your backup"
             cout<<endl<<startUnderline<<"Progress of decrypting your backup"
                                                     <<endUnderline<<endl;
         }

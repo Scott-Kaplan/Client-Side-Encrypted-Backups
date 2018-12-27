@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Scott Kaplan
+Copyright (c) 2018-2019 Scott Kaplan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -68,8 +68,11 @@ extern "C" void retrieveUsernameAndDomain
             (string &username, string &domain, string &usernameAndDomainPath);
 extern "C" void removeLeadingWhiteSpaces(string &line);
 extern "C" void clearTheTerminalWindow();
+extern "C" void writeCleanUpFunction
+                (string directory, ofstream &scriptThatRestoresTheBackupHandle);
 extern "C" void writeCleanUpAndExitFunction
                                  (string &purpose, ofstream &scriptHandle);
+extern "C" void saveTheTerminalPid(string &purpose);
 
 /********************/
 /***** Constants ****/
@@ -84,10 +87,8 @@ string tab3="      ";
 /********************************/
 string purpose="backup";  // for path $HOME/.cloudbuddy/backup
 double storageSpaceOfFilesThatWillBeInTheBackup=0;
-//long long int storageSpaceOfFilesThatWillBeInTheBackup=0;
 globalStringS globalString;
 string searchThisListForChangesPath =           "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes";
-//string usernameAndDomainPath =                  "$HOME/.cloudbuddy/input/[2] username_and_domain";
 string landingDirectoryPath =                   "$HOME/.cloudbuddy/input/[3] landing_directory";
 string computerNamePath =                       "$HOME/.cloudbuddy/input/[4] computer_name";
 string dontBackupFilesThatStartWithThisPath =   "$HOME/.cloudbuddy/input/[5] don't_backup_files_that_start_with_this";
@@ -101,15 +102,7 @@ string filteredChangedAndNewFilesPath =         "$HOME/.cloudbuddy/backup/filter
 string backupScriptPath =                       "$HOME/.cloudbuddy/backup/backupScript";
 string remainingSizeInHomeDirectoryPath =       "$HOME/.cloudbuddy/backup/remainingSizeOnTheDrive";
 string capturedTerminalOutput =                 "$HOME/.cloudbuddy/backup/capturedTerminalOutput";
-string resultsOfTarCommand =                    "$HOME/.cloudbuddy/backup/resultsOfTarCommand";
 string tarPercentageCompletePath =              "$HOME/.cloudbuddy/backup/tarPercentageCompletePath";
-//string binaryThatShowsTheTarStatus =
-//    "\"$HOME/codeBlockProjects/open source/actOnTarStatus/bin/Release/actOnTarStatus\"";
-//string binaryThatShowsTheCcryptStatus =
-//    "\"$HOME/codeBlockProjects/open source/actOnCcryptStatus/bin/Release/actOnCcryptStatus\"";
-
-
-//string deleteTheOutputDirectoryContents =       "rm -f $HOME/.cloudbuddy/backup/*";
 string computerName="";
 string backupLabelName="";
 //string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "45";              // tested when 45 for all cases - including yes/no to continuing with the backup
@@ -122,11 +115,9 @@ string expectedOutputFromRunningTheTarCommand =
 /*******************************/
 /***** Function Prototypes *****/
 /*******************************/
-//void retrieveUsernameAndDomain(string &username, string &domain);
 void createEmptyFileIfItDoesntExist(string &path);
 void displayUsage();
-void clearTheOutputDirectory();
-//void removeLeadingWhiteSpaces(string &line);
+void deleteAllFilesInTheBackupDirectory();
 void filterUnwantedFilesSoThatTheyWontBeInTheBackup();
 bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch);
 bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch);
@@ -138,26 +129,21 @@ void retrieveTheComputerName();
 void checkThatTheComputerNameIsOk(string &computerName);
 string createTheNameOfTheBackup(string &backupLabelName);
 double getApproxSizeOfBackupBeforeTaringIt();
-//long long int getApproxSizeOfBackupBeforeTaringIt();
 void checkThatThereIsEnoughDiskSpaceToPerformTheBackup();
 void createAListOfFilesThatHaveChangedOrAreNew();
 void createAScriptThatWillPerformTheBackup();
-void runTheScriptThatPeformsTheBackup();
+void runTheScriptThatPerformsTheBackup();
 double getRemainingSizeInHomeDir();
-//long long int getRemainingSizeInHomeDir();
-void saveTheTerminalPid();
 
 /*********************/
 /***** Functions *****/
 /*********************/
 int main(int argc, char * const argv[])
 {
-    //clearTheOutputDirectory();  // uncomment this
     getGlobalStrings(globalString,purpose);
+    deleteAllFilesInTheBackupDirectory();
     createTheConfigurationFilesIfTheyDontExist();
-    clearTheOutputDirectory();
-    saveTheTerminalPid();
-    //deleteFile(logOfCompletedBackupsPath);  // todo: remove this line as it is only used for debugging
+    saveTheTerminalPid(purpose);
     clearTheTerminalWindow();
     retrieveTheComputerName();
     checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
@@ -165,31 +151,16 @@ int main(int argc, char * const argv[])
     filterUnwantedFilesSoThatTheyWontBeInTheBackup();
     checkThatThereIsEnoughDiskSpaceToPerformTheBackup();
     createAScriptThatWillPerformTheBackup();
-    runTheScriptThatPeformsTheBackup();
-    //clearTheOutputDirectory();  // uncomment this
+    runTheScriptThatPerformsTheBackup();
     return 0;
 }
 
-void clearTheOutputDirectory()
+void deleteAllFilesInTheBackupDirectory()
 {
-    //cout<<endl<<globalString.deleteOnlyFilesInSubDirectory.c_str()<<endl<<endl;
-    if(system(globalString.deleteOnlyFilesInSubDirectory.c_str()));
-    //if(system(deleteTheOutputDirectoryContents.c_str()));
-}
-
-void saveTheTerminalPid()
-{
-    /* the purpose of this function is to have the ability to check whether */
-    /* the user closed the terminal window during an encryption/decryption. */
-    /* In that case, the background process showing the encryption/decryption */
-    /* status will get canceled (killed) */
-    ostringstream terminalPidStream;
-    terminalPidStream<<getppid()<<endl;
-    ofstream terminalPidHandle;
-    openForWriting(globalString.processIdOfThisTerminalSessionPath,
-                   __FILE__,__LINE__,terminalPidHandle,NEW_FILE);
-    terminalPidHandle<<terminalPidStream.str()<<endl;
-    terminalPidHandle.close();
+    string filesToBeDeleted="$HOME/.cloudbuddy/backup/*";
+    convert$HOME(filesToBeDeleted);
+    string deleteFilesCommand="rm -f "+filesToBeDeleted;
+    if(system(deleteFilesCommand.c_str()));
 }
 
 void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
@@ -250,12 +221,7 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
     }
 
     cout<<endl<<startUnderline<<"Files found (after filtering)"<<endUnderline
-    <<endl
-
-//    cout<<endl
-//    <<"Files Found (after filtering)"<<endl
-//    <<"-----------------------------"<<endl
-    <<getTotalLinesInFile(filteredChangedAndNewFilesPath)<<endl;
+    <<endl<<getTotalLinesInFile(filteredChangedAndNewFilesPath)<<endl;
 }
 
 bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
@@ -600,7 +566,6 @@ string createTheNameOfTheBackup(string &backupLabelName)
 }
 
 double getApproxSizeOfBackupBeforeTaringIt()
-//long long int getApproxSizeOfBackupBeforeTaringIt()
 // source: https://stackoverflow.com/questions/5840148/how-can-i-get-a-files-size-in-c
 {
     ifstream listOfFilesToBeTardHandle;
@@ -611,7 +576,6 @@ double getApproxSizeOfBackupBeforeTaringIt()
     string line="";
     FILE *p_file = NULL;
     double size = 0;
-//    long long int size = 0;
     while (getline(listOfFilesToBeTardHandle,line))
     {
         p_file = fopen(line.c_str(),"rb");
@@ -758,14 +722,12 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
 
 void createAScriptThatWillPerformTheBackup()
 {
-    //getGlobalStrings(globalString,purpose);
-
     /* extract the ssh server information so a backup can be sent to it  */
     string username="";
     string domain="";
     retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
     //dcout<<username<<endl<<domain<<endl<<endl;
-//cout<<endl<<"here"<<endl<<endl;
+    //cout<<endl<<"here"<<endl<<endl;
     string landingDirectory="";
     retrieveTheLandingDirectory(landingDirectory);
     //dcout<<landingDirectory<<endl;
@@ -794,7 +756,6 @@ void createAScriptThatWillPerformTheBackup()
                    ,fileContainingTheNameOfTheBackupWithPathHandle,NEW_FILE);
     fileContainingTheNameOfTheBackupWithPathHandle
                                 <<globalString.basePath+theBackup;
-//                                <<globalString.outputDirectoryPath+theBackup;
     fileContainingTheNameOfTheBackupWithPathHandle.close();
 
     /* Create a bash script that transfers the encrypted backup to a ssh */
@@ -811,8 +772,8 @@ void createAScriptThatWillPerformTheBackup()
     /* save the process Id of this terminal session */
     //<<tab0<<"echo $$ > "<<globalString.processIdOfThisTerminalSessionPath<<endl;
 
-//cout<<endl<<"here"<<endl<<endl;
-    writeCleanUpAndExitFunction(purpose, backupScriptHandle);
+    writeCleanUpFunction(purpose,backupScriptHandle);
+    writeCleanUpAndExitFunction(purpose,backupScriptHandle);
 
     /* Create a function that gives the user an option to quit */
     backupScriptHandle
@@ -859,7 +820,8 @@ void createAScriptThatWillPerformTheBackup()
     // This next line overides the limitation of not being allowed to include
     // one or more colons in the name of the tarball
     <<" --force-local"
-    <<filteredChangedAndNewFilesIntoTarCmd<<" > "<<resultsOfTarCommand<<" 2>&1"
+    <<filteredChangedAndNewFilesIntoTarCmd<<" > "<<globalString.resultsOfTarCommand<<" 2>&1"
+    //<<filteredChangedAndNewFilesIntoTarCmd<<" > "<<resultsOfTarCommand<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
     // This is needed by the 'progress' program in order to report the tar
     // percentage complete as the tar command is being executed.  When creating
@@ -871,9 +833,6 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"echo"<<endl
     <<tab0<<"echo \""<<startUnderline
     <<"Progress of creating a tarball of your backup"<<endUnderline<<"\""<<endl
-    //<<tab0<<"echo"<<endl
-    //<<tab0<<"echo \"Progress of creating a Tarball of your backup\""<<endl
-    //<<tab0<<"echo \"---------------------------------------------\""<<endl
 
     /* hide the cursor as the cursor is distracting while viewing the */
     /* progress meter */
@@ -881,7 +840,6 @@ void createAScriptThatWillPerformTheBackup()
 
     <<tab0<<"(while sleep 1; "
     <<"do "<<globalString.binaryThatShowsTheTarStatus<<" "<<purpose<<"; "
-//    <<"do "<<binaryThatShowsTheTarStatus<<"; "
     <<"done & echo $! > "<<globalString.fileThatContainsTheTarStatusProcessId
     <<")"<<endl<<endl
 
@@ -899,9 +857,7 @@ void createAScriptThatWillPerformTheBackup()
     /* which is "Removing leading `/' from member names", as the user whether */
     /* he/she wants to proceed with the backup.  If it's the same display,    */
     /* 100% complete */
-    <<tab2<<"sizeOfFile=$(stat -c%s "<<resultsOfTarCommand<<")"<<endl
-    //<<"echo $sizeOfFile"<<endl
-    //<<"echo \"Size = "<<"$sizeOfFile bytes.\""
+    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"<<endl
 
     <<tab2<<"if [ $sizeOfFile -ne "
           <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
@@ -919,7 +875,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab3<<"echo "<<endl
     <<tab3<<"echo But, instead it was - "<<endl
     <<tab3<<"echo "<<startUnderline<<endl
-    <<tab3<<"while read line; do echo \"$line\"; done < "<<resultsOfTarCommand<<endl
+    <<tab3<<"while read line; do echo \"$line\"; done < "<<globalString.resultsOfTarCommand<<endl
     <<tab3<<"echo "<<endUnderline<<endl
     <<tab3<<"message2=\"Do you still want to continue with the backup?\""<<endl
     <<tab3<<"giveContinuationOptionToTheUser $message2"<<endl
@@ -951,7 +907,6 @@ void createAScriptThatWillPerformTheBackup()
 
     /* Kick off a background process that runs every second that displays the */
     /* ccrypt command progress */
-//<<"echo "<<globalString.binaryThatShowsTheCcryptStatus<<endl
     <<tab0<<"(while sleep 1; "
     <<"do "<<globalString.binaryThatShowsTheCcryptStatus<<" "<<purpose<<"; "
     <<"done & echo $! > "<<globalString.fileThatContainsTheCcryptStatusProcessId
@@ -967,6 +922,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab1<<"echo"<<endl
     <<tab1<<"echo \"Since the passwords don't match, can't proceed - so exiting ...\""<<endl
     <<tab1<<"echo"<<endl
+    <<tab1<<"tput cnorm"<<endl // bring the cursor back before exiting
     <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
     <<tab0<<"while [ ! -f \""<<globalString.ccryptFinishedGracefully<<"\" ]; do"
@@ -975,20 +931,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"done"<<endl<<endl
 
     /* bring the cursor back now that ccrypt is done */
-    <<tab2<<"tput cnorm"<<endl
-
-/*
-    // since ccrypt is run in the foreground, making it here means that
-    // encrypting the background completed successfully, so print done
-    <<tab0<<"GREEN_CHECK_MARK=\"\033[0;32m\xE2\x9C\x94\033[0m\""<<endl
-    // Note: the next line with the \\r brings cursor back to the beginning
-    // and the 2 extra spaces overwrites the % in case the last progress output
-    // was 100.00%, otherwise would have Done checkmark%
-    <<tab0<<"echo -e \"\\rDone ${GREEN_CHECK_MARK}     \""<<endl
-    <<tab0<<"echo"<<endl<<endl
-*/
-    // for debug only
-    //backupScriptHandle<<"echo \""<<startUnderline<<"Size of the backup (after tar'ing and ecnrypting it)"<<endUnderline<<"\""<<endl;
+    <<tab0<<"tput cnorm"<<endl<<endl
 
     /* List the size of the backup */
     <<tab0<<"echo"<<endl
@@ -1045,14 +988,9 @@ void createAScriptThatWillPerformTheBackup()
 
     /* If the transfer didn't finish, display an error message and exit */
     <<tab0<<"if [ ! -f \"transfer-complete\" ]; then "<<endl
-
     <<tab1<<"echo"<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"echo \"Error: The transfer didn't finish, so exiting ...\""<<endl
-//    <<tab1<<"echo \""<<startUnderline
-//    <<tab1<<"Error: The transfer didn't finish - so exiting ..."<<endUnderline
-//    <<tab1<<"\""<<endl
-
     <<tab1<<"echo"<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"exit 1"<<endl
@@ -1076,25 +1014,21 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"echo \""<<startUnderline<<"The backup is complete"<<endUnderline
     <<"\""<<endl
     <<tab0<<"echo \""<<"The log file ("<<logOfCompletedBackupsPath
-    <<") shows a list of all files that were backed up."<<"\""<<endl<<endl
-    <<tab0<<"cleanUpAndExit"<<endl;
+    <<") shows a list of all files that have been backed up."<<"\""<<endl<<endl
+    <<tab0<<"echo"<<endl
+    <<tab0<<"cleanUp"<<endl;
 
     /* end the backup script */
     backupScriptHandle.close();
-
-    //debug only - can delete when don't need it anymore
-    //string displayScriptCmd="echo\nmore "+backupScriptPath;
-    //if (system(displayScriptCmd.c_str()));
 }
 
-void runTheScriptThatPeformsTheBackup()
+void runTheScriptThatPerformsTheBackup()
 {
     string runTheBackupScriptCommand="/bin/bash "+backupScriptPath;
     if(system(runTheBackupScriptCommand.c_str()));
 }
 
 double getRemainingSizeInHomeDir()
-//long long int getRemainingSizeInHomeDir()
 {
     //source : https://stackoverflow.com/questions/33249591/how-can-i-only-get-the-number-of-bytes-available-on-a-disk-in-bash
     string getRemainingSizeInHomeDirCmd=
@@ -1134,8 +1068,6 @@ double getRemainingSizeInHomeDir()
     ///* return a converted string to long long int of the remaining size in the home directory */
     // source: https://stackoverflow.com/questions/21887274/convert-string-to-long-long-int
     char* endptr = NULL;
-    //long long int remainingSizeInHomeDirectory =
-        //strtoll(sizeRemainingInHomeDirectoryIn1KByteBlocks.c_str(), &endptr, 10);
     double remainingSizeInHomeDirectory =
         strtod(sizeRemainingInHomeDirectoryIn1KByteBlocks.c_str(), &endptr);
     int conversionFrom1KByteBlocksToBytes = 1000;

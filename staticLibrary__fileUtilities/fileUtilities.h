@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Scott Kaplan
+Copyright (c) 2018-2019 Scott Kaplan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,8 @@ typedef enum
 typedef struct
 {
     string basePath;
-    string deleteOnlyFilesInSubDirectory;
+    string deleteAllFilesInTheBackupDirectory;
+    string deleteAllFilesInTheRestoreDirectory;
     string theBackupPath;
     string theTarCommandIsDone;
     string tarProcessId;
@@ -53,7 +54,6 @@ typedef struct
     string fileThatContainsTheCcryptStatusProcessId;
     string projectedSizeOfTheTarBallPath;
     string fileContainingTheBackupTarBallPath;
-    //string fileContainingTheNameOfTheEncryptedBackupPath;
     string fileContainingTheEncryptedBackupPath;
     string usernameAndDomainPath;
     string ccryptTitlePrintedPath;
@@ -61,6 +61,8 @@ typedef struct
     string binaryThatShowsTheTarStatus;
     string binaryThatShowsTheCcryptStatus;
     string processIdOfThisTerminalSessionPath;
+    string resultsOfTarCommand;
+    string sizeOfBackupThatIsADecryptedTarBallPath;
 }globalStringS;
 
 typedef struct

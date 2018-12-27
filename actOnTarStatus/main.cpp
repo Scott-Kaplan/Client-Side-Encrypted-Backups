@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Scott Kaplan
+Copyright (c) 2018-2019 Scott Kaplan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -152,7 +152,8 @@ void actOnTarCommand()
         if(system(createDoneWithTarCmd.c_str()));
 
     }
-    else
+    else if (purpose == "backup")
+    //else - this worked before for backup but is not sufficient for restore.  that's why needed the else if above
     {
         /* tar is still running */
         //cout<<"tar is still running"<<endl;
@@ -190,6 +191,72 @@ void actOnTarCommand()
 
         /* display the tar percentage complete */
         display(tarPercentageComplete);
+    }
+    else // purpose == "restore"
+    {
+        // todo: if what is being restored is large and has lots of directories
+        //       the below may not finish within 1 second.
+        //       examples)
+        //       [1]
+        //       did 6gb directory ($HOME/temp/test/test).  it had very few
+        //       directories so it easily finsihed within 1 second
+        //       [2]
+        //       did 64Gb directory ($HOME/temp) which had many subdirectories
+        //       from the command line, this took many seconds.  by running the
+        //       below on such a large directory the behavior of the below code
+        //       is unknown.  At best it just might not print any % complete
+        //       at each second, however than the user may deduce that it is
+        //       hung when its not.  At worst, it would print something unknown
+        //       consider testing this.
+        //       Tested with 150MB backup.  it worked perfect.  Its possible
+        //       that even with large backups with lots of directories that this
+        //       would work fine since it would know what it just restored it
+        //       wouldn't have to think about it - the same way as du -sb command
+        //       twice on $HOME/temp
+
+        /* get the total size of the backup that needs to be restored */
+        /* this is to be used to compute the percentage untar completed */
+        ifstream sizeOfDecryptedBackupHandle;
+        string totalSizeToBeRestored="";
+        string alreadyDecryptedBackupPath =
+                    globalString.basePath+"sizeOfBackupThatIsADecryptedTarBall";
+        openForReading(alreadyDecryptedBackupPath,__FILE__,__LINE__,
+                       sizeOfDecryptedBackupHandle);
+        getline(sizeOfDecryptedBackupHandle,totalSizeToBeRestored);
+        //cout<<"totalSizeToBeRestored = "<<totalSizeToBeRestored<<endl;
+        sizeOfDecryptedBackupHandle.close();
+
+        /* get the restore path */
+        ifstream restorePathHandle;
+        string restorePath="";
+        string fileThatHoldsTheRestorePath=globalString.basePath+"restorePath";
+        openForReading(fileThatHoldsTheRestorePath,__FILE__,__LINE__,
+                       restorePathHandle);
+        getline(restorePathHandle,restorePath);
+        //cout<<"restorePath = "<<restorePath<<endl;
+        restorePathHandle.close();
+
+        /* save the size of the backup that has been restored to this point */
+        // example) //du -sb e6230-primary\*\*2018-10-02__05\:47am/ | awk '{ print $1 }' > sizeOfDirectory
+        string sizeThatsBeenRestoredToThisPointPath=globalString.basePath+"sizeRestoredToThisPoint";
+        string cmd="du -sb "+restorePath+" | awk '{ print $1 }' > "+sizeThatsBeenRestoredToThisPointPath;
+        //cout<<cmd<<endl;
+        if(system(cmd.c_str()));
+
+        /* get the size of the backup that has been restored to this point */
+        ifstream sizeThatsBeenRestoredHandle;
+        string sizeThatsBeenRestored="";
+        openForReading(sizeThatsBeenRestoredToThisPointPath,__FILE__,__LINE__,sizeThatsBeenRestoredHandle);
+        getline(sizeThatsBeenRestoredHandle,sizeThatsBeenRestored);
+        //cout<<"sizeThatsBeenRestored = "<<sizeThatsBeenRestored;
+        sizeThatsBeenRestoredHandle.close();
+
+        /* convert the numerical strings to doubles */
+        double totalSizeToBeRestoredDouble = atof(totalSizeToBeRestored.c_str());
+        double sizeThatsBeenRestoredDouble = atof(sizeThatsBeenRestored.c_str());
+
+        /* display the untar percentage complete */
+        display((sizeThatsBeenRestoredDouble/totalSizeToBeRestoredDouble)*100);
     }
 }
 

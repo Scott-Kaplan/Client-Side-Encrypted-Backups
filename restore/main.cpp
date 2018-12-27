@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Scott Kaplan
+Copyright (c) 2018-2019 Scott Kaplan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,11 @@ extern "C" void extractPathAndFileName
                         (string &stringToParse, string &path, string &fileName);
 extern "C" void writeCleanUpAndExitFunction
                 (string directory, ofstream &scriptThatRestoresTheBackupHandle);
+extern "C" void writeCleanUpFunction
+                (string directory, ofstream &scriptThatRestoresTheBackupHandle);
 extern "C" void clearTheTerminalWindow();
+extern "C" void saveTheTerminalPid(string &purpose);
+extern "C" void convert$HOME(string &path);
 
 /*******************************/
 /***** Function Prototypes *****/
@@ -65,11 +69,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[]);
 void displayUsage();
 void createAScriptTheWillRestoreTheBackup();
 void runTheScriptThatRestoresTheBackup();
-void createTemporaryPathToRestoreBackupIn
-                                       (string &temporaryPathToRestoreBackupIn);
-//bool backupIsAtBaseDirectory(string &path);
-//string getdirectoryThatTheEncryptedBackupIsIn(string &nameOfEncryptedBackupWhichIncludesPath);
-void clearTheRestoreDirectory();
+void deleteAllFilesIntheRestoreDirectory();
 
 /********************/
 /***** Constants ****/
@@ -92,7 +92,8 @@ globalStringS globalString;
 string restoreDirectory="$HOME/.cloudbuddy/restore/";
 string scriptThatRestoresTheBackupPath=
                                 restoreDirectory+"scriptThatRestoresTheBackup";
-//void extractPathToBackupAndnameOfEncryptedBackup(string &nameOfEncryptedBackupWhichIncludesPath);
+string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "0";
+string expectedOutputFromRunningTheTarCommand = "";
 
 /*********************/
 /***** Functions *****/
@@ -100,30 +101,28 @@ string scriptThatRestoresTheBackupPath=
 int main(int argc, char * const argv[])
 {
     clearTheTerminalWindow();
-    clearTheRestoreDirectory();
     getGlobalStrings(globalString,purpose);
+    deleteAllFilesIntheRestoreDirectory();
+    saveTheTerminalPid(purpose);
     checkThatTheNeededConfigurationFilesExist();
     retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
     checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     createAScriptTheWillRestoreTheBackup();
     runTheScriptThatRestoresTheBackup();
-    //clearTheRestoreDirectory();
     return 0;
 }
 
-void clearTheRestoreDirectory()
+void deleteAllFilesIntheRestoreDirectory()
 {
-    string cmd="rm $HOME/.cloudbuddy/restore/*";
-    //cout<<cmd<<endl;
-    if(system(cmd.c_str()));
+    string filesToBeDeleted="$HOME/.cloudbuddy/restore/*";
+    convert$HOME(filesToBeDeleted);
+    string deleteFilesCommand="rm -f "+filesToBeDeleted;
+    if(system(deleteFilesCommand.c_str()));
 }
 
 void checkThatTheNeededConfigurationFilesExist()
 {
     string lookupFileResults=globalString.basePath+"FoundResults";
-    //string lookupFileResults=globalString.outputDirectoryPath+"FoundResults";
-//cout<<endl<<globalString.usernameAndDomainPath<<endl<<endl;
-
     if (!fileExists(globalString.usernameAndDomainPath,lookupFileResults))
     {
         cout<<"Error: \nThis configuration file could not be read - \n"
@@ -136,22 +135,19 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
     if (argc != 2)
     {
-        // the user didn't enter one parameter which equals
+        // the user didn't enter one parameter that equals
         // the filename with path that's to be restored.  Example
         // restore /uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm
         displayUsage();
     }
     nameOfEncryptedBackupWhichIncludesPath = argv[1];
-    /* both of these work
-    ./codeBlockProjects/open\ source/restore/bin/Release/restore /uploads/l__12_16_2012__11_14pm
-    ./codeBlockProjects/open\ source/restore/bin/Release/restore l__12_16_2012__11_14pm
-    */
     extractPathAndFileName
         (nameOfEncryptedBackupWhichIncludesPath,
          directoryThatTheEncryptedBackupIsIn,
          nameOfEncryptedBackup);
 }
 
+// todo: ensure that this is correct
 void displayUsage()
 {
     cout
@@ -186,18 +182,13 @@ void createAScriptTheWillRestoreTheBackup()
     fileContainingTheEncryptedBackupHandle
                 <<globalString.basePath+nameOfEncryptedBackup;
     fileContainingTheEncryptedBackupHandle.close();
-//    ofstream fileContainingTheNameOfTheEncryptedBackupHandle;
-//    openForWriting(globalString.fileContainingTheNameOfTheEncryptedBackupPath
-//                   ,__FILE__,__LINE__
-//                   ,fileContainingTheNameOfTheEncryptedBackupHandle,NEW_FILE);
-//    fileContainingTheNameOfTheEncryptedBackupHandle
-//                <<globalString.basePath+nameOfEncryptedBackup;
-//    fileContainingTheNameOfTheEncryptedBackupHandle.close();
 
     createRestoreDirectory();
-    string restorePath="$HOME/restored-from-CloudBuddy/"+nameOfEncryptedBackup;
-    string temporaryPathToRestoreBackupIn="";
-    createTemporaryPathToRestoreBackupIn(temporaryPathToRestoreBackupIn);
+
+    /***** IMPORTANT NOTE *****/
+    /***** Later on in this program a "rm -rf restorePath" is performed.  *****/
+    /***** So, if you need to change this be extremely careful.            *****/
+    string restorePath="$HOME/restored-from-backup/"+nameOfEncryptedBackup;
 
     ofstream scriptThatRestoresTheBackupHandle;
     openForWriting(scriptThatRestoresTheBackupPath,__FILE__,__LINE__,
@@ -205,18 +196,21 @@ void createAScriptTheWillRestoreTheBackup()
     scriptThatRestoresTheBackupHandle
     <<tab0<<"#!/bin/bash"<<endl<<endl;
 
-    writeCleanUpAndExitFunction("restore", scriptThatRestoresTheBackupHandle);
+    writeCleanUpFunction(purpose,scriptThatRestoresTheBackupHandle);
+    writeCleanUpAndExitFunction(purpose,scriptThatRestoresTheBackupHandle);
     scriptThatRestoresTheBackupHandle
 
     /* capture Ctrl-C if the user presses it */
     <<tab0<<"trap cleanUpAndExit SIGINT"<<endl<<endl
 
-//test three sftp attempts again.  ensure ctrl-c brings back to cursor
-//  one blapity, one legit backup with path, one legit backup no path.
-
     /* go to the restore directory */
     <<tab0<<"cd "<<restoreDirectory<<endl<<endl
 
+//debug
+//<<tab0<<"cp $HOME/temp/test/test/test/test/e6230-primary**2018-10-02__05:47am "<<restoreDirectory<<endl
+// comment out all code lines between HERE and END_HERE to skip the sftp.
+// maybe useful if large backup and user wants to try decryption key possibilities because he/she forgot what he/she initially used
+// HERE
     /* download the backup */
     /* Create a script to retrieve the encrypted backup */
     // Use -vv in the next line if have any issues, as this shows lots of
@@ -254,6 +248,10 @@ void createAScriptTheWillRestoreTheBackup()
     ///* example)  sftp <user>@cloudbuddy.cloud:/uploads/testFile . */
     //<<tab0<<"sftp "<<username<<"@"<<domain<<":"<<nameOfEncryptedBackupWhichIncludesPath
     //<<" ."<<endl
+// END_HERE
+//debug
+//<<tab0<<"touch transfer-complete"<<endl
+
 
     <<tab0<<"echo"<<endl<<endl
     /* If the backup to be downloaded wasn't found, the transfer-complete */
@@ -272,6 +270,10 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
 
+    /* hide the cursor as the cursor is distracting while viewing the */
+    /* progress meter */
+    <<tab0<<"tput civis"<<endl<<endl
+
     /* Kick off a background process that runs every second that displays the */
     /* ccrypt command progress */
     <<tab0<<"(while sleep 1; "
@@ -279,46 +281,164 @@ void createAScriptTheWillRestoreTheBackup()
     <<"done & echo $! > "<<globalString.fileThatContainsTheCcryptStatusProcessId
     <<")"<<endl<<endl
 
+    /* rename the encrypted backup to have the natural .cpt extension on it */
+    /* the reason for doing this is to have the ability to exit the script */
+    /* if the user enters the wrong decryption password and is therefore */
+    /* unable to decrypt their backup */
+    <<"mv "<<nameOfEncryptedBackup<<" "<<nameOfEncryptedBackup<<".cpt"<<endl
+
     /* decrypt the backup */
     // Note: With the below decryption command, the temporary file created
-    // (before encryption finishes) has a different suffix each time
-    // so there will be two files when not done and one once decryption finishes.
-    <<tab0<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<endl<<endl
-    <<tab0<<"echo"<<endl<<endl
+    // (after it has started & before it finishes) has a different suffix each
+    // time the decryption command is run. There will be two files when not done
+    // and one once decryption finishes.
+    <<tab0<<"echo \"About to start decrypting your backup ...\""<<endl
+    <<tab0<<"echo"<<endl<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<".cpt"<<endl<<endl
 
+    //<<tab0<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<".cpt"<<endl<<endl
+    //<<tab0<<"echo"<<endl<<endl
+
+    /* Ensure the user sucessfully decrypted the backup.  If not, mention it */
+    /* and exit the script.  Note that the .cpt is dropped off the backup */
+    /* only after it has been decrypted*/
+    <<tab0<<"if [ ! -f \""<<nameOfEncryptedBackup<<"\" ]; then "<<endl
+    <<tab1<<"echo"<<endl
+    <<tab1<<"echo \"Unable to decrypt your backup, because the wrong decryption key was entered - so exiting ...\""<<endl
+    <<tab1<<"echo"<<endl
+    <<tab1<<"tput cnorm"<<endl // bring the cursor back
+    <<tab1<<"exit 1"<<endl
+    <<tab0<<"fi"<<endl<<endl
     <<tab0<<"while [ ! -f \""<<globalString.ccryptFinishedGracefully<<"\" ]; do"
     <<endl
     <<tab1<<"sleep 1"<<endl
     <<tab0<<"done"<<endl<<endl
 
+    /* bring the cursor back now that ccrypt is done */
+    <<tab0<<"tput cnorm"<<endl
     <<tab0<<"echo"<<endl
 
-<<"exit 1"<<endl
+    <<tab0<<"echo \"About to start restoring your backup ...\""<<endl
+    //<<tab0<<"echo"<<endl
+
+    /* save the size of the tar ball.  This is to be used to calculate the */
+    /* percentage complete while extracting the tar ball by the */
+    /* actOnTarStatus binary */
+    <<tab0<<"stat -c %s "<<restoreDirectory<<nameOfEncryptedBackup<<" > "
+          <<globalString.sizeOfBackupThatIsADecryptedTarBallPath<<endl
+    <<tab0<<"echo"<<endl
+
+    /* save the name of the restore path to a file */
+    <<tab0<<"echo "<<restorePath<< " > "<<globalString.basePath+"restorePath"<<endl
 
     /* create destination directory that the backup will be restored in */
-    <<tab0<<"mkdir -p "<<restorePath<<endl<<endl
+    // todo: consider asking the user if their backup had already been restored
+    //       whether ok to delete and proceed (to restore again).  It is
+    //       necessary to delete and start from nothing when restoring a backup
+    //       because untar progress % complete will initially show greater than
+    //       100%
+    <<tab0<<"rm -rf "<<restorePath<<endl
+    <<tab0<<"mkdir "<<restorePath<<endl<<endl
+    //<<tab0<<"mkdir -p "<<restorePath<<endl<<endl
 
-    /* restore the backup to a temporary directory */
-    /* example) tar jxvf l__12_16_2012__11_14pm -C "$HOME/Temp/restore of l__12_16_2012__11_14pm"*/
-    <<tab0<<"tar jxvf "<<nameOfEncryptedBackup<<" -C "<<restorePath<<endl<<endl
+    /* untar the backup.  Do this in the background so the tar command */
+    /* progress (percentage complete) can be given in the foreground */
+    // example:
+    // (tar jxf nameOfEncryptedBackup --force-local -C restorePath >
+    // resultsPath 2>&1 & echo $! > pathThatContainsTheTarProcessId)
+    <<tab0<<"(tar jxf "<<nameOfEncryptedBackup
+    // the next line overides the limitation of not being allowed to include
+    // one or more colons in the name of the tarball
+    <<" --force-local"
+    // the next line restores the backup to the specified location
+    <<" -C "<<restorePath
+    // the next line sends all output from executing the tar command to a file
+    // so the output can be analyzed to see if tar returned something unexpected
+    <<" > "<<globalString.resultsOfTarCommand<<" 2>&1"
+    // This next line saves the tar Process Id from executing the tar command.
+    // This is needed by the 'progress' program in order to report the tar
+    // percentage complete as the tar command is being executed.  When creating
+    // large tarballs the pecentage complete is very useful, otherwise the user
+    // just sees the command hanging and doesn't really know when it will finish
+    <<" & echo $! > "<<globalString.fileThatContainsTheTarProcessId<<")"
+    <<endl<<endl
 
+    //<<tab0<<"echo"<<endl
+    <<tab0<<"echo \""<<startUnderline
+    <<"Progress of restoring your backup"<<endUnderline<<"\""<<endl
+
+    /* hide the cursor as the cursor is distracting while viewing the */
+    /* progress meter */
+    <<tab0<<"tput civis"<<endl<<endl
+
+    <<tab0<<"(while sleep 1; "
+    <<"do "<<globalString.binaryThatShowsTheTarStatus<<" "<<purpose<<"; "
+    <<"done & echo $! > "<<globalString.fileThatContainsTheTarStatusProcessId
+    <<")"<<endl<<endl
+
+    /* get the total backup from running tar once it has finished */
+    <<tab0<<"while sleep 1; do"<<endl
+
+    /* check that the file theTarCommandIsDone exists.  If so, anaylze the */
+    /* output of the tar command */
+    <<tab1<<"if [ -e \""<<globalString.theTarCommandIsDone<<"\" ]; then"<<endl
+
+    /* bring the cursor back now that tar is done */
+    <<tab2<<"tput cnorm"<<endl
+
+    /* Get the size of the output from tar.  If it is different than expected */
+    /* which is "Removing leading `/' from member names", as the user whether */
+    /* he/she wants to proceed with the backup.  If it's the same display,    */
+    /* 100% complete */
+    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"<<endl
+    //<<"echo $sizeOfFile"<<endl
+    //<<"echo \"Size = "<<"$sizeOfFile bytes.\""
+
+    <<tab2<<"if [ $sizeOfFile -ne "
+          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
+          <<endl
+    <<tab3<<"echo"<<endl
+    <<tab3<<"echo $sizeOfFile"<<endl
+    <<tab3<<"echo"<<endl
+    <<tab3<<"echo"<<endl
+    <<tab3<<"echo Warning: Normally, the output from running the tar command "
+          <<"would have been -"<<endl
+    <<tab3<<"echo "<<startUnderline<<endl
+    <<tab3<<"printf \""<<expectedOutputFromRunningTheTarCommand<<"\""<<endl
+    <<tab3<<"echo "<<endUnderline<<endl
+    <<tab3<<"echo "<<endl
+    <<tab3<<"echo "<<endl
+    <<tab3<<"echo But, instead it was - "<<endl
+    <<tab3<<"echo "<<startUnderline<<endl
+    <<tab3<<"while read line; do echo \"$line\"; done < "<<globalString.resultsOfTarCommand<<endl
+    <<tab3<<"echo "<<endUnderline<<endl
+    <<tab3<<"message2=\"Do you still want to continue with the backup?\""<<endl
+    <<tab3<<"giveContinuationOptionToTheUser $message2"<<endl
+    <<tab2<<"else"<<endl
+    // this next line is the setting for a green checkmark
+    <<tab3<<"GREEN_CHECK_MARK=\"\033[0;32m\xE2\x9C\x94\033[0m\""<<endl
+    // Note: the next line with the \\r brings cursor back to the beginning
+    // and the 2 extra spaces overwrites the % in case the last progress output
+    // was 100.00%, otherwise would have Done checkmark%
+    <<tab3<<"echo -e \"\\rDone ${GREEN_CHECK_MARK}     \""<<endl
+    <<tab3<<"echo"<<endl
+    <<tab2<<"fi"<<endl
+
+    <<tab2<<"break"<<endl
+    <<tab1<<"fi"<<endl // done if the file "theTarCommandIsDone"
+
+    //<<"echo done with tar command"<<endl
+    <<tab0<<"done"<<endl<<endl
+
+    /* Let the user know that the backup restored successfully */
+    <<tab0<<"echo \""<<startUnderline<<"Your backup was successfully restored"
+    <<endUnderline
+    <<"\""<<endl
+    <<tab0<<"echo \""<<"It can found in ("<<restorePath<<")"<<"\""<<endl
     <<tab0<<"echo"<<endl
-    <<tab0<<"GREEN_CHECK_MARK=\"\033[0;32m\xE2\x9C\x94\033[0m\""<<endl
-    <<tab0<<"echo Restore complete  ${GREEN_CHECK_MARK}"<<endl
-    <<tab0<<"echo Your backup was restored to "<<restorePath<<endl
-    <<tab0<<"echo"<<endl
-    ;
+
+    <<tab0<<"cleanUp"<<endl;
 
     scriptThatRestoresTheBackupHandle.close();
-}
-
-void createTemporaryPathToRestoreBackupIn
-                                        (string &temporaryPathToRestoreBackupIn)
-{
-    string createTemporaryPathToRestoreBackupInCmd=
-        "mkdir -p \"$HOME/Temp/restore of "+nameOfEncryptedBackup+"\"";
-    //cout<<endl<<createTemporaryPathToRestoreBackupInCmd<<endl<<endl;
-    if(system(createTemporaryPathToRestoreBackupInCmd.c_str()));
 }
 
 void createRestoreDirectory()
@@ -339,26 +459,4 @@ void runTheScriptThatRestoresTheBackup()
     if(system(restoreTheBackupScriptCommand.c_str()));
 }
 
-//void extractPathToBackupAndnameOfEncryptedBackup(string &nameOfEncryptedBackupWhichIncludesPath)  // both if/else tested
-//{
-//    //dcout<<"\nPassed in = \n"<<nameOfEncryptedBackupWhichIncludesPath<<endl;
-//    // the backup is at the base directory (the directory when sftp'ing in)
-//    if (nameOfEncryptedBackupWhichIncludesPath.find('/') == string::npos)
-//    {
-//        nameOfEncryptedBackup = nameOfEncryptedBackupWhichIncludesPath;
-//        directoryThatTheEncryptedBackupIsIn = ".";
-//    }
-//    // the backup is in a subdirectory
-//    else
-//    {
-//        nameOfEncryptedBackup = nameOfEncryptedBackupWhichIncludesPath.substr
-//                            (nameOfEncryptedBackupWhichIncludesPath.find_last_of('/')+1,
-//                             nameOfEncryptedBackupWhichIncludesPath.length());
-//
-//        directoryThatTheEncryptedBackupIsIn = nameOfEncryptedBackupWhichIncludesPath.substr
-//                           (0, nameOfEncryptedBackupWhichIncludesPath.find_last_of('/'));
-//    }
-//    //dcout<<"\ndirectoryThatTheEncryptedBackupIsIn = "<<directoryThatTheEncryptedBackupIsIn<<endl;
-//    //dcout<<"\nnameOfEncryptedBackup = "<<nameOfEncryptedBackup<<endl<<endl;
-//    //exit(EXIT_SUCCESS);
-//}
+//think about building in ability to decrypt/untar without sftp'ing first as it is now.
