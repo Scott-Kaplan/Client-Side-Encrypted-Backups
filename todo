@@ -1,0 +1,116 @@
+// check that all paths that will be in the backup do not contain illegal characters before doing the backup
+// ensure no spaces in config file 2 for field that needs to be extracted
+// ensure no spaces in config file 3 for field that needs to be extracted
+// support spaces in paths found in config file 1
+// Check that every path listed in config file 1 exists before running the find command. Otherwise, get find errors on each path that doesn't exist
+// ensure ./smallBackup doesn't end with "Exiting ..." when there were no issues
+// ensure ./smallRestore doesn't end with "Exiting ..." when there were no issues
+// save the size of the encrypted backup into the log file.  Doing this since making a strong statement that backups can't be corrupted.  That way if a server admin messes with the file the user will be able to confirm that the file is the wrong size and might conclude that it was mucked with.
+// in displayUsage() in backup, change the variable "<<computerName" to this hard coded string "computerName".  The reason is displayUsage() can be called before computerName has a value
+// call cleanUpAndExit when the user doesn't enter the correct encryption password when doing a restore
+// call cleanUpAndExit when the user doesn't enter the same encryption password twice when doing a backup
+// increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
+// ensure quotes are not anywhere in the entire path(including filename) to be backed up
+// fresh install on 16.04 at work, but retain config file 1 that has the problem
+// test ./smallBackup with 3 wrong sftp passwords
+// test ./smallRestore with 3 wrong sftp passwords
+// test ./smallRestore with wrong ccrypt key
+// modify install.sh to install packages for Debian.  Don't test it
+// modify install.sh to install packages for Arch.  Don't test it
+// modify install.sh to install packages for Fedora.  Don't test it
+// modify install.sh to install packages for openSUSE.  Don't test it
+// modify install.sh to install packages for Slackware.  Don't test it
+// modify install.sh to install packages for Gentoo.  Don't test it
+// test on virgin ubuntu 14.04 using virtualbox.  set both username and password to test
+// test ./smallBackup with ssh public key on 14.04
+// test on virgin ubuntu 16.04 using virtualbox.  set both username and password to test
+// test ./smallBackup with ssh public key on 16.04
+// test on virgin ubuntu 18.04 using virtualbox.  set both username and password to test
+// test ./smallBackup with ssh public key on 18.04
+// restore bad backup name like blappity
+// restore bad path with good backup name
+// ensure all lines wrap at 80
+// ensure all declared file scope variables are used
+// ensure all ifstream and ofstream are closed
+// ensure all prototypes are used
+// ensure all enumerated values are used
+// ensure all comments are accurate
+// ensure all config file paths are accurate by their cout statements
+// ensure all #includes are used
+
+----------------------------------------------------
+----------------------------------------------------
+----------------------------------------------------
+no further action because done or didn't take action
+----------------------------------------------------
+----------------------------------------------------
+----------------------------------------------------
+
+1 // see when doing the backup with the 2 large .iso, the percentage it jumps from to get to 100% since the calculation won't take into account compression of the tar command
+
+//--- did this with a 200MB file.  Couldn't tell that it skipped at all.  The skipping at the end to 100% wouldn't matter.  The //only thing that matters is that the user sees the percentage going up.  They'd be happy if it went to 100% sooner.
+
+
+2 //race condition
+//When decrypting, got this.  Shouldn't have happened
+//Progress of decrypting your backup
+//72.7001%        
+//ls: cannot access $HOME/.cloudbuddy/restore/e6230-primary**2018-10-02__05:47am.XVovcv: No such file or directory
+//Done ✔
+
+//race condition
+//When decrypting, got this.  Shouldn't have happened
+//Progress of decrypting your backup
+//18.3954%        
+//ls: cannot access $HOME/.cloudbuddy/restore/e6230-primary**2018-10-02__05:47am.*: No such file or directory $HOME/.cloudbuddy/restore/scriptThatRestoresTheBackup: line 45: 16747 Segmentation fault      (core dumped) "$HOME/codeBlockProjects/open source/actOnCcryptStatus/bin/Release/actOnCcryptStatus" restore
+
+3 //to get sftp to fail naturally, just wait more than 1 minute and will get this
+
+//About to start the transfer
+//Please hang on a few seconds ... (up to a minute)
+
+//<user>@<email_domain>@cloudbuddy.cloud's password: 
+//Couldn't read packet: Connection reset by peer
+//  Error: The transfer didn't finish - so exiting ...
+
+4 // If the backup is less than 1KB, units won't show.  Example: if size of backup was 248 bytes, this is what shows
+//Size of the backup
+//248
+
+5 // if a user restores a backup that has already been restored on their computer, decided against asking them whether its ok to delete everything that was there from their last restore before blowing it away.  It is necessary to be blown away frist otherwise the untar progress % complete will intially show greater than 100%.  This is relative to the line in the restore binary
+//<<tab0<<"rm -rf "<<restorePath<<endl
+
+6 // When restoring a large backup with lots of directories, there is concern over whether the untar progress % complete could be done within 1 second.  Decided not to take action.  Here is the block of code in actOnTarStatus that deals with this-
+//else // purpose == "restore"
+//Notes:
+//if what is being restored is large and has lots of directories
+//the below may not finish within 1 second.
+//examples)
+//[1]
+//did 6gb directory ($HOME/temp/test/test).  it had very few
+//directories so it easily finsihed within 1 second
+//[2]
+//did 64Gb directory ($HOME/temp) which had many subdirectories
+//from the command line, this took many seconds.  by running the
+//below on such a large directory the behavior of the below code
+//is unknown.  At best it just might not print any % complete
+//at each second, however than the user may deduce that it is
+//hung when its not.  At worst, it would print something unknown
+//consider testing this.
+//Tested with 150MB backup.  it worked perfect.  Its possible
+//that even with large backups with lots of directories that this
+//would work fine since it would know what it just restored to that point
+//and wouldn't have to think about it - the same way as du -sb command
+//twice on $HOME/temp is very fast the second time
+
+7 // remove scott from all source code
+
+8 // for now not going to consider proxy server support 
+
+9 // in install.sh at the beginning, let the user know that backup and restore are binaries that will be copied into /usr/local/bin and is it ok to proceed?
+// Reason didn't do this:  nothing is currently in the 16.04 or 18.04 repo that is a binary called backup or restore
+
+10 // change EXIT_SUCCESS to EXIT_FAILURE when the program didn't finish like it should have
+// didn't take action because both are the same: https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
+
+11 // Capitalize the start of comments.  Didn't do this.  No real upside and some comments are even complete sentences
