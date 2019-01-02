@@ -194,26 +194,6 @@ void actOnTarCommand()
     }
     else // purpose == "restore"
     {
-        // todo: if what is being restored is large and has lots of directories
-        //       the below may not finish within 1 second.
-        //       examples)
-        //       [1]
-        //       did 6gb directory ($HOME/temp/test/test).  it had very few
-        //       directories so it easily finsihed within 1 second
-        //       [2]
-        //       did 64Gb directory ($HOME/temp) which had many subdirectories
-        //       from the command line, this took many seconds.  by running the
-        //       below on such a large directory the behavior of the below code
-        //       is unknown.  At best it just might not print any % complete
-        //       at each second, however than the user may deduce that it is
-        //       hung when its not.  At worst, it would print something unknown
-        //       consider testing this.
-        //       Tested with 150MB backup.  it worked perfect.  Its possible
-        //       that even with large backups with lots of directories that this
-        //       would work fine since it would know what it just restored it
-        //       wouldn't have to think about it - the same way as du -sb command
-        //       twice on $HOME/temp
-
         /* get the total size of the backup that needs to be restored */
         /* this is to be used to compute the percentage untar completed */
         ifstream sizeOfDecryptedBackupHandle;

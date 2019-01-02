@@ -50,7 +50,7 @@ extern "C" void openForWriting(string &path,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 extern "C" void convert$HOME(string &path);
-extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+// works except does both directories and files extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
 extern "C" void deleteFile(string &filename);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 extern "C" bool fileIsEmpty(string &path);
@@ -72,14 +72,14 @@ extern "C" void writeCleanUpAndExitFunction
 extern "C" void writeCleanUpFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
+extern "C" bool fileExist(string &path, string &purpose);
+extern "C" bool directoryExist(string &path, string &purpose);
+
 
 ///*******************************/
 ///***** Function Prototypes *****/
 ///*******************************/
-//void writeCleanUpBodyOfFunction(string &purpose,
-//                                ofstream &scriptHandle,
-//                                scriptLineFormatterS &f,
-//                                globalStringS &globalString);
+bool exist(string &path, string &purpose, string &lookupSpecifier);
 
 /*****************************/
 /********* Functions *********/
@@ -140,6 +140,119 @@ void convert$HOME(string &path)
     }
 }
 
+bool fileExist(string &path, string &purpose)
+{
+    string lookupSpecifier = "f";
+    return exist(path,purpose,lookupSpecifier);
+}
+
+bool directoryExist(string &path, string &purpose)
+{
+    string lookupSpecifier = "d";
+    return exist(path,purpose,lookupSpecifier);
+}
+
+bool exist(string &path, string &purpose, string &lookupSpecifier)
+{
+    globalStringS globalString;
+    getGlobalStrings(globalString,purpose);
+    string directoryLeadingUpToFileName="";
+    string fileName="";
+    extractPathAndFileName(path,directoryLeadingUpToFileName,fileName);
+    string pathLookup = globalString.basePath+fileName+"_lookUp";
+//    string fileOrDirExistsLookupPath = path+"_LookUp";
+                        //globalString.basePath+"fileOrDirExistsLookup";
+//    // To test a file:      [ -f dir ] && echo exists > results
+//    // to test a directory: [ -d dir ] && echo exists > results
+//    string cmd =
+//                "[ -"+lookupSpecifier+" \""+path+"\" ] && echo exists > "
+//                +fileOrDirExistsLookupPath;
+
+    //examples)
+//    // To test a file:      [ -f dir ] && echo exists || echo doesnt_exist > results
+//    // To test a directory: [ -d dir ] && echo exists || echo doesnt_exist > results
+    // To test a file:      [ -f dir ] && echo exists > results || echo doesnt_exist > results
+    // To test a directory: [ -d dir ] && echo exists > results || echo doesnt_exist > results
+
+    string cmd =
+        "[ -"+lookupSpecifier+" \""+path+"\" ] "
+        "&& echo exists > \""+pathLookup+"\" || echo doesnt_exist > \""+pathLookup+"\"";
+
+
+//the problem with this is that fileOrDirExistsLookup is not created when the path is not found
+//however the file is still read in its previous state, which was file found.  so exists lingers in the file
+//when ccrypt didn't have the key entered yet, it still found the file which had exists.
+// there is another problem in that if the path was not found, fileOrDirExistsLookup doesn't exist and the segmentation fault
+//came from trying to read it below.  Change this to print exists or doesn't exist and also don't share the same filename for
+//the resultant file
+
+cout<<endl<<cmd<<endl<<endl;
+    if(system(cmd.c_str()));
+//exit(EXIT_SUCCESS);
+    ifstream pathLookupHandle;
+//    ifstream fileOrDirExistsHandle;
+    string line="";
+    openForReading(pathLookup,__FILE__,__LINE__,pathLookupHandle);
+//    openForReading(fileOrDirExistsLookupPath,
+//                   __FILE__,__LINE__,
+//                   fileOrDirExistsHandle);
+    getline(pathLookupHandle,line);
+    pathLookupHandle.close();
+//    getline(fileOrDirExistsHandle,line);
+//    fileOrDirExistsHandle.close();
+// for some reason the next line causes an error that the file cannot be opened for reading
+//    deleteFile(fileOrDirExistsLookupPath);
+    deleteFile(pathLookup);
+    if (line == "exists")
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+LEFT OFF HERE
+these all work.  just implement below that
+
+/* list only specific file */
+//https://askubuntu.com/questions/811210/how-can-i-make-ls-only-display-files
+
+// success
+// ls -p | grep -v / | grep "filename" > results 2>&1
+// saves
+// filename
+
+// successful failure because filename1 doesn't exist
+// ls -p | grep -v / | grep "filename1" > results 2>&1
+// saves
+// nothing as expected
+
+// successful failure because Movies is a directory
+// ls -p | grep -v / | grep "Movies" > results 2>&1
+// saves
+// nothing as expected
+
+/* list only specific directory */
+// success
+// ls -d Videos/ > results 2>&1
+// saves
+// Videos/
+
+// successful failure because filename is a file
+// ls -d filename/ > results 2>&1
+// saves
+// ls: cannot access filename/: Not a directory
+
+// successful failure because Videos1 is not a directory
+// ls -d Videos1/ > results 2>&1
+// saves
+// ls: cannot access Videos1/: No such file or directory
+
+
+
+/* works but doesn't differentiate between directories and files
 bool fileExists(string &lookupFile,string &lookupFileResults)
 {
     string lsCmd=
@@ -156,6 +269,7 @@ bool fileExists(string &lookupFile,string &lookupFileResults)
     string line="";
     openForReading(lookupFileResults,__FILE__,__LINE__,lsOutputHandle);
     getline(lsOutputHandle,line);
+    lsOutputHandle.close();
     deleteFile(lookupFileResults);
     if (line.substr(0,17)!="ls: cannot access")
     {
@@ -166,6 +280,8 @@ bool fileExists(string &lookupFile,string &lookupFileResults)
         return false;
     }
 }
+*/
+
 
 void deleteFile(string &filename)
 {

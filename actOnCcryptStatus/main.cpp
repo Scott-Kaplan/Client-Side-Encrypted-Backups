@@ -52,10 +52,10 @@ extern "C" void openForWriting(string &path,
                                int lineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
-extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+extern "C" bool fileExist(string &path, string &purpose);
+//extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
 extern "C" bool fileIsEmpty(string &path);
 extern "C" double getSizeOfFile(string &path);
-//extern "C" long long int getSizeOfFile(string &path);
 extern "C" string getFileName(string &path);
 
 /*******************************************/
@@ -87,7 +87,9 @@ void displayTitleOfCcryptProgress();
 void extractPaths();
 void displayCcryptStatus();
 bool ccryptFinished();
-void print(int lineNumber); // todo - delete after done debugging
+void print(int lineNumber);  // todo - delete after done debugging
+void printfileExist(int lineNumber); // todo - delete after done debugging
+
 bool decryptionInProgress();
 bool encryptionInProgress();
 bool decryptHadStarted();
@@ -178,34 +180,69 @@ print(__LINE__);
 bool encryptionInProgress()
 {
     bool encryptionIsInProgress = false;
-    string lookupFileResults=
-            globalString.basePath+
-            "checkThatTheUserFinishedEnteringTheirEncryptionPasswordResults";
+//    string lookupFileResults=
+//            globalString.basePath+
+//            "checkThatTheUserFinishedEnteringTheirEncryptionPasswordResults";
     //cout<<encryptedBackupPath<<endl;
     /* As soon as encryption begins, a *.cpt file is created */
     /* if not started a *.cpt file will be absent */
-    if (fileExists(encryptedBackupPath,lookupFileResults))
+cout<<encryptedBackupPath<<endl;
+printfileExist(__LINE__);
+    if (fileExist(encryptedBackupPath,purpose))
+//    if (fileExists(encryptedBackupPath,lookupFileResults))
     {
       encryptionIsInProgress = true;
     }
+cout<<"encryptionIsInProgress = "<<encryptionIsInProgress<<endl;
+//exit(EXIT_SUCCESS);
     return encryptionIsInProgress;
 }
+
+//bool encryptHadStarted()
+//{
+//    bool encryptionHadStarted = false;
+////    string lookupFileResults = globalString.basePath+
+////                                 "testIfEncryptionStartedResults";
+//cout<<"encryptionStartedPath = "<<encryptionStartedPath<<endl;
+//    if (fileExist(encryptionStartedPath,purpose))
+////    if (fileExists(encryptionStartedPath,lookupFileResults))
+//    {
+//        encryptionHadStarted = true;
+//    }
+//    return encryptionHadStarted;
+//}
+
 
 bool decryptionInProgress()
 {
     bool decryptionIsInProgress = false;
-    string lookupFileResults=
-            globalString.basePath+
-            "checkThatTheUserFinishedEnteringTheirDecryptionPasswordResults";
+//    string lookupFileResults=
+//            globalString.basePath+
+//            "checkThatTheUserFinishedEnteringTheirDecryptionPasswordResults";
     //cout<<encryptedBackupPath<<endl;
     /* As soon as decryption begins, a backup without the .cpt file is created */
     /* if not started a backup without the .cpt file will be absent */
-    if (fileExists(encryptedBackupPath,lookupFileResults))
+printfileExist(__LINE__);
+    if (fileExist(encryptedBackupPath,purpose))
+//    if (fileExists(encryptedBackupPath,lookupFileResults))
     {
       decryptionIsInProgress = true;
     }
     return decryptionIsInProgress;
 }
+
+//bool decryptHadStarted()
+//{
+//    bool decryptionHadStarted = false;
+////    string lookupFileResults = globalString.basePath+
+////                                 "testIfDecryptionStartedResults";
+//    if (fileExist(decryptionStartedPath,purpose))
+////    if (fileExists(decryptionStartedPath,lookupFileResults))
+//    {
+//        decryptionHadStarted = true;
+//    }
+//    return decryptionHadStarted;
+//}
 
 //    print(__LINE__);
 //    // example) ls encryptedBackupPath* -1 | wc -l
@@ -312,58 +349,40 @@ void checkThatTheTerminalWindowIsStillOpen()
     }
 }
 
-bool decryptHadStarted()
-{
-    bool decryptionHadStarted = false;
-    string lookupFileResults = globalString.basePath+
-                                 "testIfDecryptionStartedResults";
-    if (fileExists(decryptionStartedPath,lookupFileResults))
-    {
-        decryptionHadStarted = true;
-    }
-    return decryptionHadStarted;
-}
-
-bool encryptHadStarted()
-{
-    bool encryptionHadStarted = false;
-    string lookupFileResults = globalString.basePath+
-                                 "testIfEncryptionStartedResults";
-    if (fileExists(encryptionStartedPath,lookupFileResults))
-    {
-        encryptionHadStarted = true;
-    }
-    return encryptionHadStarted;
-}
-
-
 bool ccryptFinished()
 {
 print(__LINE__);
     bool ccryptIsDone=false;
     if (purpose == "backup")
     {
-        string lookupFileResults=globalString.basePath+
-                                 "testIfTheBackupHasBeenFullyEncryptedResults";
+//print(__LINE__);
+//        string lookupFileResults=globalString.basePath+
+//                                 "testIfTheBackupHasBeenFullyEncryptedResults";
         /* the absence of the backup tar ball means that encryption has completed */
         /* since the finished encrypted backup replaced the backup tar ball */
-        if (!fileExists(backupTarBallPath,lookupFileResults))
+        printfileExist(__LINE__);
+        if (!fileExist(backupTarBallPath,purpose))
+//        if (!fileExists(backupTarBallPath,lookupFileResults))
         {
+//print(__LINE__);
             ccryptIsDone=true;
         }
     }
     else // purpose = restore
     {
         //if (!decryptionInProgress())
-        string lookupFileResults=globalString.basePath+
-                                 "testIfTheBackupHasBeenFullyDecryptedResults";
+//        string lookupFileResults=globalString.basePath+
+//                                 "testIfTheBackupHasBeenFullyDecryptedResults";
         /* the absence of *.cpt means that decryption has finished */
         //cout<<encryptedBackupPathWithCptExtension<<endl;
-        if (!fileExists(encryptedBackupPathWithCptExtension,lookupFileResults))
+        printfileExist(__LINE__);
+        if (!fileExist(encryptedBackupPathWithCptExtension,purpose))
+//        if (!fileExists(encryptedBackupPathWithCptExtension,lookupFileResults))
         {
             ccryptIsDone=true;
         }
     }
+//print(__LINE__);
     return ccryptIsDone;
 }
 
@@ -382,9 +401,12 @@ print(__LINE__);
     }
     else
     {
+print(__LINE__);
         double ccryptPercentageComplete=0.0;
+        //if ((purpose == "backup") && encryptHadStarted())
         if  (purpose == "backup")
         {
+print(__LINE__);
             // encryption hasn't finished yet, so calculate % completed so far
             double sizeOfTheBackupTarBallToBeEncrypted =
                                             getSizeOfFile(backupTarBallPath);
@@ -394,9 +416,12 @@ print(__LINE__);
             //cout<<endl<<"size so far = "<<getSizeOfFile(nameOfTheEncryptedFile)<<endl;
             //cout<<endl<<"total size  = "<<sizeOfTheBackupTarBallToBeEncrypted<<endl;
             //cout<<endl<<"percentage complete = "<<ccryptPercentageComplete<<endl;
+            //display(ccryptPercentageComplete);
         }
+        //else if ((purpose == "restore") && decryptHadStarted())
         else // purpose = restore
         {
+print(__LINE__);
             // decryption hasn't finished yet, so calculate % completed so far
             double sizeOfBackupThatsToBeDecrypted =
                             getSizeOfFile(encryptedBackupPathWithCptExtension);
@@ -434,8 +459,9 @@ print(__LINE__);
 //            ccryptPercentageComplete =
 //                            (sizeofTheTemporaryDecryptedBackup/(getSizeOfFile(encryptedBackupPath)))*100;
 //            print(__LINE__);
-        }
 
+            //display(ccryptPercentageComplete);
+        }
 
         display(ccryptPercentageComplete);
     }
@@ -495,10 +521,12 @@ print(__LINE__);
 void displayTitleOfCcryptProgress()
 {
 print(__LINE__);
-    string lookupFileResults=
-                globalString.basePath+
-                "testIfTheccryptStatusTitleAlreadyPrintedResults";
-    if (!fileExists(globalString.ccryptTitlePrintedPath,lookupFileResults))
+//    string lookupFileResults=
+//                globalString.basePath+
+//                "testIfTheccryptStatusTitleAlreadyPrintedResults";
+printfileExist(__LINE__);
+    if (!fileExist(globalString.ccryptTitlePrintedPath,purpose))
+//    if (!fileExists(globalString.ccryptTitlePrintedPath,lookupFileResults))
     {
         if (purpose=="backup")
         {
@@ -519,5 +547,11 @@ print(__LINE__);
 
 void print(int lineNumber)
 {
-//    cout<<lineNumber<<endl;
+    cout<<lineNumber<<endl;
+}
+
+
+void printfileExist(int lineNumber)
+{
+    cout<<lineNumber<<" line before calling fileExist()"<<endl;
 }

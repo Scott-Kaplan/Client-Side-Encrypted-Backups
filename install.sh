@@ -238,69 +238,19 @@ fi
 
 # The following software needs to be installed
 # g++
+# tree
 # ccrypt
 echo Installing the necessary software, which is: g++, ccrypt, ...
 echo
 # Note: This next line assumes that you are running on Ubuntu.  If not, adjust for your distribution
-apt-get install -y g++ ccrypt
+apt-get install -y g++ tree ccrypt
 echo
 
 # Verify that the necessary software was installed.  Othwise, exit this script
 if (! which g++ | grep -q g++) ||
+   (! which tree | grep -q tree) ||
    (! which ccrypt | grep -q ccrypt);
 then
-  echo The necessary software was not installed.  Once you have fixed the errors, rerun the install script again.
+  echo The necessary software was not installed.  Once you have fixed the errors, rerun this install script again.
   echo
 fi
-
-#todo - remove.  This is just for debugging.  This automatically restores the input directory to what it was before the installation
-cp $HOME/.cloudbuddy/$dirToCreate/* $HOME/.cloudbuddy/input/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

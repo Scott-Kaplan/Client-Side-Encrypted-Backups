@@ -42,7 +42,8 @@ extern "C" string getTimestamp();
 extern "C" void retrieveUsernameAndDomain
             (string &username, string &domain, string &usernameAndDomainPath);
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
-extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+extern "C" bool fileExist(string &path, string &purpose);
+//extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
 extern "C" void clearTheTerminalWindow();
 extern "C" void openForWriting(string &path,
                                string fromFileName,
@@ -122,8 +123,9 @@ void deleteAllFilesIntheRestoreDirectory()
 
 void checkThatTheNeededConfigurationFilesExist()
 {
-    string lookupFileResults=globalString.basePath+"FoundResults";
-    if (!fileExists(globalString.usernameAndDomainPath,lookupFileResults))
+    //string lookupFileResults=globalString.basePath+"FoundResults";
+    //if (!fileExists(globalString.usernameAndDomainPath,lookupFileResults))
+    if (!fileExist(globalString.usernameAndDomainPath,purpose))
     {
         cout<<"Error: \nThis configuration file could not be read - \n"
             <<globalString.usernameAndDomainPath<<endl;
@@ -147,7 +149,6 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
          nameOfEncryptedBackup);
 }
 
-// todo: ensure that this is correct
 void displayUsage()
 {
     cout
@@ -187,7 +188,7 @@ void createAScriptTheWillRestoreTheBackup()
 
     /***** IMPORTANT NOTE *****/
     /***** Later on in this program a "rm -rf restorePath" is performed.  *****/
-    /***** So, if you need to change this be extremely careful.            *****/
+    /***** So, if you need to change this be extremely careful.           *****/
     string restorePath="$HOME/restored-from-backup/"+nameOfEncryptedBackup;
 
     ofstream scriptThatRestoresTheBackupHandle;
@@ -331,14 +332,11 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab0<<"echo "<<restorePath<< " > "<<globalString.basePath+"restorePath"<<endl
 
     /* create destination directory that the backup will be restored in */
-    // todo: consider asking the user if their backup had already been restored
-    //       whether ok to delete and proceed (to restore again).  It is
-    //       necessary to delete and start from nothing when restoring a backup
-    //       because untar progress % complete will initially show greater than
-    //       100%
+    // It is necessary to delete and start from nothing when restoring a backup
+    // because untar progress % complete will initially show greater than
+    // 100% otherwise
     <<tab0<<"rm -rf "<<restorePath<<endl
     <<tab0<<"mkdir "<<restorePath<<endl<<endl
-    //<<tab0<<"mkdir -p "<<restorePath<<endl<<endl
 
     /* untar the backup.  Do this in the background so the tar command */
     /* progress (percentage complete) can be given in the foreground */
@@ -355,10 +353,9 @@ void createAScriptTheWillRestoreTheBackup()
     // so the output can be analyzed to see if tar returned something unexpected
     <<" > "<<globalString.resultsOfTarCommand<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
-    // This is needed by the 'progress' program in order to report the tar
-    // percentage complete as the tar command is being executed.  When creating
-    // large tarballs the pecentage complete is very useful, otherwise the user
-    // just sees the command hanging and doesn't really know when it will finish
+    // When untar'ing large tarballs the pecentage complete is very useful,
+    // otherwise the user just sees their session hanging and doesn't really
+    // know if or when untaring will finish.
     <<" & echo $! > "<<globalString.fileThatContainsTheTarProcessId<<")"
     <<endl<<endl
 

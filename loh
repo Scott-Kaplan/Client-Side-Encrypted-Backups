@@ -9,3 +9,36 @@ DONE enter wrong decryption key, verify cursor and echo is resumed
 DONE largeRestore and enter correct decryption key, verify no blinking cursor as percentage counts up & echo/cursor resumed
 DONE run smallRestore
 DONE run largeRestore (works well for ~150MB backup)
+
+DONE replace fileExists() with fileExist() in backup
+put print statements for all passes and fails below, so will know when the file or directory is empty and when it is not
+	check createEmptyFileIfItDoesntExist() pass
+	check createEmptyFileIfItDoesntExist() fail
+	check checkThatAllDirectoriesAndFilesInConfigFile1Exist() pass
+	check checkThatAllDirectoriesAndFilesInConfigFile1Exist() fail
+
+DONE replace fileExists() with fileExist() in restore
+	check checkThatTheNeededConfigurationFilesExist() pass
+	check checkThatTheNeededConfigurationFilesExist() fail
+
+DONE replace fileExists() with fileExist() in actOnCcryptStatus	
+	check encryptionInProgress() pass
+	check encryptionInProgress() fail
+	check decryptionInProgress() pass
+	check decryptionInProgress() fail
+	check decryptHadStarted() pass
+	check decryptHadStarted() fail
+	check encryptHadStarted() pass
+	check encryptHadStarted() fail
+	check ccryptFinished() for backup pass
+	check ccryptFinished() for backup failed
+	check ccryptFinished() for restore pass
+	check ccryptFinished() for restore failed
+	check displayTitleOfCcryptProgress() pass
+	check displayTitleOfCcryptProgress() fail
+
+check that sudo in build.sh, if not print error and exit
+check that sudo in install.sh, if not print error and exit
+
+test displayUsage() in backup
+test displayUsage() in restore

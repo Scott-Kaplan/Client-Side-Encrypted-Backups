@@ -40,7 +40,6 @@ using namespace std;
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 #include <unistd.h>
 
-
 /****************************/
 /***** Static Libraries *****/
 /****************************/
@@ -53,9 +52,10 @@ extern "C" void openForWriting(string &path,
                                int lineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
-extern "C" string convertNumberToString(int number);
 extern "C" void convert$HOME(string &path);
-extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+//extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+extern "C" bool fileExist(string &path, string &purpose);
+extern "C" bool directoryExist(string &path, string &purpose);
 extern "C" void deleteFile(string &filename);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 extern "C" bool fileIsEmpty(string &path);
@@ -134,6 +134,7 @@ void createAListOfFilesThatHaveChangedOrAreNew();
 void createAScriptThatWillPerformTheBackup();
 void runTheScriptThatPerformsTheBackup();
 double getRemainingSizeInHomeDir();
+void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 
 /*********************/
 /***** Functions *****/
@@ -344,10 +345,9 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
 void createEmptyFileIfItDoesntExist(string &path)
 {
     convert$HOME(path);
-    //getGlobalStrings(globalString,purpose);
-    string lookupFileResults=globalString.basePath+"FoundResults";
-    //string lookupFileResults=globalString.outputDirectoryPath+"FoundResults";
-    if (!fileExists(path,lookupFileResults))
+    //string lookupFileResults=globalString.basePath+"FoundResults";
+    //if (!fileExists(path,lookupFileResults))
+    if (!fileExist(path,purpose))
     {
         string createFileCmd="touch \""+path+"\"";
         //dcout<<"createFileCmd = "<<createFileCmd<<endl;
@@ -404,7 +404,6 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 
 void displayUsage()
 {
-    //todo: retest this as moved around the words to fit withing column of 80
     cout
     <<"\nUsage:\n\nbackup "<<startUnderline
     <<"label-name|no-label\n\n"<<endUnderline
@@ -610,6 +609,8 @@ void createAListOfFilesThatHaveChangedOrAreNew()
         exit(EXIT_SUCCESS);
     }
 
+    checkThatAllDirectoriesAndFilesInConfigFile1Exist();
+
     /* this creates a file with a list of all files that have changed since   */
     /* the last backup was performed.  The filtering of what needs to be      */
     /* actually backed up occurs below this.                                  */
@@ -696,9 +697,7 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
                                                                         <<endl;
     projectedSizeOfTheTarBallHandle.close();
     double sizeRemainingInHomeDir = getRemainingSizeInHomeDir();
-    //long long int sizeRemainingInHomeDir = getRemainingSizeInHomeDir();
     double spaceNeededToPerformTheBackup =
-    //long long int spaceNeededToPerformTheBackup =
             (storageSpaceOfFilesThatWillBeInTheBackup*storageSpaceFactorNeeded);
 
     std::cout.imbue(std::locale(""));
@@ -708,7 +707,7 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
     {
         cout<<endl<<"Sorry but there isn't enough disc space in your Home"
               " directory to perform a backup."<<endl<<"Your Home directory"
-              " needs to at least have "
+              " needs to have at least "
               <<spaceNeededToPerformTheBackup<<" bytes available."<<endl<<endl;
         exit(EXIT_SUCCESS);
     }
@@ -813,7 +812,7 @@ void createAScriptThatWillPerformTheBackup()
     /* foreground */
     // example
     // (tar jcf e6230-primary**2018-07-16__06:37pm --force-local
-    // "/home/scott/temp/test/test/testTarBall" >
+    // "$HOME/temp/test/test/testTarBall" >
     // $HOME/.cloudbuddy/backup/resultsOfTarCommand 2>&1 &
     // echo $! > $HOME/.cloudbuddy/backup/fileThatContainsTheTarProcessId)
     <<tab0<<"(tar jcf "<<theBackup
@@ -821,12 +820,10 @@ void createAScriptThatWillPerformTheBackup()
     // one or more colons in the name of the tarball
     <<" --force-local"
     <<filteredChangedAndNewFilesIntoTarCmd<<" > "<<globalString.resultsOfTarCommand<<" 2>&1"
-    //<<filteredChangedAndNewFilesIntoTarCmd<<" > "<<resultsOfTarCommand<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
-    // This is needed by the 'progress' program in order to report the tar
-    // percentage complete as the tar command is being executed.  When creating
-    // large tarballs the pecentage complete is very useful, otherwise the user
-    // just sees the command hanging and doesn't really know when it will finish
+    // When creating large tarballs the pecentage complete is very useful,
+    // otherwise the user just sees the session hanging and doesn't really know
+    // if or when tar will finish
     <<" & echo $! > "<<globalString.fileThatContainsTheTarProcessId<<")"
     <<endl<<endl
 
@@ -1065,7 +1062,6 @@ double getRemainingSizeInHomeDir()
     string sizeRemainingInHomeDirectoryIn1KByteBlocks = getStringUnder(4,6,line);
 
     /* return the remaining size in the home directory by converting the string to a double */
-    ///* return a converted string to long long int of the remaining size in the home directory */
     // source: https://stackoverflow.com/questions/21887274/convert-string-to-long-long-int
     char* endptr = NULL;
     double remainingSizeInHomeDirectory =
@@ -1073,4 +1069,31 @@ double getRemainingSizeInHomeDir()
     int conversionFrom1KByteBlocksToBytes = 1000;
     remainingSizeInHomeDirectory *= conversionFrom1KByteBlocksToBytes;
     return remainingSizeInHomeDirectory;
+}
+
+void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
+{
+    string line="";
+    ifstream checkIntegrityHandle;
+    openForReading(searchThisListForChangesPath,
+                   __FILE__,
+                   __LINE__,
+                   checkIntegrityHandle);
+    for (int i=0;getline(checkIntegrityHandle,line);++i)
+    {
+        removeLeadingWhiteSpaces(line);
+        if ((line[0] != '#') && // skip comment lines
+            (!line.empty()))    // skip empty lines
+        {
+            if (!fileOrDirExist(line,purpose) && !directoryExist(line,purpose))
+            //if (!fileExist(line,purpose) && !directoryExist(line,purpose))
+            {
+                cout<<"Error: \""+line+"\" is not a directory or a file"<<endl
+                    <<"Please correct this in - "<<endl
+                    <<searchThisListForChangesPath<<endl;
+                exit(EXIT_SUCCESS);
+            }
+        }
+    }
+    checkIntegrityHandle.close();
 }
