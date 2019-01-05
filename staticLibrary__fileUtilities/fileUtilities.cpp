@@ -42,11 +42,11 @@ using namespace std;
 /****************************************/
 extern "C" void openForReading(string &path,
                                string fromFileName,
-                               int lineNumber,
+                               int fromLineNumber,
                                ifstream &readFileHandle);
 extern "C" void openForWriting(string &path,
                                string fromFileName,
-                               int lineNumber,
+                               int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 extern "C" void convert$HOME(string &path);
@@ -72,9 +72,16 @@ extern "C" void writeCleanUpAndExitFunction
 extern "C" void writeCleanUpFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
-extern "C" bool fileExist(string &path, string &purpose);
-extern "C" bool directoryExist(string &path, string &purpose);
-
+//extern "C" bool fileExist(string &path, string &purpose);
+extern "C" bool fileExist(string &lookupFile,
+                          string fromFileName,
+                          int fromLineNumber,
+                          string resultsDirectory);
+//extern "C" bool directoryExist(string &path, string &purpose);
+extern "C" bool directoryExist(string &lookupFile,
+                               string fromFileName,
+                               int fromLineNumber,
+                               string resultsDirectory);
 
 ///*******************************/
 ///***** Function Prototypes *****/
@@ -87,7 +94,7 @@ bool exist(string &path, string &purpose, string &lookupSpecifier);
 
 void openForReading(string &path,
                     string fromFileName,
-                    int lineNumber,
+                    int fromLineNumber,
                     ifstream &readFileHandle)
 {
     convert$HOME(path);
@@ -97,7 +104,7 @@ void openForReading(string &path,
         /* can't open the file for reading */
         cout<<"ERROR: Could not open this file for reading: "<<path
             <<"\nfrom file = "<<fromFileName
-            <<"\nfrom line # "<<lineNumber
+            <<"\nfrom line # "<<fromLineNumber
             <<endl;
         exit(EXIT_SUCCESS);
     }
@@ -105,7 +112,7 @@ void openForReading(string &path,
 
 void openForWriting(string &path,
                     string fromFileName,
-                    int lineNumber,
+                    int fromLineNumber,
                     ofstream &writeFileHandle,
                     FileWritingType fileWritingType)
 {
@@ -123,7 +130,7 @@ void openForWriting(string &path,
         /* can't open the file for writing */
         cout<<"ERROR: Could not open this file for writing: "<<path
         <<"\nfrom file = "<<fromFileName
-        <<"\nfrom line # "<<lineNumber
+        <<"\nfrom line # "<<fromLineNumber
         <<endl;
         exit(EXIT_SUCCESS);
     }
@@ -140,6 +147,7 @@ void convert$HOME(string &path)
     }
 }
 
+/*
 bool fileExist(string &path, string &purpose)
 {
     string lookupSpecifier = "f";
@@ -212,45 +220,103 @@ cout<<endl<<cmd<<endl<<endl;
         return false;
     }
 }
+*/
 
-LEFT OFF HERE
-these all work.  just implement below that
+string convertToString(int number)
+{
+    stringstream ss;
+    ss<<number;
+    return ss.str();
+}
 
-/* list only specific file */
-//https://askubuntu.com/questions/811210/how-can-i-make-ls-only-display-files
+bool fileExist(string &lookupFile,
+               string fromFileName,
+               int fromLineNumber,
+               string resultsDirectory)
+//bool fileExist(string &lookupFile,string &fileExistResults)
+{
+    /* list only specific file */
+    //https://askubuntu.com/questions/811210/how-can-i-make-ls-only-display-files
 
-// success
-// ls -p | grep -v / | grep "filename" > results 2>&1
-// saves
-// filename
+    // success
+    // ls -p | grep -v / | grep "filename" > results 2>&1
+    // saves
+    // filename
 
-// successful failure because filename1 doesn't exist
-// ls -p | grep -v / | grep "filename1" > results 2>&1
-// saves
-// nothing as expected
+    // successful failure because filename1 doesn't exist
+    // ls -p | grep -v / | grep "filename1" > results 2>&1
+    // saves
+    // nothing as expected
 
-// successful failure because Movies is a directory
-// ls -p | grep -v / | grep "Movies" > results 2>&1
-// saves
-// nothing as expected
+    // successful failure because Movies is a directory
+    // ls -p | grep -v / | grep "Movies" > results 2>&1
+    // saves
+    // nothing as expected
 
-/* list only specific directory */
-// success
-// ls -d Videos/ > results 2>&1
-// saves
-// Videos/
+    string fileExistResults =
+                resultsDirectory+
+                "__FileExistLookupFromFilename__"+fromFileName+
+                "__FromLineNumber__"+convertToString(fromLineNumber);
+cout<<fileExistResults<<endl;
+    bool theFileExists = true;
+    string fileExistCmd =
+    //ls -p | grep -v / | grep "filename" > results 2>&1
+    "ls -p | grep -v / | grep \""+lookupFile+"\" > "+fileExistResults+" 2>&1";
+cout<<fileExistCmd<<endl;
+    if(system(fileExistCmd.c_str()));
+    if (fileIsEmpty(fileExistResults))
+    {
+        theFileExists = false;
+    }
+exit(EXIT_SUCCESS);
+    return theFileExists;
+}
 
-// successful failure because filename is a file
-// ls -d filename/ > results 2>&1
-// saves
-// ls: cannot access filename/: Not a directory
+bool directoryExist(string &lookupDirectory,
+               string fromFileName,
+               int fromLineNumber,
+               string resultsDirectory)
+//bool directoryExist(string &lookupDirectory,string &directoryExistResults)
+{
+    /* list only specific directory */
+    // success
+    // ls -d Videos/ > results 2>&1
+    // saves
+    // Videos/
 
-// successful failure because Videos1 is not a directory
-// ls -d Videos1/ > results 2>&1
-// saves
-// ls: cannot access Videos1/: No such file or directory
+    // successful failure because filename is a file
+    // ls -d filename/ > results 2>&1
+    // saves
+    // ls: cannot access filename/: Not a directory
 
+    // successful failure because Videos1 is not a directory
+    // ls -d Videos1/ > results 2>&1
+    // saves
+    // ls: cannot access Videos1/: No such file or directory
 
+    string directoryExistResults =
+                resultsDirectory+
+                "__FileExistLookupFromFilename__"+fromFileName+
+                "__FromLineNumber__"+convertToString(fromLineNumber);
+cout<<directoryExistResults<<endl;
+    bool theDirectoryExists = true;
+    string directoryExistCmd =
+         //ls -d Videos/ > results 2>&1
+        "ls -d \""+lookupDirectory+"/\" > "+directoryExistResults+" 2>&1";
+cout<<directoryExistCmd<<endl;
+    ifstream directoryExistHandle;
+    string line="";
+    openForReading(directoryExistResults,__FILE__,__LINE__,directoryExistHandle);
+    getline(directoryExistHandle,line);
+    directoryExistHandle.close();
+    deleteFile(directoryExistResults);
+    if (line.substr(0,17) == "ls: cannot access")
+    {
+        theDirectoryExists = false;
+    }
+exit(EXIT_SUCCESS);
+    return theDirectoryExists;
+}
 
 /* works but doesn't differentiate between directories and files
 bool fileExists(string &lookupFile,string &lookupFileResults)

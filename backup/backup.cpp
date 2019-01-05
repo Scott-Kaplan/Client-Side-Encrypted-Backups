@@ -45,17 +45,25 @@ using namespace std;
 /****************************/
 extern "C" void openForReading(string &path,
                                string fromFileName,
-                               int lineNumber,
+                               int fromLineNumber,
                                ifstream &readFileHandle);
 extern "C" void openForWriting(string &path,
                                string fromFileName,
-                               int lineNumber,
+                               int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 extern "C" void convert$HOME(string &path);
 //extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
-extern "C" bool fileExist(string &path, string &purpose);
-extern "C" bool directoryExist(string &path, string &purpose);
+//extern "C" bool fileExist(string &path, string &purpose);
+extern "C" bool fileExist(string &lookupFile,
+                          string fromFileName,
+                          int fromLineNumber,
+                          string resultsDirectory);
+//extern "C" bool directoryExist(string &path, string &purpose);
+extern "C" bool directoryExist(string &lookupFile,
+                               string fromFileName,
+                               int fromLineNumber,
+                               string resultsDirectory);
 extern "C" void deleteFile(string &filename);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 extern "C" bool fileIsEmpty(string &path);
@@ -347,7 +355,8 @@ void createEmptyFileIfItDoesntExist(string &path)
     convert$HOME(path);
     //string lookupFileResults=globalString.basePath+"FoundResults";
     //if (!fileExists(path,lookupFileResults))
-    if (!fileExist(path,purpose))
+    if (!fileExist(path,__FILE__,__LINE__,purpose))
+//    if (!fileExist(path,purpose))
     {
         string createFileCmd="touch \""+path+"\"";
         //dcout<<"createFileCmd = "<<createFileCmd<<endl;
@@ -1085,10 +1094,12 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
-            if (!fileOrDirExist(line,purpose) && !directoryExist(line,purpose))
+            if (!fileExist(line,__FILE__,__LINE__,purpose) &&
+                !directoryExist(line,__FILE__,__LINE__,purpose))
+            //if (!fileOrDirExist(line,purpose) && !directoryExist(line,purpose))
             //if (!fileExist(line,purpose) && !directoryExist(line,purpose))
             {
-                cout<<"Error: \""+line+"\" is not a directory or a file"<<endl
+                cout<<"Error: \""+line+"\" is not a file or directory"<<endl
                     <<"Please correct this in - "<<endl
                     <<searchThisListForChangesPath<<endl;
                 exit(EXIT_SUCCESS);

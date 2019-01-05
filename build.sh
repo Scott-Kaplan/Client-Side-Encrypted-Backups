@@ -8,35 +8,35 @@ echo
 
 echo Building the fileUtilities static library ...
 cd ./staticLibrary__fileUtilities
-g++ -Wall -O2  -c main.cpp -o obj/Release/main.o
+g++ -Wall -O2  -c fileUtilities.cpp -o obj/Release/fileUtilities.o
 rm -f bin/Release/libstaticLibrary__fileUtilities.a
-ar -r -s bin/Release/libstaticLibrary__fileUtilities.a obj/Release/main.o
+ar -r -s bin/Release/libstaticLibrary__fileUtilities.a obj/Release/fileUtilities.o
 
 echo
 echo Building the backup binary ...
 cd ../backup
-g++ -Wall -fexceptions -O2  -c main.cpp -o obj/Release/main.o
-g++ -o bin/Release/backup obj/Release/main.o -s  ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+g++ -Wall -fexceptions -O2  -c backup.cpp -o obj/Release/backup.o
+g++ -o bin/Release/backup obj/Release/backup.o -s  ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 
 echo
 echo Building the actOnTarStatus binary ...
 cd ../actOnTarStatus
-g++ -Wall -fexceptions -O2  -c main.cpp -o obj/Release/main.o
-g++  -o bin/Release/actOnTarStatus obj/Release/main.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+g++ -Wall -fexceptions -O2  -c actOnTarStatus.cpp -o obj/Release/actOnTarStatus.o
+g++  -o bin/Release/actOnTarStatus obj/Release/actOnTarStatus.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 
 echo
 echo Building the actOnCcryptStatus binary ...
 cd ../actOnCcryptStatus
-g++ -Wall -fexceptions -O2  -c main.cpp -o obj/Release/main.o
-g++  -o bin/Release/actOnCcryptStatus obj/Release/main.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+g++ -Wall -fexceptions -O2  -c actOnCcryptStatus.cpp -o obj/Release/actOnCcryptStatus.o
+g++  -o bin/Release/actOnCcryptStatus obj/Release/actOnCcryptStatus.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 
 echo
 echo Building the restore binary ...
 cd ../restore
-g++ -Wall -fexceptions -O2  -c main.cpp -o obj/Release/main.o
-g++  -o bin/Release/restore obj/Release/main.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+g++ -Wall -fexceptions -O2  -c restore.cpp -o obj/Release/restore.o
+g++  -o bin/Release/restore obj/Release/restore.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 
-# copy the backup and restore binaries to /usr/local/bin/ if all of these build
+# copy the binaries to /usr/local/bin/ if all of them build
 # ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 # ./backup/bin/Release/backup
 # ./actOnTarStatus/bin/Release/actOnTarStatus

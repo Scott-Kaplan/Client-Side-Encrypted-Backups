@@ -42,12 +42,16 @@ extern "C" string getTimestamp();
 extern "C" void retrieveUsernameAndDomain
             (string &username, string &domain, string &usernameAndDomainPath);
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
-extern "C" bool fileExist(string &path, string &purpose);
+//extern "C" bool fileExist(string &path, string &purpose);
 //extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+extern "C" bool fileExist(string &lookupFile,
+                          string fromFileName,
+                          int fromLineNumber,
+                          string resultsDirectory);
 extern "C" void clearTheTerminalWindow();
 extern "C" void openForWriting(string &path,
                                string fromFileName,
-                               int lineNumber,
+                               int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 void createRestoreDirectory();
@@ -125,7 +129,8 @@ void checkThatTheNeededConfigurationFilesExist()
 {
     //string lookupFileResults=globalString.basePath+"FoundResults";
     //if (!fileExists(globalString.usernameAndDomainPath,lookupFileResults))
-    if (!fileExist(globalString.usernameAndDomainPath,purpose))
+    if (!fileExist(globalString.usernameAndDomainPath,__FILE__,__LINE__,purpose))
+//    if (!fileExist(globalString.usernameAndDomainPath,purpose))
     {
         cout<<"Error: \nThis configuration file could not be read - \n"
             <<globalString.usernameAndDomainPath<<endl;

@@ -45,14 +45,18 @@ using namespace std;
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
 extern "C" void openForReading(string &path,
                                string fromFileName,
-                               int lineNumber,
+                               int fromLineNumber,
                                ifstream &readFileHandle);
 extern "C" void openForWriting(string &path,
                                string fromFileName,
-                               int lineNumber,
+                               int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
-extern "C" bool fileExist(string &path, string &purpose);
+extern "C" bool fileExist(string &lookupFile,
+                          string fromFileName,
+                          int fromLineNumber,
+                          string resultsDirectory);
+//extern "C" bool fileExist(string &path, string &purpose);
 //extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
 extern "C" bool fileIsEmpty(string &path);
 extern "C" double getSizeOfFile(string &path);
@@ -87,8 +91,8 @@ void displayTitleOfCcryptProgress();
 void extractPaths();
 void displayCcryptStatus();
 bool ccryptFinished();
-void print(int lineNumber);  // todo - delete after done debugging
-void printfileExist(int lineNumber); // todo - delete after done debugging
+void print(int fromLineNumber);  // todo - delete after done debugging
+void printfileExist(int fromLineNumber); // todo - delete after done debugging
 
 bool decryptionInProgress();
 bool encryptionInProgress();
@@ -188,7 +192,8 @@ bool encryptionInProgress()
     /* if not started a *.cpt file will be absent */
 cout<<encryptedBackupPath<<endl;
 printfileExist(__LINE__);
-    if (fileExist(encryptedBackupPath,purpose))
+    if (fileExist(encryptedBackupPath,__FILE__,__LINE__,purpose))
+    //if (fileExist(encryptedBackupPath,purpose))
 //    if (fileExists(encryptedBackupPath,lookupFileResults))
     {
       encryptionIsInProgress = true;
@@ -223,7 +228,8 @@ bool decryptionInProgress()
     /* As soon as decryption begins, a backup without the .cpt file is created */
     /* if not started a backup without the .cpt file will be absent */
 printfileExist(__LINE__);
-    if (fileExist(encryptedBackupPath,purpose))
+    if (fileExist(encryptedBackupPath,__FILE__,__LINE__,purpose))
+//    if (fileExist(encryptedBackupPath,purpose))
 //    if (fileExists(encryptedBackupPath,lookupFileResults))
     {
       decryptionIsInProgress = true;
@@ -361,7 +367,8 @@ print(__LINE__);
         /* the absence of the backup tar ball means that encryption has completed */
         /* since the finished encrypted backup replaced the backup tar ball */
         printfileExist(__LINE__);
-        if (!fileExist(backupTarBallPath,purpose))
+        if (!fileExist(backupTarBallPath,__FILE__,__LINE__,purpose))
+//        if (!fileExist(backupTarBallPath,purpose))
 //        if (!fileExists(backupTarBallPath,lookupFileResults))
         {
 //print(__LINE__);
@@ -376,7 +383,8 @@ print(__LINE__);
         /* the absence of *.cpt means that decryption has finished */
         //cout<<encryptedBackupPathWithCptExtension<<endl;
         printfileExist(__LINE__);
-        if (!fileExist(encryptedBackupPathWithCptExtension,purpose))
+        if (!fileExist(encryptedBackupPathWithCptExtension,__FILE__,__LINE__,purpose))
+//        if (!fileExist(encryptedBackupPathWithCptExtension,purpose))
 //        if (!fileExists(encryptedBackupPathWithCptExtension,lookupFileResults))
         {
             ccryptIsDone=true;
@@ -525,7 +533,8 @@ print(__LINE__);
 //                globalString.basePath+
 //                "testIfTheccryptStatusTitleAlreadyPrintedResults";
 printfileExist(__LINE__);
-    if (!fileExist(globalString.ccryptTitlePrintedPath,purpose))
+    if (!fileExist(globalString.ccryptTitlePrintedPath,__FILE__,__LINE__,purpose))
+//    if (!fileExist(globalString.ccryptTitlePrintedPath,purpose))
 //    if (!fileExists(globalString.ccryptTitlePrintedPath,lookupFileResults))
     {
         if (purpose=="backup")
@@ -545,13 +554,13 @@ printfileExist(__LINE__);
     }
 }
 
-void print(int lineNumber)
+void print(int fromLineNumber)
 {
-    cout<<lineNumber<<endl;
+    cout<<fromLineNumber<<endl;
 }
 
 
-void printfileExist(int lineNumber)
+void printfileExist(int fromLineNumber)
 {
-    cout<<lineNumber<<" line before calling fileExist()"<<endl;
+    cout<<fromLineNumber<<" line before calling fileExist()"<<endl;
 }

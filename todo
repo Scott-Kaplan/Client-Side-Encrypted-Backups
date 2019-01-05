@@ -1,3 +1,7 @@
+// ensure main.cpp from github has been removed
+// resume testing of fileExist and dirExist
+// check that build.sh is sudo, otherwise print error message
+// check that install.sh is suco, otherwise print error message
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
 // ensure no spaces in config file 2 for field that needs to be extracted
 // ensure no spaces in config file 3 for field that needs to be extracted

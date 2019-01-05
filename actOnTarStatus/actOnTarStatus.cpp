@@ -45,7 +45,7 @@ using namespace std;
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
 extern "C" void openForReading(string &path,
                     string fromFileName,
-                    int lineNumber,
+                    int fromLineNumber,
                     ifstream &readFileHandle);
 extern "C" double getSizeOfFile(string &path);
 
