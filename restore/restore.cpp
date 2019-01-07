@@ -44,7 +44,7 @@ extern "C" void retrieveUsernameAndDomain
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
 //extern "C" bool fileExist(string &path, string &purpose);
 //extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
-extern "C" bool fileExist(string &lookupFile,
+extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
                           string resultsDirectory);

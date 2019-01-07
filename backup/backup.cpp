@@ -53,14 +53,14 @@ extern "C" void openForWriting(string &path,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 extern "C" void convert$HOME(string &path);
-//extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+//extern "C" bool fileExists(string &lookupPath,string &lookupPathResults);
 //extern "C" bool fileExist(string &path, string &purpose);
-extern "C" bool fileExist(string &lookupFile,
+extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
                           string resultsDirectory);
 //extern "C" bool directoryExist(string &path, string &purpose);
-extern "C" bool directoryExist(string &lookupFile,
+extern "C" bool directoryExist(string &lookupDirectoryPath,
                                string fromFileName,
                                int fromLineNumber,
                                string resultsDirectory);
@@ -149,6 +149,10 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 /*********************/
 int main(int argc, char * const argv[])
 {
+    string path="$HOME/.cloudbuddy/dirThatDoesntExist";
+    directoryExist(path,__FILE__,__LINE__,purpose);
+    exit(EXIT_SUCCESS);
+
     getGlobalStrings(globalString,purpose);
     deleteAllFilesInTheBackupDirectory();
     createTheConfigurationFilesIfTheyDontExist();

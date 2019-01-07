@@ -1,4 +1,3 @@
-// ensure main.cpp from github has been removed
 // resume testing of fileExist and dirExist
 // check that build.sh is sudo, otherwise print error message
 // check that install.sh is suco, otherwise print error message

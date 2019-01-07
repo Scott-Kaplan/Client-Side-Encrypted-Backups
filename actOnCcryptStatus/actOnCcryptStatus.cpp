@@ -52,7 +52,7 @@ extern "C" void openForWriting(string &path,
                                int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
-extern "C" bool fileExist(string &lookupFile,
+extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
                           string resultsDirectory);

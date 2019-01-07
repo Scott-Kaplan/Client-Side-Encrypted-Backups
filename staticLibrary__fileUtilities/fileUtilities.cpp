@@ -50,7 +50,7 @@ extern "C" void openForWriting(string &path,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 extern "C" void convert$HOME(string &path);
-// works except does both directories and files extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
+// works except does both directories and files extern "C" bool fileExists(string &lookupPath,string &lookupPathResults);
 extern "C" void deleteFile(string &filename);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 extern "C" bool fileIsEmpty(string &path);
@@ -73,12 +73,12 @@ extern "C" void writeCleanUpFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
 //extern "C" bool fileExist(string &path, string &purpose);
-extern "C" bool fileExist(string &lookupFile,
+extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
                           string resultsDirectory);
 //extern "C" bool directoryExist(string &path, string &purpose);
-extern "C" bool directoryExist(string &lookupFile,
+extern "C" bool directoryExist(string &lookupPath,
                                string fromFileName,
                                int fromLineNumber,
                                string resultsDirectory);
@@ -102,10 +102,10 @@ void openForReading(string &path,
     if (!(readFileHandle.is_open()))
     {
         /* can't open the file for reading */
-        cout<<"ERROR: Could not open this file for reading: "<<path
-            <<"\nfrom file = "<<fromFileName
+        cout<<endl<<"ERROR: Could not open this file for reading: \""<<path
+            <<"\"\nfrom file = "<<fromFileName
             <<"\nfrom line # "<<fromLineNumber
-            <<endl;
+            <<endl<<endl;
         exit(EXIT_SUCCESS);
     }
 }
@@ -128,10 +128,10 @@ void openForWriting(string &path,
     if (!(writeFileHandle.is_open()))
     {
         /* can't open the file for writing */
-        cout<<"ERROR: Could not open this file for writing: "<<path
-        <<"\nfrom file = "<<fromFileName
+        cout<<endl<<"ERROR: Could not open this file for writing: \""<<path
+        <<"\"\nfrom file = "<<fromFileName
         <<"\nfrom line # "<<fromLineNumber
-        <<endl;
+        <<endl<<endl;
         exit(EXIT_SUCCESS);
     }
 }
@@ -229,81 +229,97 @@ string convertToString(int number)
     return ss.str();
 }
 
-bool fileExist(string &lookupFile,
+bool fileExist(string &lookupFilePath,
                string fromFileName,
                int fromLineNumber,
                string resultsDirectory)
-//bool fileExist(string &lookupFile,string &fileExistResults)
+//bool fileExist(string &lookupPath,string &fileExistResults)
 {
     /* list only specific file */
     //https://askubuntu.com/questions/811210/how-can-i-make-ls-only-display-files
 
-    // success
+    // example in current directory
     // ls -p | grep -v / | grep "filename" > results 2>&1
+
+    // success
+    // ls -p "PathUpToFileName"| grep -v / | grep "filename" > results 2>&1
     // saves
     // filename
 
     // successful failure because filename1 doesn't exist
-    // ls -p | grep -v / | grep "filename1" > results 2>&1
+    // ls -p "PathUpToFileName" | grep -v / | grep "filename1" > results 2>&1
     // saves
     // nothing as expected
 
     // successful failure because Movies is a directory
-    // ls -p | grep -v / | grep "Movies" > results 2>&1
+    // ls -p "PathUpToFileName" | grep -v / | grep "Movies" > results 2>&1
     // saves
     // nothing as expected
 
+    globalStringS globalString;
+    getGlobalStrings(globalString,resultsDirectory);
     string fileExistResults =
-                resultsDirectory+
-                "__FileExistLookupFromFilename__"+fromFileName+
-                "__FromLineNumber__"+convertToString(fromLineNumber);
-cout<<fileExistResults<<endl;
+                globalString.basePath+
+                "fileExistLookupFrom_"+fromFileName+
+                "_fromLineNumber__"+convertToString(fromLineNumber);
+    string dirThatTheFileIsIn="";
+    string fileName="";
+    extractPathAndFileName(lookupFilePath,dirThatTheFileIsIn,fileName);
     bool theFileExists = true;
     string fileExistCmd =
-    //ls -p | grep -v / | grep "filename" > results 2>&1
-    "ls -p | grep -v / | grep \""+lookupFile+"\" > "+fileExistResults+" 2>&1";
-cout<<fileExistCmd<<endl;
+    //example)
+    //ls -p "$HOME/.cloudbuddy/input/" | grep -v / | grep -F "[1] search_this_list_for_changes" > results 2>&1;
+            "ls -p \""+dirThatTheFileIsIn+"\" | grep -v / | grep -F \""+fileName
+                                              +"\" > "+fileExistResults+" 2>&1";
     if(system(fileExistCmd.c_str()));
     if (fileIsEmpty(fileExistResults))
     {
         theFileExists = false;
     }
-exit(EXIT_SUCCESS);
     return theFileExists;
 }
 
-bool directoryExist(string &lookupDirectory,
+bool directoryExist(string &lookupDirectoryPath,
                string fromFileName,
                int fromLineNumber,
                string resultsDirectory)
 //bool directoryExist(string &lookupDirectory,string &directoryExistResults)
 {
     /* list only specific directory */
-    // success
+
+    // example in current directory
     // ls -d Videos/ > results 2>&1
+
+    // success
+    // ls -d "$HOME/Videos/" > results 2>&1
     // saves
     // Videos/
 
     // successful failure because filename is a file
-    // ls -d filename/ > results 2>&1
+    // ls -d "$HOME/filename/" > results 2>&1
     // saves
     // ls: cannot access filename/: Not a directory
 
     // successful failure because Videos1 is not a directory
-    // ls -d Videos1/ > results 2>&1
+    // ls -d "$HOME/Videos1/" > results 2>&1
     // saves
     // ls: cannot access Videos1/: No such file or directory
 
+    globalStringS globalString;
+    getGlobalStrings(globalString,resultsDirectory);
     string directoryExistResults =
-                resultsDirectory+
-                "__FileExistLookupFromFilename__"+fromFileName+
-                "__FromLineNumber__"+convertToString(fromLineNumber);
-cout<<directoryExistResults<<endl;
+                globalString.basePath+
+                "directoryExistLookupFrom_"+fromFileName+
+                "_fromLineNumber__"+convertToString(fromLineNumber);
     bool theDirectoryExists = true;
     string directoryExistCmd =
-         //ls -d Videos/ > results 2>&1
-        "ls -d \""+lookupDirectory+"/\" > "+directoryExistResults+" 2>&1";
+        // example)
+        // ls -d "$HOME/Videos/" > results 2>&1
+        "ls -d \""+lookupDirectoryPath+"/\" > "+directoryExistResults+" 2>&1";
 cout<<directoryExistCmd<<endl;
+LEFT OFF HERE
+uncomment this line and ensure that it passes
+//    if(system(directoryExistCmd.c_str()));
     ifstream directoryExistHandle;
     string line="";
     openForReading(directoryExistResults,__FILE__,__LINE__,directoryExistHandle);
@@ -314,29 +330,28 @@ cout<<directoryExistCmd<<endl;
     {
         theDirectoryExists = false;
     }
-exit(EXIT_SUCCESS);
     return theDirectoryExists;
 }
 
 /* works but doesn't differentiate between directories and files
-bool fileExists(string &lookupFile,string &lookupFileResults)
+bool fileExists(string &lookupPath,string &lookupPathResults)
 {
     string lsCmd=
                 "ls "
                 "\""+
-                lookupFile+
+                lookupPath+
                 "\""
                 " > "+
-                lookupFileResults+
+                lookupPathResults+
                 " 2>&1";
     //dcout<<lsCmd<<endl;
     if(system(lsCmd.c_str()));
     ifstream lsOutputHandle;
     string line="";
-    openForReading(lookupFileResults,__FILE__,__LINE__,lsOutputHandle);
+    openForReading(lookupPathResults,__FILE__,__LINE__,lsOutputHandle);
     getline(lsOutputHandle,line);
     lsOutputHandle.close();
-    deleteFile(lookupFileResults);
+    deleteFile(lookupPathResults);
     if (line.substr(0,17)!="ls: cannot access")
     {
         return true;
