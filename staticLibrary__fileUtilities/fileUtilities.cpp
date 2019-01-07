@@ -77,7 +77,6 @@ extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
                           string resultsDirectory);
-//extern "C" bool directoryExist(string &path, string &purpose);
 extern "C" bool directoryExist(string &lookupPath,
                                string fromFileName,
                                int fromLineNumber,
@@ -283,10 +282,7 @@ bool directoryExist(string &lookupDirectoryPath,
                string fromFileName,
                int fromLineNumber,
                string resultsDirectory)
-//bool directoryExist(string &lookupDirectory,string &directoryExistResults)
 {
-    /* list only specific directory */
-
     // example in current directory
     // ls -d Videos/ > results 2>&1
 
@@ -316,10 +312,7 @@ bool directoryExist(string &lookupDirectoryPath,
         // example)
         // ls -d "$HOME/Videos/" > results 2>&1
         "ls -d \""+lookupDirectoryPath+"/\" > "+directoryExistResults+" 2>&1";
-cout<<directoryExistCmd<<endl;
-LEFT OFF HERE
-uncomment this line and ensure that it passes
-//    if(system(directoryExistCmd.c_str()));
+    if(system(directoryExistCmd.c_str()));
     ifstream directoryExistHandle;
     string line="";
     openForReading(directoryExistResults,__FILE__,__LINE__,directoryExistHandle);
@@ -330,6 +323,7 @@ uncomment this line and ensure that it passes
     {
         theDirectoryExists = false;
     }
+
     return theDirectoryExists;
 }
 

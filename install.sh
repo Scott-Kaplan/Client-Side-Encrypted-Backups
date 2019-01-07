@@ -212,7 +212,7 @@ echo
 echo "Starting to build the Client-Side-Encrypted-Backups static libraries and binaries ..."
 ./build.sh
 
-# copy the backup and restore binaries to /usr/local/bin/ if all of these build
+# exit if the following wasn't built
 # ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 # ./backup/bin/Release/backup
 # ./actOnTarStatus/bin/Release/actOnTarStatus
@@ -224,23 +224,15 @@ if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtili
    [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
    [ ! -e ./restore/bin/Release/restore ];
 then
-  echo
-  echo The build failed.  Once you have fixed the errors, rerun the install script again
-  echo
-  echo
+  # there is no need to display additional error messages here since build.sh displayed them
   exit
-else
-  cp ./backup/bin/Release/backup /usr/local/bin
-  cp ./actOnTarStatus/bin/Release/actOnTarStatus /usr/local/bin
-  cp ./actOnCcryptStatus/bin/Release/actOnCcryptStatus /usr/local/bin
-  cp ./restore/bin/Release/restore /usr/local/bin
 fi
 
 # The following software needs to be installed
 # g++
 # tree
 # ccrypt
-echo Installing the necessary software, which is: g++, ccrypt, ...
+echo Installing the necessary software which is: g++, tree, ccrypt
 echo
 # Note: This next line assumes that you are running on Ubuntu.  If not, adjust for your distribution
 apt-get install -y g++ tree ccrypt
@@ -251,6 +243,6 @@ if (! which g++ | grep -q g++) ||
    (! which tree | grep -q tree) ||
    (! which ccrypt | grep -q ccrypt);
 then
-  echo The necessary software was not installed.  Once you have fixed the errors, rerun this install script again.
+  echo ERROR: The necessary software was not installed.  Please fix above.
   echo
 fi
