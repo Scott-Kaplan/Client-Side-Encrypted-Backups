@@ -1,3 +1,28 @@
+// why is the timestamp being updates for this.  look for Touch command
+// may not occur in regular practice as just trying to get fileExist() to not detect multiple beyond pattern matches
+//.bashrc
+//.bashrc~
+//.bashrc1
+//.bashrcBk
+// these were all updated to 1/8/19 6:06am timestamp
+//$HOME/.cloudbuddy/input/[2] username_and_domain
+//$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this
+//$HOME/.cloudbuddy/input/[4] computer_name
+//$HOME/.cloudbuddy/input/[6] don't_backup_files_that_end_with_this
+//$HOME/.cloudbuddy/input/[5] don't_backup_files_that_start_with_this
+//$HOME/.cloudbuddy/input/[3] landing_directory
+//$HOME/.cloudbuddy/input/[1] search_this_list_for_changes
+
+// these are supposed to be filtered out but aren't when running ./smallBackup
+// /home/scott/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__1198
+// /home/scott/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__459
+
+//  add this to install script
+// # When you do a backup, there will be temporary files that will be created in //$HOME/.cloudbuddy/backup
+//# There is no value added in these being in your backup, so leave the next line uncommented
+///$HOME/.cloudbuddy/backup/
+
+
 // resume testing of fileExist and dirExist
 // check that build.sh is sudo, otherwise print error message
 // check that install.sh is suco, otherwise print error message
@@ -117,3 +142,5 @@ no further action because done or didn't take action
 // didn't take action because both are the same: https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
 
 11 // Capitalize the start of comments.  Didn't do this.  No real upside and some comments are even complete sentences
+
+12 // test fileExit() and directoryExist()

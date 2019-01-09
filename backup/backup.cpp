@@ -167,19 +167,35 @@ void test__existenceOfADirectory()
     exists = directoryExist(path,__FILE__,__LINE__,purpose);
     test__displayMessage(exists,whatsBeingTested,path);
 
-    // 'backup' is a directory
+    // 'dirThatDoesntExist dirThatDoesntExist' is a non existent directory
     whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/backup";
+    path="$HOME/.cloudbuddy/dirThatDoesntExist dirThatDoesntExist";
     exists = directoryExist(path,__FILE__,__LINE__,purpose);
     test__displayMessage(exists,whatsBeingTested,path);
 
-    // 'howdy' is a file
+    // 'log' is a directory that exists
     whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/howdy";
+    path="$HOME/.cloudbuddy/log";
     exists = directoryExist(path,__FILE__,__LINE__,purpose);
     test__displayMessage(exists,whatsBeingTested,path);
 
-    exit(EXIT_SUCCESS);
+    // 'log log' is a directory that exists
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/log log";
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'thisisafile' is a file that exists
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/thisisafile";
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'thisisafile thisisafile' is a file that exists
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/thisisafile thisisafile";
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
 }
 
 void test__existenceOfAFile()
@@ -187,34 +203,52 @@ void test__existenceOfAFile()
     string whatsBeingTested="";
     string path="";
     bool exists=false;
-LEFT OFF HERE
-modify the remainder of this function and run. test__existenceOfADirectory() works great
+
     // 'howdy1' is a non existent file
     whatsBeingTested="file";
-    path="$HOME/.cloudbuddy/dirThatDoesntExist";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    path="$HOME/.cloudbuddy/howdy1";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
     test__displayMessage(exists,whatsBeingTested,path);
 
-    // 'backup' is a legitimate directory
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/backup";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    // 'howdy1 1' is a non existent file
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/howdy1 1";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
     test__displayMessage(exists,whatsBeingTested,path);
 
-    // 'howdy' is a file
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/howdy";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    // 'thisisafile' is a file that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/thisisafile";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
     test__displayMessage(exists,whatsBeingTested,path);
 
-    exit(EXIT_SUCCESS);
+    // 'thisisafile thisisafile' is a file that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/thisisafile thisisafile";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'log' is a directory that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/log";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'log log' is a directory that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/log log";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
 }
 
 
 int main(int argc, char * const argv[])
 {
-    //test__existenceOfADirectory();
-    test__existenceOfAFile();
+//LEFT OFF HERE
+//move these next 3 lines  & above 3 functions to test file
+//    test__existenceOfADirectory();
+//    test__existenceOfAFile();
+//    exit(EXIT_SUCCESS);
 
     getGlobalStrings(globalString,purpose);
     deleteAllFilesInTheBackupDirectory();
@@ -1168,7 +1202,7 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
             {
                 cout<<"Error: \""+line+"\" is not a file or directory"<<endl
                     <<"Please correct this in - "<<endl
-                    <<searchThisListForChangesPath<<endl;
+                    <<searchThisListForChangesPath<<endl<<endl;
                 exit(EXIT_SUCCESS);
             }
         }

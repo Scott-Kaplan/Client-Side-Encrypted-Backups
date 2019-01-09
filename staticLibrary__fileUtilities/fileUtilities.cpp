@@ -238,25 +238,26 @@ bool fileExist(string &lookupFilePath,
     //https://askubuntu.com/questions/811210/how-can-i-make-ls-only-display-files
 
     // example in current directory
-    // ls -p | grep -v / | grep "filename" > results 2>&1
+    // ls -ap | grep -v / | grep "filename" > results 2>&1
 
     // success
-    // ls -p "PathUpToFileName"| grep -v / | grep "filename" > results 2>&1
+    // ls -ap "PathUpToFileName"| grep -v / | grep "filename" > results 2>&1
     // saves
     // filename
 
     // successful failure because filename1 doesn't exist
-    // ls -p "PathUpToFileName" | grep -v / | grep "filename1" > results 2>&1
+    // ls -ap "PathUpToFileName" | grep -v / | grep "filename1" > results 2>&1
     // saves
     // nothing as expected
 
     // successful failure because Movies is a directory
-    // ls -p "PathUpToFileName" | grep -v / | grep "Movies" > results 2>&1
+    // ls -ap "PathUpToFileName" | grep -v / | grep "Movies" > results 2>&1
     // saves
     // nothing as expected
-
+    convert$HOME(lookupFilePath);
     globalStringS globalString;
     getGlobalStrings(globalString,resultsDirectory);
+
     string fileExistResults =
                 globalString.basePath+
                 "fileExistLookupFrom_"+fromFileName+
@@ -267,9 +268,24 @@ bool fileExist(string &lookupFilePath,
     bool theFileExists = true;
     string fileExistCmd =
     //example)
-    //ls -p "$HOME/.cloudbuddy/input/" | grep -v / | grep -F "[1] search_this_list_for_changes" > results 2>&1;
-            "ls -p \""+dirThatTheFileIsIn+"\" | grep -v / | grep -F \""+fileName
-                                              +"\" > "+fileExistResults+" 2>&1";
+    //ls -ap "$HOME/.cloudbuddy/input/" | grep -v / | grep -F "[1] search_this_list_for_changes" > results 2>&1;
+//        "ls -ap \""+dirThatTheFileIsIn+"\" | grep -v / | grep -F \""+fileName
+//                                            +"\" > "+fileExistResults+" 2>&1";
+
+ todo: just uncomment above.  Then below parse the output file and look for exact filename match.  In example below just look for
+ .bashrc.  If don't find the exact match, just return false
+//.bashrc
+//.bashrc~
+//.bashrc1
+//.bashrcBk
+then do exactly the same thing for directoryExist()
+
+    // had problems with this.  delete when have above working
+    //ls -ap "$HOME/.cloudbuddy/input/" | grep -v / | grep -E '(^|\s)[1] search_this_list_for_changes($|\s)' > results 2>&1;
+    //    "ls -ap \""+dirThatTheFileIsIn+"\" | grep -v / | grep -E '(^|\\s)"+fileName
+    //                                        +"($|\\s)' > "+fileExistResults+" 2>&1";
+cout<<fileExistCmd<<endl;
+exit(EXIT_SUCCESS);
     if(system(fileExistCmd.c_str()));
     if (fileIsEmpty(fileExistResults))
     {
@@ -301,6 +317,7 @@ bool directoryExist(string &lookupDirectoryPath,
     // saves
     // ls: cannot access Videos1/: No such file or directory
 
+    convert$HOME(lookupDirectoryPath);
     globalStringS globalString;
     getGlobalStrings(globalString,resultsDirectory);
     string directoryExistResults =
