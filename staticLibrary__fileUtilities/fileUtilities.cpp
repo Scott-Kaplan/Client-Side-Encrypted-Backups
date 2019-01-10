@@ -50,7 +50,6 @@ extern "C" void openForWriting(string &path,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 extern "C" void convert$HOME(string &path);
-// works except does both directories and files extern "C" bool fileExists(string &lookupPath,string &lookupPathResults);
 extern "C" void deleteFile(string &filename);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 extern "C" bool fileIsEmpty(string &path);
@@ -72,7 +71,6 @@ extern "C" void writeCleanUpAndExitFunction
 extern "C" void writeCleanUpFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
-//extern "C" bool fileExist(string &path, string &purpose);
 extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
@@ -146,81 +144,6 @@ void convert$HOME(string &path)
     }
 }
 
-/*
-bool fileExist(string &path, string &purpose)
-{
-    string lookupSpecifier = "f";
-    return exist(path,purpose,lookupSpecifier);
-}
-
-bool directoryExist(string &path, string &purpose)
-{
-    string lookupSpecifier = "d";
-    return exist(path,purpose,lookupSpecifier);
-}
-
-bool exist(string &path, string &purpose, string &lookupSpecifier)
-{
-    globalStringS globalString;
-    getGlobalStrings(globalString,purpose);
-    string directoryLeadingUpToFileName="";
-    string fileName="";
-    extractPathAndFileName(path,directoryLeadingUpToFileName,fileName);
-    string pathLookup = globalString.basePath+fileName+"_lookUp";
-//    string fileOrDirExistsLookupPath = path+"_LookUp";
-                        //globalString.basePath+"fileOrDirExistsLookup";
-//    // To test a file:      [ -f dir ] && echo exists > results
-//    // to test a directory: [ -d dir ] && echo exists > results
-//    string cmd =
-//                "[ -"+lookupSpecifier+" \""+path+"\" ] && echo exists > "
-//                +fileOrDirExistsLookupPath;
-
-    //examples)
-//    // To test a file:      [ -f dir ] && echo exists || echo doesnt_exist > results
-//    // To test a directory: [ -d dir ] && echo exists || echo doesnt_exist > results
-    // To test a file:      [ -f dir ] && echo exists > results || echo doesnt_exist > results
-    // To test a directory: [ -d dir ] && echo exists > results || echo doesnt_exist > results
-
-    string cmd =
-        "[ -"+lookupSpecifier+" \""+path+"\" ] "
-        "&& echo exists > \""+pathLookup+"\" || echo doesnt_exist > \""+pathLookup+"\"";
-
-
-//the problem with this is that fileOrDirExistsLookup is not created when the path is not found
-//however the file is still read in its previous state, which was file found.  so exists lingers in the file
-//when ccrypt didn't have the key entered yet, it still found the file which had exists.
-// there is another problem in that if the path was not found, fileOrDirExistsLookup doesn't exist and the segmentation fault
-//came from trying to read it below.  Change this to print exists or doesn't exist and also don't share the same filename for
-//the resultant file
-
-cout<<endl<<cmd<<endl<<endl;
-    if(system(cmd.c_str()));
-//exit(EXIT_SUCCESS);
-    ifstream pathLookupHandle;
-//    ifstream fileOrDirExistsHandle;
-    string line="";
-    openForReading(pathLookup,__FILE__,__LINE__,pathLookupHandle);
-//    openForReading(fileOrDirExistsLookupPath,
-//                   __FILE__,__LINE__,
-//                   fileOrDirExistsHandle);
-    getline(pathLookupHandle,line);
-    pathLookupHandle.close();
-//    getline(fileOrDirExistsHandle,line);
-//    fileOrDirExistsHandle.close();
-// for some reason the next line causes an error that the file cannot be opened for reading
-//    deleteFile(fileOrDirExistsLookupPath);
-    deleteFile(pathLookup);
-    if (line == "exists")
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-*/
-
 string convertToString(int number)
 {
     stringstream ss;
@@ -232,7 +155,6 @@ bool fileExist(string &lookupFilePath,
                string fromFileName,
                int fromLineNumber,
                string resultsDirectory)
-//bool fileExist(string &lookupPath,string &fileExistResults)
 {
     /* list only specific file */
     //https://askubuntu.com/questions/811210/how-can-i-make-ls-only-display-files
@@ -265,32 +187,33 @@ bool fileExist(string &lookupFilePath,
     string dirThatTheFileIsIn="";
     string fileName="";
     extractPathAndFileName(lookupFilePath,dirThatTheFileIsIn,fileName);
-    bool theFileExists = true;
     string fileExistCmd =
     //example)
     //ls -ap "$HOME/.cloudbuddy/input/" | grep -v / | grep -F "[1] search_this_list_for_changes" > results 2>&1;
-//        "ls -ap \""+dirThatTheFileIsIn+"\" | grep -v / | grep -F \""+fileName
-//                                            +"\" > "+fileExistResults+" 2>&1";
-
- todo: just uncomment above.  Then below parse the output file and look for exact filename match.  In example below just look for
- .bashrc.  If don't find the exact match, just return false
-//.bashrc
-//.bashrc~
-//.bashrc1
-//.bashrcBk
-then do exactly the same thing for directoryExist()
-
-    // had problems with this.  delete when have above working
-    //ls -ap "$HOME/.cloudbuddy/input/" | grep -v / | grep -E '(^|\s)[1] search_this_list_for_changes($|\s)' > results 2>&1;
-    //    "ls -ap \""+dirThatTheFileIsIn+"\" | grep -v / | grep -E '(^|\\s)"+fileName
-    //                                        +"($|\\s)' > "+fileExistResults+" 2>&1";
-cout<<fileExistCmd<<endl;
-exit(EXIT_SUCCESS);
+        "ls -ap \""+dirThatTheFileIsIn+"\" | grep -v / | grep -F \""+fileName
+                                            +"\" > "+fileExistResults+" 2>&1";
     if(system(fileExistCmd.c_str()));
-    if (fileIsEmpty(fileExistResults))
+    bool theFileExists = false;
+    // The above command only looks for substrings rather than entire strings
+    // So say as an example for 'howdy' could yield these 4 lines-
+    // howdy1~
+    // howdy1
+    // howdyBk
+    // howdy
+    // Only return true if an entire line is just 'howdy'
+    ifstream exactMatchHandle;
+    string line="";
+    openForReading(fileExistResults,__FILE__,__LINE__,exactMatchHandle);
+    while (getline(exactMatchHandle,line))
     {
-        theFileExists = false;
+        if (line == fileName)
+        {
+            theFileExists = true;
+            break;
+        }
     }
+    exactMatchHandle.close();
+    deleteFile(fileExistResults);
     return theFileExists;
 }
 
@@ -343,37 +266,6 @@ bool directoryExist(string &lookupDirectoryPath,
 
     return theDirectoryExists;
 }
-
-/* works but doesn't differentiate between directories and files
-bool fileExists(string &lookupPath,string &lookupPathResults)
-{
-    string lsCmd=
-                "ls "
-                "\""+
-                lookupPath+
-                "\""
-                " > "+
-                lookupPathResults+
-                " 2>&1";
-    //dcout<<lsCmd<<endl;
-    if(system(lsCmd.c_str()));
-    ifstream lsOutputHandle;
-    string line="";
-    openForReading(lookupPathResults,__FILE__,__LINE__,lsOutputHandle);
-    getline(lsOutputHandle,line);
-    lsOutputHandle.close();
-    deleteFile(lookupPathResults);
-    if (line.substr(0,17)!="ls: cannot access")
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-*/
-
 
 void deleteFile(string &filename)
 {
@@ -442,7 +334,6 @@ void getGlobalStrings(globalStringS &globalString, string &purpose)
             globalString.basePath+"ccryptStatusTitleAlreadyPrinted";
 
     globalString.deleteAllFilesInTheBackupDirectory =
-//            "/bin/bash rm -f $HOME/.cloudbuddy/backup/*";
             "rm -f $HOME/.cloudbuddy/backup/*";
 
     globalString.deleteAllFilesInTheRestoreDirectory =

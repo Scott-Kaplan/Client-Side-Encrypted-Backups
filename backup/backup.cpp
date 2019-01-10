@@ -147,109 +147,9 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 /*********************/
 /***** Functions *****/
 /*********************/
-void test__displayMessage(bool booleanValue, string &whatsBeingTested, string &path)
-{
-    if (booleanValue)
-        cout<<endl<<"This "<<whatsBeingTested<<" exists:  "<<path<<endl<<endl;
-    else
-        cout<<endl<<"This "<<whatsBeingTested<<" does not exist:  "<<path<<endl<<endl;
-}
-
-void test__existenceOfADirectory()
-{
-    string whatsBeingTested="";
-    string path="";
-    bool exists=false;
-
-    // 'dirThatDoesntExist' is a non existent directory
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/dirThatDoesntExist";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'dirThatDoesntExist dirThatDoesntExist' is a non existent directory
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/dirThatDoesntExist dirThatDoesntExist";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'log' is a directory that exists
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/log";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'log log' is a directory that exists
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/log log";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'thisisafile' is a file that exists
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/thisisafile";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'thisisafile thisisafile' is a file that exists
-    whatsBeingTested="directory";
-    path="$HOME/.cloudbuddy/thisisafile thisisafile";
-    exists = directoryExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-}
-
-void test__existenceOfAFile()
-{
-    string whatsBeingTested="";
-    string path="";
-    bool exists=false;
-
-    // 'howdy1' is a non existent file
-    whatsBeingTested="file";
-    path="$HOME/.cloudbuddy/howdy1";
-    exists = fileExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'howdy1 1' is a non existent file
-    whatsBeingTested="file";
-    path="$HOME/.cloudbuddy/howdy1 1";
-    exists = fileExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'thisisafile' is a file that exists
-    whatsBeingTested="file";
-    path="$HOME/.cloudbuddy/thisisafile";
-    exists = fileExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'thisisafile thisisafile' is a file that exists
-    whatsBeingTested="file";
-    path="$HOME/.cloudbuddy/thisisafile thisisafile";
-    exists = fileExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'log' is a directory that exists
-    whatsBeingTested="file";
-    path="$HOME/.cloudbuddy/log";
-    exists = fileExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-
-    // 'log log' is a directory that exists
-    whatsBeingTested="file";
-    path="$HOME/.cloudbuddy/log log";
-    exists = fileExist(path,__FILE__,__LINE__,purpose);
-    test__displayMessage(exists,whatsBeingTested,path);
-}
-
 
 int main(int argc, char * const argv[])
 {
-//LEFT OFF HERE
-//move these next 3 lines  & above 3 functions to test file
-//    test__existenceOfADirectory();
-//    test__existenceOfAFile();
-//    exit(EXIT_SUCCESS);
-
     getGlobalStrings(globalString,purpose);
     deleteAllFilesInTheBackupDirectory();
     createTheConfigurationFilesIfTheyDontExist();
@@ -420,6 +320,7 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
     //dcout<<"\nEntire string filter check-\nThis file\n"<<lineToKeepOrPitch<<endl;
     bool lineWanted = true;
     const char * pch;
+    const char * pch1;
     string line="";
     ifstream dontBackupFilesThatContainThisHandle;
 
@@ -435,7 +336,16 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
             (!line.empty()))    // skip empty lines
         {
             pch = strstr(lineToKeepOrPitch.c_str(),line.c_str());
-            if (pch != NULL)
+
+            // prevents any temporary files in $HOME/.cloudbuddy/backup/
+            // from going into the backup such as like one of these
+            // $HOME/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__1198
+            // $HOME/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__459
+            pch1 = strstr("/.cloudbuddy/backup/",line.c_str());
+//THIS NEEDS TO BE TESTED
+// shouldn't see any temporary files in the backup
+            if ((pch != NULL) || (pch1 != NULL))
+            //if (pch != NULL)
             {
                 //dcout<<"will not be included in the backup\nbecause \""
                 //d    <<line<<"\" was contained in the string"<<endl;
@@ -487,7 +397,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
             /* check to make sure that the backup label name isn't too long */
             if (backupLabelName.length() >= 128)
             {
-                cout<<"Error: the length of the second parameter can't exceed "
+                cout<<"ERROR: the length of the second parameter can't exceed "
                       "128"<<endl;
                 displayUsage();
             }
@@ -501,8 +411,8 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
                       (backupLabelName[i]=='_') ||
                       (backupLabelName[i]=='.')))
                 {
-                    //cout<<"Error: Only letters, numbers, hyphens and underscores "
-                    cout<<"Error: Only letters, numbers, periods, hyphens and "
+                    //cout<<"ERROR: Only letters, numbers, hyphens and underscores "
+                    cout<<"ERROR: Only letters, numbers, periods, hyphens and "
                           "underscores can be used in label-name|no-label"
                           <<endl;
                     displayUsage();
@@ -572,7 +482,7 @@ void retrieveTheLandingDirectory(string &landingDirectory)
     if (!landingDirectoryFound)
     {
         cout<<
-            "\nError: Unable to extract the landing directory on the sftp  "
+            "\nERROR: Unable to extract the landing directory on the sftp  "
             "server that you want to send the backup to.\nTo fix, please see "
             "this file -\n"
             "$HOME/.cloudbuddy/input/[3] landing_directory\n"
@@ -605,7 +515,7 @@ void retrieveTheComputerName()
     if (!computerNameFound)
     {
         cout<<
-            "\nError: Unable to extract the computer name.  This is needed "
+            "\nERROR: Unable to extract the computer name.  This is needed "
             "as it will be used to name your backup.\nTo fix, please see "
             "this file -\n"
             "$HOME/.cloudbuddy/input/[4] computer_name\n"
@@ -620,7 +530,7 @@ void checkThatTheComputerNameIsOk(string &computerName)
     /* check to make sure that the computer name length isn't too long */
     if (computerName.length() >= 32)
     {
-        cout<<"Error: the length of the computer name in the file \"[4] "
+        cout<<"ERROR: the length of the computer name in the file \"[4] "
             <<"computer_name\" can't exceed 32"<<endl;
         displayUsage();
     }
@@ -635,7 +545,7 @@ void checkThatTheComputerNameIsOk(string &computerName)
               (computerName[i]=='_') ||
               (computerName[i]=='.')))
         {
-            cout<<"Error: Only letters, numbers, periods, hyphens and "
+            cout<<"ERROR: Only letters, numbers, periods, hyphens and "
                   "underscores can be used in from-computer-name"<<endl;
             displayUsage();
         }
@@ -714,7 +624,7 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     /* check that the list of directories/files to monitor is not empty */
     if (fileIsEmpty(searchThisListForChangesPath))
     {
-        cout<<"\nError: The file "<<searchThisListForChangesPath<<" can't be "
+        cout<<"\nERROR: The file "<<searchThisListForChangesPath<<" can't be "
               "blank.\n"<<endl;
         exit(EXIT_SUCCESS);
     }
@@ -1097,7 +1007,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"if [ ! -f \"transfer-complete\" ]; then "<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"echo"<<endl
-    <<tab1<<"echo \"Error: The transfer didn't finish, so exiting ...\""<<endl
+    <<tab1<<"echo \"ERROR: The transfer didn't finish, so exiting ...\""<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"exit 1"<<endl
@@ -1200,8 +1110,8 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
             //if (!fileOrDirExist(line,purpose) && !directoryExist(line,purpose))
             //if (!fileExist(line,purpose) && !directoryExist(line,purpose))
             {
-                cout<<"Error: \""+line+"\" is not a file or directory"<<endl
-                    <<"Please correct this in - "<<endl
+                cout<<endl<<"ERROR: \""+line+"\" is not a file or directory"
+                    <<endl<<"Please correct this in - "<<endl
                     <<searchThisListForChangesPath<<endl<<endl;
                 exit(EXIT_SUCCESS);
             }

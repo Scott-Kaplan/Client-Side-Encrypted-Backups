@@ -1,29 +1,3 @@
-// why is the timestamp being updates for this.  look for Touch command
-// may not occur in regular practice as just trying to get fileExist() to not detect multiple beyond pattern matches
-//.bashrc
-//.bashrc~
-//.bashrc1
-//.bashrcBk
-// these were all updated to 1/8/19 6:06am timestamp
-//$HOME/.cloudbuddy/input/[2] username_and_domain
-//$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this
-//$HOME/.cloudbuddy/input/[4] computer_name
-//$HOME/.cloudbuddy/input/[6] don't_backup_files_that_end_with_this
-//$HOME/.cloudbuddy/input/[5] don't_backup_files_that_start_with_this
-//$HOME/.cloudbuddy/input/[3] landing_directory
-//$HOME/.cloudbuddy/input/[1] search_this_list_for_changes
-
-// these are supposed to be filtered out but aren't when running ./smallBackup
-// /home/scott/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__1198
-// /home/scott/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__459
-
-//  add this to install script
-// # When you do a backup, there will be temporary files that will be created in //$HOME/.cloudbuddy/backup
-//# There is no value added in these being in your backup, so leave the next line uncommented
-///$HOME/.cloudbuddy/backup/
-
-
-// resume testing of fileExist and dirExist
 // check that build.sh is sudo, otherwise print error message
 // check that install.sh is suco, otherwise print error message
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
@@ -144,3 +118,127 @@ no further action because done or didn't take action
 11 // Capitalize the start of comments.  Didn't do this.  No real upside and some comments are even complete sentences
 
 12 // test fileExit() and directoryExist()
+
+13 // tested fileExist() and directoryExist() for all positive and negative paths
+/* to test
+put these at the beginning of main in backup binary
+    test__existenceOfADirectory();
+    test__existenceOfAFile();
+    exit(EXIT_SUCCESS);
+then place these ahead of main()
+
+void test__displayMessage(bool booleanValue, string &whatsBeingTested, string &path)
+{
+    if (booleanValue)
+        cout<<endl<<"This "<<whatsBeingTested<<" exists:  "<<path<<endl<<endl;
+    else
+        cout<<endl<<"This "<<whatsBeingTested<<" does not exist:  "<<path<<endl<<endl;
+}
+
+void test__existenceOfADirectory()
+{
+    string whatsBeingTested="";
+    string path="";
+    bool exists=false;
+
+    // 'dirThatDoesntExist' is a non existent directory
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/dirThatDoesntExist";
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'dirThatDoesntExist dirThatDoesntExist' is a non existent directory
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/dirThatDoesntExist dirThatDoesntExist";
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'log' is a directory that exists
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/log";
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'log log' is a directory that exists
+    whatsBeingTested="directory";
+    path="\"$HOME/.cloudbuddy/log log\"";
+    string mkdirCmd="mkdir -p "+path;
+    if(system(mkdirCmd.c_str()));
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'thisisafile' is a file that exists
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/thisisafile";
+    string makeFile1Cmd="touch "+path;
+    if(system(makeFile1Cmd.c_str()));
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'thisisafile thisisafile' is a file that exists
+    whatsBeingTested="directory";
+    path="\"$HOME/.cloudbuddy/thisisafile thisisafile\"";
+    string makeFile2Cmd="touch "+path;
+    if(system(makeFile2Cmd.c_str()));
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // this ensures that a substring of a directory wasn't found
+    whatsBeingTested="directory";
+    path="$HOME/.cloudbuddy/lo";
+    exists = directoryExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+}
+
+void test__existenceOfAFile()
+{
+    string whatsBeingTested="";
+    string path="";
+    bool exists=false;
+
+    // 'howdy1' is a non existent file
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/howdy1";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'howdy1 1' is a non existent file
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/howdy1 1";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'thisisafile' is a file that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/thisisafile";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'thisisafile thisisafile' is a file that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/thisisafile thisisafile";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'log' is a directory that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/log";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // 'log log' is a directory that exists
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/log log";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+
+    // this ensures that a substring of a file wasn't found
+    whatsBeingTested="file";
+    path="$HOME/.cloudbuddy/thisisafil";
+    exists = fileExist(path,__FILE__,__LINE__,purpose);
+    test__displayMessage(exists,whatsBeingTested,path);
+}
+    
+    
+*/ 
