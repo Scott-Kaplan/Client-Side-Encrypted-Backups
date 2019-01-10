@@ -9,6 +9,7 @@
 // support spaces in paths found in config file 1
 // save the size of the encrypted backup into the log file.  Doing this since making a strong statement that backups can't be corrupted.  That way if a server admin messes with the file the user will be able to confirm that the file is the wrong size and might conclude that it was mucked with.
 // in displayUsage() in backup, change the variable "<<computerName" to this hard coded string "computerName".  The reason is displayUsage() can be called before computerName has a value
+// test displayUsage() in restore
 // call cleanUpAndExit when the user doesn't enter the correct encryption password when doing a restore
 // call cleanUpAndExit when the user doesn't enter the same encryption password twice when doing a backup
 // increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
