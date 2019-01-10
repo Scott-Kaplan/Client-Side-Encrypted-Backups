@@ -1107,8 +1107,6 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
         {
             if (!fileExist(line,__FILE__,__LINE__,purpose) &&
                 !directoryExist(line,__FILE__,__LINE__,purpose))
-            //if (!fileOrDirExist(line,purpose) && !directoryExist(line,purpose))
-            //if (!fileExist(line,purpose) && !directoryExist(line,purpose))
             {
                 cout<<endl<<"ERROR: \""+line+"\" is not a file or directory"
                     <<endl<<"Please correct this in - "<<endl

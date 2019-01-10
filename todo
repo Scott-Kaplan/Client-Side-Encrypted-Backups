@@ -1,16 +1,18 @@
+// ensure ./smallBackup doesn't end with "Exiting ..." when there were no issues
+// ensure ./smallRestore doesn't end with "Exiting ..." when there were no issues
+
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
+//   ensure quotes are not anywhere in the entire path(including filename) to be backed up
+
 // ensure no spaces in config file 2 for field that needs to be extracted
 // ensure no spaces in config file 3 for field that needs to be extracted
 // support spaces in paths found in config file 1
-// Check that every path listed in config file 1 exists before running the find command. Otherwise, get find errors on each path that doesn't exist
-// ensure ./smallBackup doesn't end with "Exiting ..." when there were no issues
-// ensure ./smallRestore doesn't end with "Exiting ..." when there were no issues
 // save the size of the encrypted backup into the log file.  Doing this since making a strong statement that backups can't be corrupted.  That way if a server admin messes with the file the user will be able to confirm that the file is the wrong size and might conclude that it was mucked with.
 // in displayUsage() in backup, change the variable "<<computerName" to this hard coded string "computerName".  The reason is displayUsage() can be called before computerName has a value
 // call cleanUpAndExit when the user doesn't enter the correct encryption password when doing a restore
 // call cleanUpAndExit when the user doesn't enter the same encryption password twice when doing a backup
 // increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
-// ensure quotes are not anywhere in the entire path(including filename) to be backed up
+
 // fresh install on 16.04 at work, but retain config file 1 that has the problem
 // test ./smallBackup with 3 wrong sftp passwords
 // test ./smallRestore with 3 wrong sftp passwords
@@ -242,3 +244,6 @@ void test__existenceOfAFile()
 14 // check that build.sh is sudo, otherwise print error message
 
 15 // check that install.sh is sudo, otherwise print error message
+
+16 // Check that every path listed in config file 1 exists before running the find command. Otherwise, get find errors on each path that doesn't exist
+// done in checkThatAllDirectoriesAndFilesInConfigFile1Exist()
