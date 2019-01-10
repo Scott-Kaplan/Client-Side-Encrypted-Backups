@@ -1,11 +1,17 @@
 #clear
-
 # Usage: sudo ./build.sh
-
 #!/bin/bash
-
 echo
 
+if [ "$(whoami)" != "root" ];
+then
+	echo "Because this script copies built binaries into \"/usr/local/bin\", you'll need to run as superuser."
+  echo "Usage:"
+  echo "  sudo ./build.sh"
+  echo
+  exit
+fi
+  
 echo Building the fileUtilities static library ...
 cd ./staticLibrary__fileUtilities
 rm -f bin/Release/libstaticLibrary__fileUtilities.a

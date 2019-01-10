@@ -4,6 +4,15 @@
 clear
 echo
 
+if [ "$(whoami)" != "root" ];
+then
+	echo "Because this script installs some dependencies and copies built binaries into \"/usr/local/bin\", you'll need to run as superuser."
+  echo "Usage:"
+  echo "  sudo ./install.sh"
+  echo
+  exit
+fi
+
 currentUser=$SUDO_USER
 
 # If this installation has previously happened, then the "$HOME/.cloudbuddy/input" directory will already contain the users settings.  In this case save a copy of these in case the user would like to restore them.
@@ -243,6 +252,6 @@ if (! which g++ | grep -q g++) ||
    (! which tree | grep -q tree) ||
    (! which ccrypt | grep -q ccrypt);
 then
-  echo ERROR: The necessary software was not installed.  Please fix above.
+  echo ERROR: The necessary software was not installed.  Please fix the above.
   echo
 fi
