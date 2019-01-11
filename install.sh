@@ -214,7 +214,8 @@ chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[7] don't_backup_files_
 echo
 echo "Creating the timeStampMarker file ..."
 echo "Done.  This is located in $HOME/.cloudbuddy/input"
-touch $HOME/.cloudbuddy/input/timeStampMarker
+#touch $HOME/.cloudbuddy/input/timeStampMarker
+touch --date=@0 $HOME/.cloudbuddy/input/timeStampMarker # set the timestamp to epoch
 chown $currentUser:$currentUser $HOME/.cloudbuddy/input/timeStampMarker
 echo
 

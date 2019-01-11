@@ -1,9 +1,13 @@
+// try to run with not filled in config files (installed but not hand edited)
+// DONE with config file 1
+// working on config file 2.  the error message is good. just put in the username and domain
+
 // ensure ./smallBackup doesn't end with "Exiting ..." when there were no issues
 // ensure ./smallRestore doesn't end with "Exiting ..." when there were no issues
 
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
 //   ensure quotes are not anywhere in the entire path(including filename) to be backed up
-
+// (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
 // ensure no spaces in config file 2 for field that needs to be extracted
 // ensure no spaces in config file 3 for field that needs to be extracted
 // support spaces in paths found in config file 1

@@ -53,13 +53,10 @@ extern "C" void openForWriting(string &path,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
 extern "C" void convert$HOME(string &path);
-//extern "C" bool fileExists(string &lookupPath,string &lookupPathResults);
-//extern "C" bool fileExist(string &path, string &purpose);
 extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
                           string resultsDirectory);
-//extern "C" bool directoryExist(string &path, string &purpose);
 extern "C" bool directoryExist(string &lookupDirectoryPath,
                                string fromFileName,
                                int fromLineNumber,
@@ -71,7 +68,6 @@ extern "C" string getStringUnder(int columnNumberWanted,
                                  int totalNumberOfColumns,
                                  string &lineToBeParsed);
 extern "C" double getTotalLinesInFile(string &pathToCountLines);
-//extern "C" long int getTotalLinesInFile(string &pathToCountLines);
 extern "C" void retrieveUsernameAndDomain
             (string &username, string &domain, string &usernameAndDomainPath);
 extern "C" void removeLeadingWhiteSpaces(string &line);
@@ -447,7 +443,7 @@ void createTheConfigurationFilesIfTheyDontExist()
     //cout<<endl<<"0"<<endl;
     /* This program relies on there at least being an empty file for each of */
     /* these.  Unique error messages on what is necessary out of each will be */
-    /* displayed to the user if they occur. */
+    /* displayed to the user if the necessary content is not found. */
     createEmptyFileIfItDoesntExist(searchThisListForChangesPath);
     createEmptyFileIfItDoesntExist(globalString.usernameAndDomainPath);
     createEmptyFileIfItDoesntExist(landingDirectoryPath);
@@ -644,6 +640,7 @@ void createAListOfFilesThatHaveChangedOrAreNew()
 
     cout<<endl<<startUnderline<<"Files found (before filtering)"<<endUnderline
     <<"    "<<startUnderline<<"Files searched"<<endUnderline<<endl;
+    int configFile1LinesToCheck = 0;
     for (int i=0;getline(searchThisListForChangesHandle,line);++i)
     {
         //dcout<<line<<endl;
@@ -651,9 +648,11 @@ void createAListOfFilesThatHaveChangedOrAreNew()
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
+            ++configFile1LinesToCheck;
             findChangedAndNewFilesCmd=
-                "find "+
-                line+
+                "find \""+line+"\""
+                //"find "+
+                //line+
                 " -path '../.*' -prune -o -type f -newer "+
                 timeStampMarkerPath+
                 " -print >> "+
@@ -678,6 +677,14 @@ void createAListOfFilesThatHaveChangedOrAreNew()
             //cout<<endl;
         }
     }
+    if (!configFile1LinesToCheck)
+    {
+        cout<<endl<<"ERROR: "<<endl<<"  The configuration file \""
+            <<searchThisListForChangesPath<<"\""<<endl
+            <<"  needs to at least contain one file or directory.  "
+            <<"Please add something."<<endl<<endl;
+        exit(EXIT_SUCCESS);
+    }
 
     cout
     << left << setw(34)<<getTotalLinesInFile(changedAndNewFilesPath)
@@ -689,8 +696,10 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     searchThisListForChangesHandle.close();
     if (fileIsEmpty(changedAndNewFilesPath))
     {
-        cout<<"\nNo files were found that needed to be backed up.  Exiting.\n"
+        cout<<"\nNothing was found that needs to be backed up.  Exiting.\n"
+//        cout<<"\nNo files were found that needed to be backed up.  Exiting.\n"
             <<endl;
+        exit(EXIT_SUCCESS);
     }
 }
 

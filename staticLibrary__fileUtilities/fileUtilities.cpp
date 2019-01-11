@@ -401,10 +401,7 @@ double getTotalLinesInFile(string &pathToCountLines)
 {
     string line="";
     ifstream fileHandle;
-    openForReading(pathToCountLines,
-                   __FILE__,
-                   __LINE__,
-                   fileHandle);
+    openForReading(pathToCountLines,__FILE__,__LINE__,fileHandle);
     double totalLines=0;
     while (getline(fileHandle,line))
     {
@@ -509,8 +506,7 @@ void retrieveUsernameAndDomain(string &username, string &domain, string &usernam
             "\nError: Unable to extract the username and domain of the sftp "
             "server that you want to send the backup to.\nTo fix, please see "
             "this file -\n"
-            "$HOME/.cloudbuddy/input/[2] username_and_domain\n"
-        <<endl;
+            <<usernameAndDomainPath<<endl<<endl;
         exit(EXIT_SUCCESS);
     }
 }
