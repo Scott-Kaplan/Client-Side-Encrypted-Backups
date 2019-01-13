@@ -77,6 +77,7 @@ extern "C" void writeCleanUpFunction
 extern "C" void writeCleanUpAndExitFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
+extern "C" void displayError(string &problem, string &correctiveAction);
 
 /********************/
 /***** Constants ****/
@@ -90,6 +91,9 @@ string tab3="      ";
 /***** File Scope Variables *****/
 /********************************/
 string purpose="backup";  // for path $HOME/.cloudbuddy/backup
+string landingDirectory="";
+string username="";
+string domain="";
 double storageSpaceOfFilesThatWillBeInTheBackup=0;
 globalStringS globalString;
 string searchThisListForChangesPath =           "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes";
@@ -109,7 +113,7 @@ string capturedTerminalOutput =                 "$HOME/.cloudbuddy/backup/captur
 string tarPercentageCompletePath =              "$HOME/.cloudbuddy/backup/tarPercentageCompletePath";
 string computerName="";
 string backupLabelName="";
-//string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "45";              // tested when 45 for all cases - including yes/no to continuing with the backup
+//string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "45";            // tested when 45 for all cases - including yes/no to continuing with the backup
 string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "44";              // this is the nominal case
 
 // Note: In the next line, \\x60 escapes the back tick(`)
@@ -119,7 +123,7 @@ string expectedOutputFromRunningTheTarCommand =
 /*******************************/
 /***** Function Prototypes *****/
 /*******************************/
-void createEmptyFileIfItDoesntExist(string &path);
+void checkThatConfigurationFileHasBeenInstalled(string &path);
 void displayUsage();
 void deleteAllFilesInTheBackupDirectory();
 void filterUnwantedFilesSoThatTheyWontBeInTheBackup();
@@ -127,10 +131,10 @@ bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch);
 bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch);
 bool fileIsWantedBecauseEndingPathIsOk(string &lineToKeepOrPitch);
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[]);
-void createTheConfigurationFilesIfTheyDontExist();
-void retrieveTheLandingDirectory(string &landingDir);
+void checkTheIntegrityOfTheConfigurationFiles();
+void retrieveTheLandingDirectory();
 void retrieveTheComputerName();
-void checkThatTheComputerNameIsOk(string &computerName);
+void checkTheIntegrityOfTheComputerName(string &computerName);
 string createTheNameOfTheBackup(string &backupLabelName);
 double getApproxSizeOfBackupBeforeTaringIt();
 void checkThatThereIsEnoughDiskSpaceToPerformTheBackup();
@@ -146,13 +150,15 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 
 int main(int argc, char * const argv[])
 {
+    clearTheTerminalWindow();
+    checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     getGlobalStrings(globalString,purpose);
     deleteAllFilesInTheBackupDirectory();
-    createTheConfigurationFilesIfTheyDontExist();
+    checkTheIntegrityOfTheConfigurationFiles();
     saveTheTerminalPid(purpose);
-    clearTheTerminalWindow();
-    retrieveTheComputerName();
-    checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
+    //clearTheTerminalWindow();
+    //retrieveTheComputerName();
+    //checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     createAListOfFilesThatHaveChangedOrAreNew();
     filterUnwantedFilesSoThatTheyWontBeInTheBackup();
     checkThatThereIsEnoughDiskSpaceToPerformTheBackup();
@@ -233,8 +239,7 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
 bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
 {
     //dcout<<"\nBeginning string filter check-\nThis file\n"<<lineToKeepOrPitch<<endl;
-
-    createEmptyFileIfItDoesntExist(dontBackupFilesThatStartWithThisPath);
+    //checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatStartWithThisPath);
 
     bool lineWanted = true;
     int lengthOfString = 0;
@@ -357,17 +362,18 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
     return lineWanted;
 }
 
-void createEmptyFileIfItDoesntExist(string &path)
+void checkThatConfigurationFileHasBeenInstalled(string &path)
 {
     convert$HOME(path);
-    //string lookupFileResults=globalString.basePath+"FoundResults";
-    //if (!fileExists(path,lookupFileResults))
     if (!fileExist(path,__FILE__,__LINE__,purpose))
-//    if (!fileExist(path,purpose))
     {
-        string createFileCmd="touch \""+path+"\"";
-        //dcout<<"createFileCmd = "<<createFileCmd<<endl;
-        if(system(createFileCmd.c_str()));
+        string problem=
+            "The startup configuration file \""+path+"\" does not exist.";
+        string correctiveAction=
+            "Reinstall by following these steps:\n  "
+            "[1] cd to your Client-Side-Encrypted-Backups directory\n  "
+            "[2] sudo ./install.sh";
+        displayError(problem,correctiveAction);
     }
 }
 
@@ -438,23 +444,23 @@ void displayUsage()
     exit(EXIT_SUCCESS);
 }
 
-void createTheConfigurationFilesIfTheyDontExist()
+void checkTheIntegrityOfTheConfigurationFiles()
 {
-    //cout<<endl<<"0"<<endl;
-    /* This program relies on there at least being an empty file for each of */
-    /* these.  Unique error messages on what is necessary out of each will be */
-    /* displayed to the user if the necessary content is not found. */
-    createEmptyFileIfItDoesntExist(searchThisListForChangesPath);
-    createEmptyFileIfItDoesntExist(globalString.usernameAndDomainPath);
-    createEmptyFileIfItDoesntExist(landingDirectoryPath);
-    createEmptyFileIfItDoesntExist(computerNamePath);
-    createEmptyFileIfItDoesntExist(dontBackupFilesThatStartWithThisPath);
-    createEmptyFileIfItDoesntExist(dontBackupFilesThatEndWithThisPath);
-    createEmptyFileIfItDoesntExist(dontBackupFilesThatContainThisPath);
-    createEmptyFileIfItDoesntExist(timeStampMarkerPath);
+    checkThatConfigurationFileHasBeenInstalled(searchThisListForChangesPath);
+    checkThatConfigurationFileHasBeenInstalled(globalString.usernameAndDomainPath);
+    checkThatConfigurationFileHasBeenInstalled(landingDirectoryPath);
+    checkThatConfigurationFileHasBeenInstalled(computerNamePath);
+    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatStartWithThisPath);
+    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatEndWithThisPath);
+    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatContainThisPath);
+    checkThatConfigurationFileHasBeenInstalled(timeStampMarkerPath);
+
+    retrieveUsernameAndDomain();
+    retrieveTheLandingDirectory();
+    retrieveTheComputerName();
 }
 
-void retrieveTheLandingDirectory(string &landingDirectory)
+void retrieveTheLandingDirectory()
 {
     bool landingDirectoryFound = false;
     string line="";
@@ -477,13 +483,19 @@ void retrieveTheLandingDirectory(string &landingDirectory)
     landingDirectoryHandle.close();
     if (!landingDirectoryFound)
     {
-        cout<<
-            "\nERROR: Unable to extract the landing directory on the sftp  "
-            "server that you want to send the backup to.\nTo fix, please see "
-            "this file -\n"
-            "$HOME/.cloudbuddy/input/[3] landing_directory\n"
-        <<endl;
-        exit(EXIT_SUCCESS);
+        string problem=
+            "The configuration file \""+landingDirectoryPath
+            +"\" needs to contain an entry.";
+        string correctiveAction=
+            "Please add an entry.";
+        displayError(problem,correctiveAction);
+//        cout<<
+//            "\nERROR: Unable to extract the landing directory on the sftp "
+//            "server that you want to send the backup to.\nTo fix, please see "
+//            "this file -\n"<<landingDirectoryPath
+//            //"$HOME/.cloudbuddy/input/[3] landing_directory\n"
+//        <<endl<<endl;
+//        exit(EXIT_SUCCESS);
     }
 }
 
@@ -510,18 +522,24 @@ void retrieveTheComputerName()
     computerNameHandle.close();
     if (!computerNameFound)
     {
-        cout<<
-            "\nERROR: Unable to extract the computer name.  This is needed "
-            "as it will be used to name your backup.\nTo fix, please see "
-            "this file -\n"
-            "$HOME/.cloudbuddy/input/[4] computer_name\n"
-        <<endl;
-        exit(EXIT_SUCCESS);
+        string problem=
+            "The configuration file \""+computerNamePath
+            +"\" needs to contain an entry.";
+        string correctiveAction=
+            "Please add an entry.";
+        displayError(problem,correctiveAction);
+//        cout<<
+//            "\nERROR: Unable to extract the computer name.  This is needed "
+//            "as it will be used to name your backup.\nTo fix, please see "
+//            "this file -\n"
+//            "$HOME/.cloudbuddy/input/[4] computer_name\n"
+//        <<endl;
+//        exit(EXIT_SUCCESS);
     }
-    checkThatTheComputerNameIsOk(computerName);
+    checkTheIntegrityOfTheComputerName(computerName);
 }
 
-void checkThatTheComputerNameIsOk(string &computerName)
+void checkTheIntegrityOfTheComputerName(string &computerName)
 {
     /* check to make sure that the computer name length isn't too long */
     if (computerName.length() >= 32)
@@ -617,13 +635,14 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     ifstream searchThisListForChangesHandle;
     deleteFile(changedAndNewFilesPath); // Create this file from scratch below
 
-    /* check that the list of directories/files to monitor is not empty */
-    if (fileIsEmpty(searchThisListForChangesPath))
-    {
-        cout<<"\nERROR: The file "<<searchThisListForChangesPath<<" can't be "
-              "blank.\n"<<endl;
-        exit(EXIT_SUCCESS);
-    }
+//    /* check that the list of directories/files to monitor is not empty */
+//    if (fileIsEmpty(searchThisListForChangesPath))
+//    {
+//        cout<<"\nERROR:\n  The file "<<searchThisListForChangesPath<<" can't be"
+//              " blank.\n  Considering reinstalling via sudo ./install.sh"
+//        <<endl<<endl;
+//        exit(EXIT_SUCCESS);
+//    }
 
     checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 
@@ -634,10 +653,11 @@ void createAListOfFilesThatHaveChangedOrAreNew()
                    __FILE__,
                    __LINE__,
                    searchThisListForChangesHandle);
-
     double totalLinesInConfigFile1 =
                             getTotalLinesInFile(searchThisListForChangesPath);
 
+    /* create a file that lists all files that have changed or are new before */
+    /* any filtering is done*/
     cout<<endl<<startUnderline<<"Files found (before filtering)"<<endUnderline
     <<"    "<<startUnderline<<"Files searched"<<endUnderline<<endl;
     int configFile1LinesToCheck = 0;
@@ -677,15 +697,19 @@ void createAListOfFilesThatHaveChangedOrAreNew()
             //cout<<endl;
         }
     }
+    /* ensure that there was something to check in config file 1*/
     if (!configFile1LinesToCheck)
     {
-        cout<<endl<<"ERROR: "<<endl<<"  The configuration file \""
-            <<searchThisListForChangesPath<<"\""<<endl
-            <<"  needs to at least contain one file or directory.  "
-            <<"Please add something."<<endl<<endl;
-        exit(EXIT_SUCCESS);
+        string problem=
+            "The configuration file \""+searchThisListForChangesPath
+            +"\" needs to contain at least one entry.";
+        string correctiveAction=
+            "Please add something.";
+        displayError(problem,correctiveAction);
     }
 
+    /* when search before filtering is done, display 100% in Files Searched */
+    /* column */
     cout
     << left << setw(34)<<getTotalLinesInFile(changedAndNewFilesPath)
     << left << setw(18)<<"100%"
@@ -751,14 +775,15 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
 void createAScriptThatWillPerformTheBackup()
 {
     /* extract the ssh server information so a backup can be sent to it  */
-    string username="";
-    string domain="";
-    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
+//    string username="";
+//    string domain="";
+LEFT OFF HERE. see if can make retrieveUsernameAndDomain() without any parameters
+//    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
     //dcout<<username<<endl<<domain<<endl<<endl;
     //cout<<endl<<"here"<<endl<<endl;
-    string landingDirectory="";
-    retrieveTheLandingDirectory(landingDirectory);
-    //dcout<<landingDirectory<<endl;
+//    string landingDirectory="";
+//    retrieveTheLandingDirectory(landingDirectory);
+//    //dcout<<landingDirectory<<endl;
 
     /* create input to the tar command with filtered changed and new files */
     string lineRead="";

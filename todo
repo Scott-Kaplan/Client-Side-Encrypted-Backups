@@ -1,6 +1,31 @@
-// try to run with not filled in config files (installed but not hand edited)
-// DONE with config file 1
-// working on config file 2.  the error message is good. just put in the username and domain
+// confirm correct error messages when each of these config files doesn't exist
+// 	DONE 1
+// 	DONE 2
+// 	DONE 3
+// 	DONE 4
+// 	DONE 5
+// 	DONE 6
+//	DONE 7
+//  DONE timeStampMarker
+
+// confirm correct error messages with each config file where the user didn't add anything
+// 	DONE 1
+// 	2
+// 	DONE 3
+// 	DONE 4
+
+// use displayError() for everything in
+//	actOnCcryptStatus
+//	actOnTarStatus
+//  backup
+//  restore
+//  staticLibrary_fileUtilities
+
+
+// move clearTheTerminalWindow to the top of main
+// move checkThatTheCommandLineArgumentsAreCorrect in restore to the 2nd to the top of main
+
+
 
 // ensure ./smallBackup doesn't end with "Exiting ..." when there were no issues
 // ensure ./smallRestore doesn't end with "Exiting ..." when there were no issues

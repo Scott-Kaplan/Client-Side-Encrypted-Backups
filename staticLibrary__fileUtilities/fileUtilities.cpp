@@ -79,6 +79,7 @@ extern "C" bool directoryExist(string &lookupPath,
                                string fromFileName,
                                int fromLineNumber,
                                string resultsDirectory);
+extern "C" void displayError(string &problem, string &correctiveAction);
 
 ///*******************************/
 ///***** Function Prototypes *****/
@@ -635,3 +636,43 @@ void writeCleanUpAndExitFunction(string &purpose, ofstream &scriptHandle)
     <<f.tab1<<"exit 1"<<endl
     <<f.tab0<<"}"<<endl<<endl;
 }
+
+void displayError(string &problem, string &correctiveAction)
+{
+    cout<<endl<<"ERROR"<<endl<<"  "<<problem
+        <<endl<<"HOW TO FIX"<<endl<<"  "<<correctiveAction<<endl<<endl;
+    exit(EXIT_SUCCESS);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
