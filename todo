@@ -1,37 +1,5 @@
-// confirm correct error messages when each of these config files doesn't exist
-// 	DONE 1
-// 	DONE 2
-// 	DONE 3
-// 	DONE 4
-// 	DONE 5
-// 	DONE 6
-//	DONE 7
-//  DONE timeStampMarker
-
-// confirm correct error messages with each config file where the user didn't add anything
-// 	DONE 1
-// 	2
-// 	DONE 3
-// 	DONE 4
-
-// use displayError() for everything in
-//	actOnCcryptStatus
-//	actOnTarStatus
-//  backup
-//  restore
-//  staticLibrary_fileUtilities
-
-
-// move clearTheTerminalWindow to the top of main
-// move checkThatTheCommandLineArgumentsAreCorrect in restore to the 2nd to the top of main
-
-
-
-// ensure ./smallBackup doesn't end with "Exiting ..." when there were no issues
-// ensure ./smallRestore doesn't end with "Exiting ..." when there were no issues
-
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
-//   ensure quotes are not anywhere in the entire path(including filename) to be backed up
+	// ensure quotes are not anywhere in the entire path(including filename) to be backed up
 // (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
 // ensure no spaces in config file 2 for field that needs to be extracted
 // ensure no spaces in config file 3 for field that needs to be extracted
@@ -277,3 +245,36 @@ void test__existenceOfAFile()
 
 16 // Check that every path listed in config file 1 exists before running the find command. Otherwise, get find errors on each path that doesn't exist
 // done in checkThatAllDirectoriesAndFilesInConfigFile1Exist()
+
+17 // confirm correct error messages when each of these config files doesn't exist
+// backup
+	// 	DONE 1
+	// 	DONE 2
+	// 	DONE 3
+	// 	DONE 4
+	// 	DONE 5
+	// 	DONE 6
+	//	DONE 7
+	//  DONE timeStampMarker
+// restore 
+	// 	DONE 2
+	
+18 // confirm correct error messages with each config file where the user didn't add anything
+// backup
+	// 	DONE 1
+	// 	DONE 2
+	// 	DONE 3
+	// 	DONE 4
+// restore 
+	// 	DONE 2
+
+19 // use displayError() for everything (except for "Usage:" & openForReading() & openForWriting()) in
+// DONE backup
+// DONE restore
+// DONE staticLibrary_fileUtilities
+// DONE actOnCcryptStatus
+// DONE	actOnTarStatus
+
+20 // ensure ./smallBackup doesn't end with "Exiting ..." when there were no issues
+
+21 // ensure ./smallRestore doesn't end with "Exiting ..." when there were no issues

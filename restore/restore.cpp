@@ -65,16 +65,18 @@ extern "C" void writeCleanUpFunction
 extern "C" void clearTheTerminalWindow();
 extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void convert$HOME(string &path);
+extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
 
 /*******************************/
 /***** Function Prototypes *****/
 /*******************************/
-void checkThatTheNeededConfigurationFilesExist();
+//void checkThatTheNeededConfigurationFilesExist();
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[]);
 void displayUsage();
 void createAScriptTheWillRestoreTheBackup();
 void runTheScriptThatRestoresTheBackup();
 void deleteAllFilesIntheRestoreDirectory();
+void checkTheConfigurationFileIntegrity();
 
 /********************/
 /***** Constants ****/
@@ -106,12 +108,14 @@ string expectedOutputFromRunningTheTarCommand = "";
 int main(int argc, char * const argv[])
 {
     clearTheTerminalWindow();
+    checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     getGlobalStrings(globalString,purpose);
     deleteAllFilesIntheRestoreDirectory();
+    checkTheConfigurationFileIntegrity();
     saveTheTerminalPid(purpose);
-    checkThatTheNeededConfigurationFilesExist();
-    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
-    checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
+    //checkThatTheNeededConfigurationFilesExist();
+    //retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
+    //checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     createAScriptTheWillRestoreTheBackup();
     runTheScriptThatRestoresTheBackup();
     return 0;
@@ -125,18 +129,25 @@ void deleteAllFilesIntheRestoreDirectory()
     if(system(deleteFilesCommand.c_str()));
 }
 
-void checkThatTheNeededConfigurationFilesExist()
+void checkTheConfigurationFileIntegrity()
 {
-    //string lookupFileResults=globalString.basePath+"FoundResults";
-    //if (!fileExists(globalString.usernameAndDomainPath,lookupFileResults))
-    if (!fileExist(globalString.usernameAndDomainPath,__FILE__,__LINE__,purpose))
-//    if (!fileExist(globalString.usernameAndDomainPath,purpose))
-    {
-        cout<<"Error: \nThis configuration file could not be read - \n"
-            <<globalString.usernameAndDomainPath<<endl;
-        exit(EXIT_SUCCESS);
-    }
+    checkThatConfigurationFileHasBeenInstalled(globalString.usernameAndDomainPath,purpose);
+    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
 }
+
+
+//void checkThatTheNeededConfigurationFilesExist()
+//{
+//    //string lookupFileResults=globalString.basePath+"FoundResults";
+//    //if (!fileExists(globalString.usernameAndDomainPath,lookupFileResults))
+//    if (!fileExist(globalString.usernameAndDomainPath,__FILE__,__LINE__,purpose))
+////    if (!fileExist(globalString.usernameAndDomainPath,purpose))
+//    {
+//        cout<<"Error: \nThis configuration file could not be read - \n"
+//            <<globalString.usernameAndDomainPath<<endl;
+//        exit(EXIT_SUCCESS);
+//    }
+//}
 
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
@@ -147,7 +158,14 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
         // restore /uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm
         displayUsage();
     }
+
+    /* the expected number of parameters (1) was passed in, so continue */
+    /* with checking the validity of the parameter. */
     nameOfEncryptedBackupWhichIncludesPath = argv[1];
+
+    /* display what the user typed in to launch*/
+    cout<<"> restore "<<nameOfEncryptedBackupWhichIncludesPath<<endl;
+
     extractPathAndFileName
         (nameOfEncryptedBackupWhichIncludesPath,
          directoryThatTheEncryptedBackupIsIn,
@@ -435,7 +453,7 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab0<<"echo \""<<startUnderline<<"Your backup was successfully restored"
     <<endUnderline
     <<"\""<<endl
-    <<tab0<<"echo \""<<"It can found in ("<<restorePath<<")"<<"\""<<endl
+    <<tab0<<"echo \""<<"It can be found in "<<restorePath<<"\""<<endl
     <<tab0<<"echo"<<endl
 
     <<tab0<<"cleanUp"<<endl;

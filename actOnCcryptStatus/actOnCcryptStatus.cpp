@@ -190,7 +190,7 @@ bool encryptionInProgress()
     //cout<<encryptedBackupPath<<endl;
     /* As soon as encryption begins, a *.cpt file is created */
     /* if not started a *.cpt file will be absent */
-cout<<encryptedBackupPath<<endl;
+//cout<<encryptedBackupPath<<endl;
 printfileExist(__LINE__);
     if (fileExist(encryptedBackupPath,__FILE__,__LINE__,purpose))
     //if (fileExist(encryptedBackupPath,purpose))
@@ -198,7 +198,7 @@ printfileExist(__LINE__);
     {
       encryptionIsInProgress = true;
     }
-cout<<"encryptionIsInProgress = "<<encryptionIsInProgress<<endl;
+//cout<<"encryptionIsInProgress = "<<encryptionIsInProgress<<endl;
 //exit(EXIT_SUCCESS);
     return encryptionIsInProgress;
 }
@@ -556,11 +556,10 @@ printfileExist(__LINE__);
 
 void print(int fromLineNumber)
 {
-    cout<<fromLineNumber<<endl;
+    //cout<<fromLineNumber<<endl;
 }
-
 
 void printfileExist(int fromLineNumber)
 {
-    cout<<fromLineNumber<<" line before calling fileExist()"<<endl;
+    //cout<<fromLineNumber<<" line before calling fileExist()"<<endl;
 }

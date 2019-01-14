@@ -78,6 +78,7 @@ extern "C" void writeCleanUpAndExitFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void displayError(string &problem, string &correctiveAction);
+extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
 
 /********************/
 /***** Constants ****/
@@ -123,7 +124,7 @@ string expectedOutputFromRunningTheTarCommand =
 /*******************************/
 /***** Function Prototypes *****/
 /*******************************/
-void checkThatConfigurationFileHasBeenInstalled(string &path);
+//void checkThatConfigurationFileHasBeenInstalled(string &path);
 void displayUsage();
 void deleteAllFilesInTheBackupDirectory();
 void filterUnwantedFilesSoThatTheyWontBeInTheBackup();
@@ -362,20 +363,20 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
     return lineWanted;
 }
 
-void checkThatConfigurationFileHasBeenInstalled(string &path)
-{
-    convert$HOME(path);
-    if (!fileExist(path,__FILE__,__LINE__,purpose))
-    {
-        string problem=
-            "The startup configuration file \""+path+"\" does not exist.";
-        string correctiveAction=
-            "Reinstall by following these steps:\n  "
-            "[1] cd to your Client-Side-Encrypted-Backups directory\n  "
-            "[2] sudo ./install.sh";
-        displayError(problem,correctiveAction);
-    }
-}
+//void checkThatConfigurationFileHasBeenInstalled(string &path)
+//{
+//    convert$HOME(path);
+//    if (!fileExist(path,__FILE__,__LINE__,purpose))
+//    {
+//        string problem=
+//            "The startup configuration file \""+path+"\" does not exist.";
+//        string correctiveAction=
+//            "Reinstall by following these steps:\n  "
+//            "[1] cd to your Client-Side-Encrypted-Backups directory\n  "
+//            "[2] sudo ./install.sh";
+//        displayError(problem,correctiveAction);
+//    }
+//}
 
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
@@ -388,7 +389,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
     else
     {
         /* the expected number of parameters (1) was passed in, so continue */
-        /* with checking the validity of those parameters. */
+        /* with checking the validity of the parameter. */
         backupLabelName = argv[1];
 
         /* display what the user typed in to launch*/
@@ -446,16 +447,15 @@ void displayUsage()
 
 void checkTheIntegrityOfTheConfigurationFiles()
 {
-    checkThatConfigurationFileHasBeenInstalled(searchThisListForChangesPath);
-    checkThatConfigurationFileHasBeenInstalled(globalString.usernameAndDomainPath);
-    checkThatConfigurationFileHasBeenInstalled(landingDirectoryPath);
-    checkThatConfigurationFileHasBeenInstalled(computerNamePath);
-    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatStartWithThisPath);
-    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatEndWithThisPath);
-    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatContainThisPath);
-    checkThatConfigurationFileHasBeenInstalled(timeStampMarkerPath);
-
-    retrieveUsernameAndDomain();
+    checkThatConfigurationFileHasBeenInstalled(searchThisListForChangesPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled(globalString.usernameAndDomainPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled(landingDirectoryPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled(computerNamePath,purpose);
+    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatStartWithThisPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatEndWithThisPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatContainThisPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled(timeStampMarkerPath,purpose);
+    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
     retrieveTheLandingDirectory();
     retrieveTheComputerName();
 }
@@ -774,10 +774,9 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
 
 void createAScriptThatWillPerformTheBackup()
 {
-    /* extract the ssh server information so a backup can be sent to it  */
+//    /* extract the ssh server information so a backup can be sent to it  */
 //    string username="";
 //    string domain="";
-LEFT OFF HERE. see if can make retrieveUsernameAndDomain() without any parameters
 //    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
     //dcout<<username<<endl<<domain<<endl<<endl;
     //cout<<endl<<"here"<<endl<<endl;
@@ -1142,10 +1141,16 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
             if (!fileExist(line,__FILE__,__LINE__,purpose) &&
                 !directoryExist(line,__FILE__,__LINE__,purpose))
             {
-                cout<<endl<<"ERROR: \""+line+"\" is not a file or directory"
-                    <<endl<<"Please correct this in - "<<endl
-                    <<searchThisListForChangesPath<<endl<<endl;
-                exit(EXIT_SUCCESS);
+                string problem=
+                    "The configuration file \""+searchThisListForChangesPath
+                    +"\" contains this invalid line -\n  \""+line+"\"";
+                string correctiveAction=
+                    "Please make this a valid file or directory";
+                displayError(problem,correctiveAction);
+//                cout<<endl<<"ERROR: \""+line+"\" is not a file or directory"
+//                    <<endl<<"Please correct this in - "<<endl
+//                    <<searchThisListForChangesPath<<endl<<endl;
+//                exit(EXIT_SUCCESS);
             }
         }
     }

@@ -80,6 +80,7 @@ extern "C" bool directoryExist(string &lookupPath,
                                int fromLineNumber,
                                string resultsDirectory);
 extern "C" void displayError(string &problem, string &correctiveAction);
+extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
 
 ///*******************************/
 ///***** Function Prototypes *****/
@@ -503,12 +504,18 @@ void retrieveUsernameAndDomain(string &username, string &domain, string &usernam
     fillUsernameAndDomainHandle.close();
     if (!usernameAndDomainFound)
     {
-        cout<<
-            "\nError: Unable to extract the username and domain of the sftp "
-            "server that you want to send the backup to.\nTo fix, please see "
-            "this file -\n"
-            <<usernameAndDomainPath<<endl<<endl;
-        exit(EXIT_SUCCESS);
+        string problem=
+            "The configuration file \""+usernameAndDomainPath
+            +"\" needs to contain an entry.";
+        string correctiveAction=
+            "Please add an entry.";
+        displayError(problem,correctiveAction);
+//        cout<<
+//            "\nError: Unable to extract the username and domain of the sftp "
+//            "server that you want to send the backup to.\nTo fix, please see "
+//            "this file -\n"
+//            <<usernameAndDomainPath<<endl<<endl;
+//        exit(EXIT_SUCCESS);
     }
 }
 
@@ -644,6 +651,20 @@ void displayError(string &problem, string &correctiveAction)
     exit(EXIT_SUCCESS);
 }
 
+void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose)
+{
+    convert$HOME(path);
+    if (!fileExist(path,__FILE__,__LINE__,purpose))
+    {
+        string problem=
+            "The startup configuration file \""+path+"\" does not exist.";
+        string correctiveAction=
+            "Reinstall by following these steps:\n  "
+            "[1] cd to your Client-Side-Encrypted-Backups directory\n  "
+            "[2] sudo ./install.sh";
+        displayError(problem,correctiveAction);
+    }
+}
 
 
 
