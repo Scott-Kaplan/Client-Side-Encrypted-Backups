@@ -79,6 +79,9 @@ extern "C" void writeCleanUpAndExitFunction
 extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void displayError(string &problem, string &correctiveAction);
 extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
+extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
+                                               string lineTitle,
+                                               string &configurationFilePath);
 
 /********************/
 /***** Constants ****/
@@ -472,10 +475,13 @@ void retrieveTheLandingDirectory()
     while (getline(landingDirectoryHandle,line))
     {
         //dcout<<line<<endl;
-        removeLeadingWhiteSpaces(line);
+        //removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
+            checkThatThereAreNoWhiteSpaces
+                        (line,"landing directory line",landingDirectoryPath);
+
             landingDirectoryFound = true;
             landingDirectory = line;
         }

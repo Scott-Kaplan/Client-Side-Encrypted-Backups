@@ -36,6 +36,7 @@ using namespace std;
 #include <stdlib.h>
 #include <sstream>
 #include <unistd.h>
+#include <string.h>
 
 /****************************************/
 /************** Share these *************/
@@ -81,6 +82,9 @@ extern "C" bool directoryExist(string &lookupPath,
                                string resultsDirectory);
 extern "C" void displayError(string &problem, string &correctiveAction);
 extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
+extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
+                                               string lineTitle,
+                                               string &configurationFilePath);
 
 ///*******************************/
 ///***** Function Prototypes *****/
@@ -492,6 +496,8 @@ void retrieveUsernameAndDomain(string &username, string &domain, string &usernam
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
+            checkThatThereAreNoWhiteSpaces
+                        (line,"username and domain line",usernameAndDomainPath);
             size_t positionOfLastAtSign = line.find_last_of("@");
             if (positionOfLastAtSign != string::npos)
             {
@@ -666,7 +672,22 @@ void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose)
     }
 }
 
-
+void checkThatThereAreNoWhiteSpaces(string &line, string lineTitle, string &configurationFilePath)
+{
+    int lengthOfString = strlen(line.c_str());
+    for (int i=0; i<lengthOfString; ++i)
+    {
+        if (line[i] == ' ')
+        {
+            string problem=
+                "The "+lineTitle+" in \""+configurationFilePath
+                +"\" contains a space in it.";
+            string correctiveAction=
+                "Please remove the space.";
+            displayError(problem,correctiveAction);
+        }
+    }
+}
 
 
 
