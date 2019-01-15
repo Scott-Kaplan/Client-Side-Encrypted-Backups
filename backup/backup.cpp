@@ -440,10 +440,12 @@ void displayUsage()
     " from one or more of these:\ncharacters, numbers, periods, hyphens,"
     " underscores and has a length less than 128.\n\nExamples\n  >"
     " backup no-label\n  This is how it will look on the server"
-    " (Note: The timestamp will be different)\n  "<<computerName<<
+    " (Note: The timestamp will be different)\ncomputerName"
+//    " (Note: The timestamp will be different)\n  "<<computerName<<
     "**2018-05-01__12:28am\n\n  > backup pics-of-aunt-mary\n "
     " This is how it will look on the server (Note: The timestamp will be"
-    " different)\n  "<<computerName<<"**pics-of-aunt-mary**2018-05-01__12:28am"
+    " different)\ncomputerName**pics-of-aunt-mary**2018-05-01__12:28am"
+//    " different)\n  "<<computerName<<"**pics-of-aunt-mary**2018-05-01__12:28am"
     "\n"<<endl;
     exit(EXIT_SUCCESS);
 }
@@ -976,10 +978,13 @@ void createAScriptThatWillPerformTheBackup()
     /* does not, mention it and exit the script */
     <<tab0<<"if [ ! -f \""<<theBackup<<".cpt\" ]; then "<<endl
     <<tab1<<"echo"<<endl
-    <<tab1<<"echo \"Since the passwords don't match, can't proceed - so exiting ...\""<<endl
+    <<tab1<<"echo \"Since the encryption keys don't match, can't proceed - so exiting ...\""<<endl
+//    <<tab1<<"echo \"Since the passwords don't match, can't proceed - so exiting ...\""<<endl
     <<tab1<<"echo"<<endl
-    <<tab1<<"tput cnorm"<<endl // bring the cursor back before exiting
-    <<tab1<<"exit 1"<<endl
+TEST THIS
+    <<tab1<<"cleanUpAndExit"<<endl
+//    <<tab1<<"tput cnorm"<<endl // bring the cursor back before exiting
+//    <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
     <<tab0<<"while [ ! -f \""<<globalString.ccryptFinishedGracefully<<"\" ]; do"
     <<endl

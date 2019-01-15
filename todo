@@ -1,11 +1,11 @@
+// call cleanUpAndExit when the user doesn't enter the same encryption password twice when doing a backup
+// call cleanUpAndExit when the user doesn't enter the correct encryption password when doing a restore
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
 	// ensure quotes are not anywhere in the entire path(including filename) to be backed up
 // (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
 // save the size of the encrypted backup into the log file.  Doing this since making a strong statement that backups can't be corrupted.  That way if a server admin messes with the file the user will be able to confirm that the file is the wrong size and might conclude that it was mucked with.
-// in displayUsage() in backup, change the variable "<<computerName" to this hard coded string "computerName".  The reason is displayUsage() can be called before computerName has a value
+// test displayUsage() in backup
 // test displayUsage() in restore
-// call cleanUpAndExit when the user doesn't enter the correct encryption password when doing a restore
-// call cleanUpAndExit when the user doesn't enter the same encryption password twice when doing a backup
 // increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
 // fresh install on 16.04 at work, but retain config file 1 that has the problem
 // test ./smallBackup with 3 wrong sftp passwords
@@ -45,7 +45,6 @@ no further action because done or didn't take action
 1 // see when doing the backup with the 2 large .iso, the percentage it jumps from to get to 100% since the calculation won't take into account compression of the tar command
 
 //--- did this with a 200MB file.  Couldn't tell that it skipped at all.  The skipping at the end to 100% wouldn't matter.  The //only thing that matters is that the user sees the percentage going up.  They'd be happy if it went to 100% sooner.
-
 
 2 //race condition
 //When decrypting, got this.  Shouldn't have happened
@@ -280,3 +279,5 @@ void test__existenceOfAFile()
 23 // ensure no spaces in config file 3 for field that needs to be extracted
 
 24 // support spaces in paths found in config file 1
+
+25 // in displayUsage() in backup, change the variable "<<computerName" to this hard coded string "computerName".  The reason is displayUsage() can be called before computerName has a value
