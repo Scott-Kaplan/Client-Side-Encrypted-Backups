@@ -1,4 +1,3 @@
-// support spaces in paths found in config file 1
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
 	// ensure quotes are not anywhere in the entire path(including filename) to be backed up
 // (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
@@ -279,3 +278,5 @@ void test__existenceOfAFile()
 22 // ensure that there are no space is in config file 2 for field that needs to be extracted
 
 23 // ensure no spaces in config file 3 for field that needs to be extracted
+
+24 // support spaces in paths found in config file 1
