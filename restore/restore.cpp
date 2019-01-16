@@ -288,10 +288,11 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab1<<"echo Error: Unable to locate the backup '\""
           <<nameOfEncryptedBackupWhichIncludesPath<<"\"'"<<endl
     <<tab1<<"echo"<<endl
-    <<tab1<<"echo Exiting ..."<<endl
-    <<tab1<<"echo"<<endl
-    <<tab1<<"echo"<<endl
-    <<tab1<<"exit 1"<<endl
+    <<tab1<<"cleanUpAndExit"<<endl
+//    <<tab1<<"echo Exiting ..."<<endl
+//    <<tab1<<"echo"<<endl
+//    <<tab1<<"echo"<<endl
+//    <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
 
     /* hide the cursor as the cursor is distracting while viewing the */
@@ -327,10 +328,12 @@ void createAScriptTheWillRestoreTheBackup()
     /* only after it has been decrypted*/
     <<tab0<<"if [ ! -f \""<<nameOfEncryptedBackup<<"\" ]; then "<<endl
     <<tab1<<"echo"<<endl
-    <<tab1<<"echo \"Unable to decrypt your backup, because the wrong decryption key was entered - so exiting ...\""<<endl
-    <<tab1<<"echo"<<endl
-    <<tab1<<"tput cnorm"<<endl // bring the cursor back
-    <<tab1<<"exit 1"<<endl
+
+//    <<tab1<<"echo \"Unable to decrypt your backup, because the wrong decryption key was entered - so exiting ...\""<<endl
+//    <<tab1<<"echo"<<endl
+    <<tab1<<"cleanUpAndExit"<<endl
+//    <<tab1<<"tput cnorm"<<endl // bring the cursor back
+//    <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
     <<tab0<<"while [ ! -f \""<<globalString.ccryptFinishedGracefully<<"\" ]; do"
     <<endl
@@ -478,5 +481,3 @@ void runTheScriptThatRestoresTheBackup()
         "minute)"<<endl<<endl;
     if(system(restoreTheBackupScriptCommand.c_str()));
 }
-
-//think about building in ability to decrypt/untar without sftp'ing first as it is now.

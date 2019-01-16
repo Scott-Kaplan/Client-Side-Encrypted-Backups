@@ -1,29 +1,29 @@
-// call cleanUpAndExit when the user doesn't enter the same encryption password twice when doing a backup
-// call cleanUpAndExit when the user doesn't enter the correct encryption password when doing a restore
-// check that all paths that will be in the backup do not contain illegal characters before doing the backup
-	// ensure quotes are not anywhere in the entire path(including filename) to be backed up
-// (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
-// save the size of the encrypted backup into the log file.  Doing this since making a strong statement that backups can't be corrupted.  That way if a server admin messes with the file the user will be able to confirm that the file is the wrong size and might conclude that it was mucked with.
 // test displayUsage() in backup
 // test displayUsage() in restore
+
+// test ./smallRestore with 3 wrong sftp passwords
+
+// check that all paths that will be in the backup do not contain illegal characters before doing the backup
+	// ensure quotes are not anywhere in the entire path(including filename) to be backed up
+
+// (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
+// save the size of the encrypted backup into the log file.  Doing this since making a strong statement that backups can't be corrupted.  That way if a server admin messes with the file the user will be able to confirm that the file is the wrong size and might conclude that it was mucked with.
 // increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
 // fresh install on 16.04 at work, but retain config file 1 that has the problem
-// test ./smallBackup with 3 wrong sftp passwords
-// test ./smallRestore with 3 wrong sftp passwords
-// test ./smallRestore with wrong ccrypt key
-// modify install.sh to install packages for Debian.  Don't test it
-// modify install.sh to install packages for Arch.  Don't test it
-// modify install.sh to install packages for Fedora.  Don't test it
-// modify install.sh to install packages for openSUSE.  Don't test it
-// modify install.sh to install packages for Slackware.  Don't test it
-// modify install.sh to install packages for Gentoo.  Don't test it
+
 // test on virgin ubuntu 14.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 14.04
 // test on virgin ubuntu 16.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 16.04
 // test on virgin ubuntu 18.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 18.04
-// restore bad backup name like blappity
+// modify install.sh to install packages for Debian.  Don't test it
+// modify install.sh to install packages for Arch.  Don't test it
+// modify install.sh to install packages for Fedora.  Don't test it
+// modify install.sh to install packages for openSUSE.  Don't test it
+// modify install.sh to install packages for Slackware.  Don't test it
+// modify install.sh to install packages for Gentoo.  Don't test it
+
 // restore bad path with good backup name
 // ensure all lines wrap at 80
 // ensure all declared file scope variables are used
@@ -281,3 +281,25 @@ void test__existenceOfAFile()
 24 // support spaces in paths found in config file 1
 
 25 // in displayUsage() in backup, change the variable "<<computerName" to this hard coded string "computerName".  The reason is displayUsage() can be called before computerName has a value
+
+26 // call cleanUpAndExit when the user doesn't enter the same encryption password twice when doing a backup
+
+27 // think about building in ability to decrypt/untar without sftp'ing first as it is now.
+// nah because most/all of time the user will enter the correct decryption key
+
+28 // call cleanUpAndExit when the user doesn't enter the correct decryption password when doing a restore
+
+29 // test ./smallRestore with wrong ccrypt key
+
+30 // restore bad backup name like blappity
+// correctly get-
+//Error: Unable to locate the backup "blappity"
+//
+//
+//Exiting ...
+
+31 // cleanUpAndExit should be used in place of "exit 1" in these binaries
+  // DONE backup
+  // DONE restore
+
+32 // test ./smallBackup with 3 wrong sftp passwords

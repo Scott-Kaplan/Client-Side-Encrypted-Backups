@@ -433,10 +433,16 @@ void displayUsage()
     cout
     <<"\nUsage:\n\nbackup "<<startUnderline
     <<"label-name|no-label\n\n"<<endUnderline
-    <<startUnderline<<"label-name|no-label"<<endUnderline<<" --> This is a"
-    " parameter that you need to provide which makes\nup part of your backup"
-    " name. If you don't want a label in your backup name,\nuse: no-label. If"
-    " you are using a label, you can use anything as long as it\nis made up"
+    <<startUnderline<<"label-name|no-label"<<endUnderline<<
+    " --> This is a parameter that you need to provide because it makes up part of your backup's name.\n"
+    "If you don't want a label in your backup name, use: no-label.\n"
+    "If you are using a label, it needs to be created from one or more of these:\n"
+    "characters, numbers, periods, hyphens,"
+//    " parameter that you need to provide which makes\nup part of the name of your backup"
+//    " parameter that you need to provide which makes\nup part of your backup"
+//    " name. If you don't want a label in your backup name,\nuse: no-label. If"
+//    "If you don't want a label in your backup name,\nuse: no-label. If"
+//    "If you are using a label, you can use anything as long as it\nis made up"
     " from one or more of these:\ncharacters, numbers, periods, hyphens,"
     " underscores and has a length less than 128.\n\nExamples\n  >"
     " backup no-label\n  This is how it will look on the server"
@@ -978,10 +984,9 @@ void createAScriptThatWillPerformTheBackup()
     /* does not, mention it and exit the script */
     <<tab0<<"if [ ! -f \""<<theBackup<<".cpt\" ]; then "<<endl
     <<tab1<<"echo"<<endl
-    <<tab1<<"echo \"Since the encryption keys don't match, can't proceed - so exiting ...\""<<endl
+//    <<tab1<<"echo \"Since the encryption keys don't match, can't proceed - so exiting ...\""<<endl
 //    <<tab1<<"echo \"Since the passwords don't match, can't proceed - so exiting ...\""<<endl
-    <<tab1<<"echo"<<endl
-TEST THIS
+//    <<tab1<<"echo"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
 //    <<tab1<<"tput cnorm"<<endl // bring the cursor back before exiting
 //    <<tab1<<"exit 1"<<endl
@@ -1050,11 +1055,13 @@ TEST THIS
     /* If the transfer didn't finish, display an error message and exit */
     <<tab0<<"if [ ! -f \"transfer-complete\" ]; then "<<endl
     <<tab1<<"echo"<<endl
+    //<<tab1<<"echo"<<endl
+    <<tab1<<"echo \"ERROR: The transfer didn't finish.\""<<endl
+    //<<tab1<<"echo \"ERROR: The transfer didn't finish, so exiting ...\""<<endl
     <<tab1<<"echo"<<endl
-    <<tab1<<"echo \"ERROR: The transfer didn't finish, so exiting ...\""<<endl
-    <<tab1<<"echo"<<endl
-    <<tab1<<"echo"<<endl
-    <<tab1<<"exit 1"<<endl
+    //<<tab1<<"echo"<<endl
+    //<<tab1<<"exit 1"<<endl
+    <<tab1<<"cleanUpAndExit"<<endl
     <<tab0<<"fi"<<endl<<endl
 
     /* Refresh the timestamp of the timeStampMarker file, so the next backup */
