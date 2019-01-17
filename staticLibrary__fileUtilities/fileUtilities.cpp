@@ -81,7 +81,8 @@ extern "C" bool directoryExist(string &lookupPath,
                                int fromLineNumber,
                                string resultsDirectory);
 extern "C" void displayError(string &problem, string &correctiveAction);
-extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
+extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
+                                                           string &purpose);
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);

@@ -160,9 +160,6 @@ int main(int argc, char * const argv[])
     deleteAllFilesInTheBackupDirectory();
     checkTheIntegrityOfTheConfigurationFiles();
     saveTheTerminalPid(purpose);
-    //clearTheTerminalWindow();
-    //retrieveTheComputerName();
-    //checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     createAListOfFilesThatHaveChangedOrAreNew();
     filterUnwantedFilesSoThatTheyWontBeInTheBackup();
     checkThatThereIsEnoughDiskSpaceToPerformTheBackup();
@@ -385,8 +382,17 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
     if (argc != 2)
     {
+        string commandLineArgs="";
+        for (int i=0,remaingArgs=argc;remaingArgs;++i,--remaingArgs)
+        {
+            commandLineArgs=argv[argc];
+        }
+        todo trying to print "> backup " incorrect parameters
+        cout<<commandLineArgs<<endl;
+
         /* display usage message because the user didn't enter the correct */
         /* amount of parameters - which  was supposed to be (1) */
+        cout<<"ERROR:  the wrong number of parameters were entered"<<endl;
         displayUsage();
     }
     else
@@ -403,8 +409,8 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
             /* check to make sure that the backup label name isn't too long */
             if (backupLabelName.length() >= 128)
             {
-                cout<<"ERROR: the length of the second parameter can't exceed "
-                      "128"<<endl;
+                cout<<endl<<"ERROR - the length of the second parameter can't "
+                "exceed 128"<<endl<<endl;
                 displayUsage();
             }
 
@@ -417,10 +423,9 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
                       (backupLabelName[i]=='_') ||
                       (backupLabelName[i]=='.')))
                 {
-                    //cout<<"ERROR: Only letters, numbers, hyphens and underscores "
-                    cout<<"ERROR: Only letters, numbers, periods, hyphens and "
-                          "underscores can be used in label-name|no-label"
-                          <<endl;
+                    cout<<endl<<"ERROR - only letters, numbers, periods, "
+                    "hyphens and underscores can be used in label-name"<<endl
+                    <<endl;
                     displayUsage();
                 }
             }
@@ -435,25 +440,18 @@ void displayUsage()
     <<"label-name|no-label\n\n"<<endUnderline
     <<startUnderline<<"label-name|no-label"<<endUnderline<<
     " --> This is a parameter that makes up part of the name of your backup.\n"
-    "If you don't want a label in your backup name, then use "<<startUnderline<<"no-label"<<endUnderline<<".\n"
+    "If you don't want a label in your backup name, then use "
+    <<startUnderline<<"no-label"<<endUnderline<<".\n"
     "If you want a label, it needs to be less than a length of 128 and can only contain - \n"
     "characters, numbers, periods, hyphens, underscores"
-    "\n\nExamples\n  >"
-//    " parameter that you need to provide which makes\nup part of the name of your backup"
-//    " parameter that you need to provide which makes\nup part of your backup"
-//    " name. If you don't want a label in your backup name,\nuse: no-label. If"
-//    "If you don't want a label in your backup name,\nuse: no-label. If"
-//    "If you are using a label, you can use anything as long as it\nis made up"
-//    " from one or more of these:\ncharacters, numbers, periods, hyphens,"
-//    " underscores and has a length less than 128.\n\nExamples\n  >"
-    " backup no-label\n  This is how it will look on the server\n"
-    "  (Note: The timestamp will be different)\n  computerName"
-//    " (Note: The timestamp will be different)\n  "<<computerName<<
-    "**2018-05-01__12:28am\n\n  > backup pics-of-aunt-mary\n "
-    " This is how it will look on the server (Note: The timestamp will be"
-    " different)\n  computerName**pics-of-aunt-mary**2018-05-01__12:28am"
-//    " different)\n  "<<computerName<<"**pics-of-aunt-mary**2018-05-01__12:28am"
-    "\n"<<endl;
+    "\n\nExamples\n\n"
+    "  > backup no-label\n\n"
+    "  This is how it will look on the server (computerName and timestamp will vary) - \n\n"
+    "  computerName**2018-05-01__12:28am\n\n\n"
+    "  > backup pics-of-aunt-mary\n\n"
+    "  This is how it will look on the server (computerName and timestamp will vary) - \n\n"
+    "  computerName**pics-of-aunt-mary**2018-05-01__12:28am\n\n"
+    <<endl;
     exit(EXIT_SUCCESS);
 }
 
