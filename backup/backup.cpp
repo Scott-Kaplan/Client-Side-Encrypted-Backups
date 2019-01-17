@@ -434,23 +434,24 @@ void displayUsage()
     <<"\nUsage:\n\nbackup "<<startUnderline
     <<"label-name|no-label\n\n"<<endUnderline
     <<startUnderline<<"label-name|no-label"<<endUnderline<<
-    " --> This is a parameter that you need to provide because it makes up part of your backup's name.\n"
-    "If you don't want a label in your backup name, use: no-label.\n"
-    "If you are using a label, it needs to be created from one or more of these:\n"
-    "characters, numbers, periods, hyphens,"
+    " --> This is a parameter that makes up part of the name of your backup.\n"
+    "If you don't want a label in your backup name, then use "<<startUnderline<<"no-label"<<endUnderline<<".\n"
+    "If you want a label, it needs to be less than a length of 128 and can only contain - \n"
+    "characters, numbers, periods, hyphens, underscores"
+    "\n\nExamples\n  >"
 //    " parameter that you need to provide which makes\nup part of the name of your backup"
 //    " parameter that you need to provide which makes\nup part of your backup"
 //    " name. If you don't want a label in your backup name,\nuse: no-label. If"
 //    "If you don't want a label in your backup name,\nuse: no-label. If"
 //    "If you are using a label, you can use anything as long as it\nis made up"
-    " from one or more of these:\ncharacters, numbers, periods, hyphens,"
-    " underscores and has a length less than 128.\n\nExamples\n  >"
-    " backup no-label\n  This is how it will look on the server"
-    " (Note: The timestamp will be different)\ncomputerName"
+//    " from one or more of these:\ncharacters, numbers, periods, hyphens,"
+//    " underscores and has a length less than 128.\n\nExamples\n  >"
+    " backup no-label\n  This is how it will look on the server\n"
+    "  (Note: The timestamp will be different)\n  computerName"
 //    " (Note: The timestamp will be different)\n  "<<computerName<<
     "**2018-05-01__12:28am\n\n  > backup pics-of-aunt-mary\n "
     " This is how it will look on the server (Note: The timestamp will be"
-    " different)\ncomputerName**pics-of-aunt-mary**2018-05-01__12:28am"
+    " different)\n  computerName**pics-of-aunt-mary**2018-05-01__12:28am"
 //    " different)\n  "<<computerName<<"**pics-of-aunt-mary**2018-05-01__12:28am"
     "\n"<<endl;
     exit(EXIT_SUCCESS);
