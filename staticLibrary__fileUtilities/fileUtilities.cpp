@@ -87,6 +87,10 @@ extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);
 
+extern "C" void displayCommandLineArgumentsAreWrong(int argc,
+                                                    char * const argv[],
+                                                    string &purpose);
+
 ///*******************************/
 ///***** Function Prototypes *****/
 ///*******************************/
@@ -690,7 +694,25 @@ void checkThatThereAreNoWhiteSpaces(string &line, string lineTitle, string &conf
     }
 }
 
+void displayCommandLineArgumentsAreWrong(int argc,
+                                         char * const argv[],
+                                         string &purpose)
+{
+    string commandLineArgs="";
+    for (int i=1,remaingArgs=argc;remaingArgs>1;++i,--remaingArgs)
+    {
+        commandLineArgs+=" ";
+        commandLineArgs+=argv[i];
+    }
 
+    // examples:
+    // > backup howdy there
+    // > restore /that_directory/howdy howdy
+    cout<<"> "<<purpose<<commandLineArgs<<endl;
+
+    cout<<endl<<"ERROR - the wrong number of parameters were entered"<<endl
+    <<endl;
+}
 
 
 

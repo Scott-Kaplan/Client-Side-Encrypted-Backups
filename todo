@@ -1,5 +1,17 @@
-// test displayUsage() in backup
-// test displayUsage() in restore
+// Put these in one place
+///********************/
+///***** Constants ****/
+///********************/
+//string tab0="";
+//string tab1="  ";
+//string tab2="    ";
+//string tab3="      ";
+
+// test displayCommandLineArgumentsAreWrong() in
+  // backup
+  // restore
+
+// rework displayUsage() in restore to match the format in backup
 
 // test ./smallRestore with 3 wrong sftp passwords
 
@@ -303,3 +315,5 @@ void test__existenceOfAFile()
   // DONE restore
 
 32 // test ./smallBackup with 3 wrong sftp passwords
+
+33 // test displayUsage() in backup

@@ -42,8 +42,6 @@ extern "C" string getTimestamp();
 extern "C" void retrieveUsernameAndDomain
             (string &username, string &domain, string &usernameAndDomainPath);
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
-//extern "C" bool fileExist(string &path, string &purpose);
-//extern "C" bool fileExists(string &lookupFile,string &lookupFileResults);
 extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
@@ -65,12 +63,15 @@ extern "C" void writeCleanUpFunction
 extern "C" void clearTheTerminalWindow();
 extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void convert$HOME(string &path);
-extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
+extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
+                                                           string &purpose);
+extern "C" void displayCommandLineArgumentsAreWrong(int argc,
+                                                    char * const argv[],
+                                                    string &purpose);
 
 /*******************************/
 /***** Function Prototypes *****/
 /*******************************/
-//void checkThatTheNeededConfigurationFilesExist();
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[]);
 void displayUsage();
 void createAScriptTheWillRestoreTheBackup();
@@ -113,9 +114,6 @@ int main(int argc, char * const argv[])
     deleteAllFilesIntheRestoreDirectory();
     checkTheConfigurationFileIntegrity();
     saveTheTerminalPid(purpose);
-    //checkThatTheNeededConfigurationFilesExist();
-    //retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
-    //checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     createAScriptTheWillRestoreTheBackup();
     runTheScriptThatRestoresTheBackup();
     return 0;
@@ -135,31 +133,18 @@ void checkTheConfigurationFileIntegrity()
     retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
 }
 
-
-//void checkThatTheNeededConfigurationFilesExist()
-//{
-//    //string lookupFileResults=globalString.basePath+"FoundResults";
-//    //if (!fileExists(globalString.usernameAndDomainPath,lookupFileResults))
-//    if (!fileExist(globalString.usernameAndDomainPath,__FILE__,__LINE__,purpose))
-////    if (!fileExist(globalString.usernameAndDomainPath,purpose))
-//    {
-//        cout<<"Error: \nThis configuration file could not be read - \n"
-//            <<globalString.usernameAndDomainPath<<endl;
-//        exit(EXIT_SUCCESS);
-//    }
-//}
-
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
     if (argc != 2)
     {
-        // the user didn't enter one parameter that equals
-        // the filename with path that's to be restored.  Example
-        // restore /uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm
+        // Examples of what is expected
+        // > restore /uploads/e6230**2018-06-26__09:26pm
+        // > restore /uploads/e6230**pics-of-aunt-mary**2018-06-26__09:26pm
+        displayCommandLineArgumentsAreWrong(argc,argv,purpose);
         displayUsage();
     }
 
-    /* the expected number of parameters (1) was passed in, so continue */
+    /* the expected number of parameters (1) were passed in, so continue */
     /* with checking the validity of the parameter. */
     nameOfEncryptedBackupWhichIncludesPath = argv[1];
 
@@ -230,11 +215,6 @@ void createAScriptTheWillRestoreTheBackup()
     /* go to the restore directory */
     <<tab0<<"cd "<<restoreDirectory<<endl<<endl
 
-//debug
-//<<tab0<<"cp $HOME/temp/test/test/test/test/e6230-primary**2018-10-02__05:47am "<<restoreDirectory<<endl
-// comment out all code lines between HERE and END_HERE to skip the sftp.
-// maybe useful if large backup and user wants to try decryption key possibilities because he/she forgot what he/she initially used
-// HERE
     /* download the backup */
     /* Create a script to retrieve the encrypted backup */
     // Use -vv in the next line if have any issues, as this shows lots of
@@ -267,16 +247,6 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab0<<"!command touch transfer-complete"<<endl
     // The next line ends the sftp script
     <<tab0<<"END_SCRIPT"<<endl<<endl
-    // delete when above works
-    // this works except if the user cancels the download during the transfer
-    ///* example)  sftp <user>@cloudbuddy.cloud:/uploads/testFile . */
-    //<<tab0<<"sftp "<<username<<"@"<<domain<<":"<<nameOfEncryptedBackupWhichIncludesPath
-    //<<" ."<<endl
-// END_HERE
-//debug
-//<<tab0<<"touch transfer-complete"<<endl
-
-
     <<tab0<<"echo"<<endl<<endl
     /* If the backup to be downloaded wasn't found, the transfer-complete */
     /* file still gets created since the 'get' command still finished */
@@ -289,10 +259,6 @@ void createAScriptTheWillRestoreTheBackup()
           <<nameOfEncryptedBackupWhichIncludesPath<<"\"'"<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
-//    <<tab1<<"echo Exiting ..."<<endl
-//    <<tab1<<"echo"<<endl
-//    <<tab1<<"echo"<<endl
-//    <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
 
     /* hide the cursor as the cursor is distracting while viewing the */
@@ -320,20 +286,12 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab0<<"echo \"About to start decrypting your backup ...\""<<endl
     <<tab0<<"echo"<<endl<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<".cpt"<<endl<<endl
 
-    //<<tab0<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<".cpt"<<endl<<endl
-    //<<tab0<<"echo"<<endl<<endl
-
     /* Ensure the user sucessfully decrypted the backup.  If not, mention it */
     /* and exit the script.  Note that the .cpt is dropped off the backup */
     /* only after it has been decrypted*/
     <<tab0<<"if [ ! -f \""<<nameOfEncryptedBackup<<"\" ]; then "<<endl
     <<tab1<<"echo"<<endl
-
-//    <<tab1<<"echo \"Unable to decrypt your backup, because the wrong decryption key was entered - so exiting ...\""<<endl
-//    <<tab1<<"echo"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
-//    <<tab1<<"tput cnorm"<<endl // bring the cursor back
-//    <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
     <<tab0<<"while [ ! -f \""<<globalString.ccryptFinishedGracefully<<"\" ]; do"
     <<endl
@@ -345,7 +303,6 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab0<<"echo"<<endl
 
     <<tab0<<"echo \"About to start restoring your backup ...\""<<endl
-    //<<tab0<<"echo"<<endl
 
     /* save the size of the tar ball.  This is to be used to calculate the */
     /* percentage complete while extracting the tar ball by the */
@@ -385,7 +342,6 @@ void createAScriptTheWillRestoreTheBackup()
     <<" & echo $! > "<<globalString.fileThatContainsTheTarProcessId<<")"
     <<endl<<endl
 
-    //<<tab0<<"echo"<<endl
     <<tab0<<"echo \""<<startUnderline
     <<"Progress of restoring your backup"<<endUnderline<<"\""<<endl
 
@@ -401,7 +357,7 @@ void createAScriptTheWillRestoreTheBackup()
     /* get the total backup from running tar once it has finished */
     <<tab0<<"while sleep 1; do"<<endl
 
-    /* check that the file theTarCommandIsDone exists.  If so, anaylze the */
+    /* check that the file theTarCommandIsDone exists.  If so, analyze the */
     /* output of the tar command */
     <<tab1<<"if [ -e \""<<globalString.theTarCommandIsDone<<"\" ]; then"<<endl
 
@@ -413,9 +369,6 @@ void createAScriptTheWillRestoreTheBackup()
     /* he/she wants to proceed with the backup.  If it's the same display,    */
     /* 100% complete */
     <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"<<endl
-    //<<"echo $sizeOfFile"<<endl
-    //<<"echo \"Size = "<<"$sizeOfFile bytes.\""
-
     <<tab2<<"if [ $sizeOfFile -ne "
           <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
           <<endl
@@ -447,9 +400,8 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab2<<"fi"<<endl
 
     <<tab2<<"break"<<endl
-    <<tab1<<"fi"<<endl // done if the file "theTarCommandIsDone"
+    <<tab1<<"fi"<<endl // done with analyzing the output of the tar command
 
-    //<<"echo done with tar command"<<endl
     <<tab0<<"done"<<endl<<endl
 
     /* Let the user know that the backup restored successfully */

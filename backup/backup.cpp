@@ -82,6 +82,9 @@ extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string 
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);
+extern "C" void displayCommandLineArgumentsAreWrong(int argc,
+                                                    char * const argv[],
+                                                    string &purpose);
 
 /********************/
 /***** Constants ****/
@@ -127,7 +130,6 @@ string expectedOutputFromRunningTheTarCommand =
 /*******************************/
 /***** Function Prototypes *****/
 /*******************************/
-//void checkThatConfigurationFileHasBeenInstalled(string &path);
 void displayUsage();
 void deleteAllFilesInTheBackupDirectory();
 void filterUnwantedFilesSoThatTheyWontBeInTheBackup();
@@ -344,10 +346,7 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
             // $HOME/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__1198
             // $HOME/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__459
             pch1 = strstr("/.cloudbuddy/backup/",line.c_str());
-//THIS NEEDS TO BE TESTED
-// shouldn't see any temporary files in the backup
             if ((pch != NULL) || (pch1 != NULL))
-            //if (pch != NULL)
             {
                 //dcout<<"will not be included in the backup\nbecause \""
                 //d    <<line<<"\" was contained in the string"<<endl;
@@ -363,41 +362,19 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
     return lineWanted;
 }
 
-//void checkThatConfigurationFileHasBeenInstalled(string &path)
-//{
-//    convert$HOME(path);
-//    if (!fileExist(path,__FILE__,__LINE__,purpose))
-//    {
-//        string problem=
-//            "The startup configuration file \""+path+"\" does not exist.";
-//        string correctiveAction=
-//            "Reinstall by following these steps:\n  "
-//            "[1] cd to your Client-Side-Encrypted-Backups directory\n  "
-//            "[2] sudo ./install.sh";
-//        displayError(problem,correctiveAction);
-//    }
-//}
-
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
     if (argc != 2)
     {
-        string commandLineArgs="";
-        for (int i=0,remaingArgs=argc;remaingArgs;++i,--remaingArgs)
-        {
-            commandLineArgs=argv[argc];
-        }
-        todo trying to print "> backup " incorrect parameters
-        cout<<commandLineArgs<<endl;
-
-        /* display usage message because the user didn't enter the correct */
-        /* amount of parameters - which  was supposed to be (1) */
-        cout<<"ERROR:  the wrong number of parameters were entered"<<endl;
+        // Examples of what is expected
+        // > backup no-label
+        // > backup pics-of-aunt-mary
+        displayCommandLineArgumentsAreWrong(argc,argv,purpose);
         displayUsage();
     }
     else
     {
-        /* the expected number of parameters (1) was passed in, so continue */
+        /* the expected number of parameters (1) were passed in, so continue */
         /* with checking the validity of the parameter. */
         backupLabelName = argv[1];
 
@@ -502,13 +479,6 @@ void retrieveTheLandingDirectory()
         string correctiveAction=
             "Please add an entry.";
         displayError(problem,correctiveAction);
-//        cout<<
-//            "\nERROR: Unable to extract the landing directory on the sftp "
-//            "server that you want to send the backup to.\nTo fix, please see "
-//            "this file -\n"<<landingDirectoryPath
-//            //"$HOME/.cloudbuddy/input/[3] landing_directory\n"
-//        <<endl<<endl;
-//        exit(EXIT_SUCCESS);
     }
 }
 
@@ -541,13 +511,6 @@ void retrieveTheComputerName()
         string correctiveAction=
             "Please add an entry.";
         displayError(problem,correctiveAction);
-//        cout<<
-//            "\nERROR: Unable to extract the computer name.  This is needed "
-//            "as it will be used to name your backup.\nTo fix, please see "
-//            "this file -\n"
-//            "$HOME/.cloudbuddy/input/[4] computer_name\n"
-//        <<endl;
-//        exit(EXIT_SUCCESS);
     }
     checkTheIntegrityOfTheComputerName(computerName);
 }
@@ -630,9 +593,6 @@ double getApproxSizeOfBackupBeforeTaringIt()
         fclose(p_file);
     }
     listOfFilesToBeTardHandle.close();
-    //std::cout.imbue(std::locale(""));
-    //cout<<endl<<"The approximate size of your backup prior to tar'ing it is "<<size<<" bytes."<<endl;
-
     return size;
 }
 
@@ -647,16 +607,6 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     string analyzeFileToKeepline;
     ifstream searchThisListForChangesHandle;
     deleteFile(changedAndNewFilesPath); // Create this file from scratch below
-
-//    /* check that the list of directories/files to monitor is not empty */
-//    if (fileIsEmpty(searchThisListForChangesPath))
-//    {
-//        cout<<"\nERROR:\n  The file "<<searchThisListForChangesPath<<" can't be"
-//              " blank.\n  Considering reinstalling via sudo ./install.sh"
-//        <<endl<<endl;
-//        exit(EXIT_SUCCESS);
-//    }
-
     checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 
     /* this creates a file with a list of all files that have changed since   */
@@ -734,7 +684,6 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     if (fileIsEmpty(changedAndNewFilesPath))
     {
         cout<<"\nNothing was found that needs to be backed up.  Exiting.\n"
-//        cout<<"\nNo files were found that needed to be backed up.  Exiting.\n"
             <<endl;
         exit(EXIT_SUCCESS);
     }
@@ -777,26 +726,10 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
               <<spaceNeededToPerformTheBackup<<" bytes available."<<endl<<endl;
         exit(EXIT_SUCCESS);
     }
-    /* for debug.  Use for testing, then delete
-    else
-    {
-        cout<<endl<<"total size in bytes left in home directory = "<<sizeRemainingInHomeDir<<endl;
-    }
-    */
 }
 
 void createAScriptThatWillPerformTheBackup()
 {
-//    /* extract the ssh server information so a backup can be sent to it  */
-//    string username="";
-//    string domain="";
-//    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
-    //dcout<<username<<endl<<domain<<endl<<endl;
-    //cout<<endl<<"here"<<endl<<endl;
-//    string landingDirectory="";
-//    retrieveTheLandingDirectory(landingDirectory);
-//    //dcout<<landingDirectory<<endl;
-
     /* create input to the tar command with filtered changed and new files */
     string lineRead="";
     ifstream filteredChangedAndNewFilesHandle;
@@ -983,12 +916,7 @@ void createAScriptThatWillPerformTheBackup()
     /* does not, mention it and exit the script */
     <<tab0<<"if [ ! -f \""<<theBackup<<".cpt\" ]; then "<<endl
     <<tab1<<"echo"<<endl
-//    <<tab1<<"echo \"Since the encryption keys don't match, can't proceed - so exiting ...\""<<endl
-//    <<tab1<<"echo \"Since the passwords don't match, can't proceed - so exiting ...\""<<endl
-//    <<tab1<<"echo"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
-//    <<tab1<<"tput cnorm"<<endl // bring the cursor back before exiting
-//    <<tab1<<"exit 1"<<endl
     <<tab0<<"fi"<<endl<<endl
     <<tab0<<"while [ ! -f \""<<globalString.ccryptFinishedGracefully<<"\" ]; do"
     <<endl
@@ -1015,7 +943,6 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"echo \""<<startUnderline<<"About to start the transfer"<<endUnderline
     <<"\""<<endl
     <<tab0<<"echo \"Please hang on a few seconds (up to a minute) ... while the sftp server is contacted\""<<endl
-    //<<tab0<<"echo \"Please hang on a few seconds ... (up to a minute)\""<<endl
     <<tab0<<"echo"<<endl
 
     /* Create a script to transfer the encrypted backup to a destination */
@@ -1054,12 +981,8 @@ void createAScriptThatWillPerformTheBackup()
     /* If the transfer didn't finish, display an error message and exit */
     <<tab0<<"if [ ! -f \"transfer-complete\" ]; then "<<endl
     <<tab1<<"echo"<<endl
-    //<<tab1<<"echo"<<endl
     <<tab1<<"echo \"ERROR: The transfer didn't finish.\""<<endl
-    //<<tab1<<"echo \"ERROR: The transfer didn't finish, so exiting ...\""<<endl
     <<tab1<<"echo"<<endl
-    //<<tab1<<"echo"<<endl
-    //<<tab1<<"exit 1"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
     <<tab0<<"fi"<<endl<<endl
 
@@ -1164,10 +1087,6 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
                 string correctiveAction=
                     "Please make this a valid file or directory";
                 displayError(problem,correctiveAction);
-//                cout<<endl<<"ERROR: \""+line+"\" is not a file or directory"
-//                    <<endl<<"Please correct this in - "<<endl
-//                    <<searchThisListForChangesPath<<endl<<endl;
-//                exit(EXIT_SUCCESS);
             }
         }
     }
