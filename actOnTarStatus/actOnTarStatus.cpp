@@ -37,7 +37,6 @@ using namespace std;
 #include <sstream> // needed for ostringstream
 #include <iomanip> // setw() - sets column width of a field
 #include <sys/stat.h> // support for stat()
-//#include <error.h>
 
 /********************************/
 /******* Static Libraries *******/
@@ -77,11 +76,6 @@ int main(int argc, char * const argv[])
 
 void checkTheCommandLineArguments(int argc, char * const argv[])
 {
-    // no arguments are expected to be passed in
-    //cout << "argc = " << argc << endl;
-    //for(int i = 0; i < argc; i++) cout << "argv[" << i << "] = " << argv[i] << endl;
-//    if (argc != 1)
-
     /* one parameter is expected to be passed in */
     if (argc != 2)
     {
@@ -101,16 +95,13 @@ void actOnTarCommand()
                    fileThatContainsTheTarProcessIdHandle);
     getline(fileThatContainsTheTarProcessIdHandle,tarProcessId);
     fileThatContainsTheTarProcessIdHandle.close();
-    //cout<<endl<<"tarProcessId = "<<tarProcessId<<endl<<endl;
 
     /* determine if tar is still running */
     struct stat sts;
     string processPath="/proc/"+tarProcessId;
     if (stat(processPath.c_str(),&sts) == -1)
-    //if (stat(processPath.c_str(),&sts) == -1 && errno == ENOENT)
     {
         /* tar finished */
-        //cout<<"tar is done"<<endl;
 
         // Notes on all the possible scenarios
 
@@ -142,7 +133,6 @@ void actOnTarCommand()
         // the 'backup' program
 
         /* kill this tar status process */
-        //cout<<endl<<globalString.killTheTarStatusProcess<<endl;
         if(system(globalString.killTheTarStatusProcess.c_str()));
 
         /* create an empty theTarCommandIsDone file, this acts as a marker */
@@ -153,10 +143,8 @@ void actOnTarCommand()
 
     }
     else if (purpose == "backup")
-    //else - this worked before for backup but is not sufficient for restore.  that's why needed the else if above
     {
         /* tar is still running */
-        //cout<<"tar is still running"<<endl;
 
         /* extract the name of the backup with path, this will always exist even */
         /* when its finished, so no need to worry about when tar finishes and  */
@@ -171,7 +159,6 @@ void actOnTarCommand()
 
         /* get the current size of the Tar Ball */
         double currentSizeOfTheTarBall = getSizeOfFile(theBackupPath);
-        //dcout<<endl<<"string 3 ="<<currentSizeOfTheTarBall<<endl;
 
         /* extract the projected size of the tar ball */
         string projectedSizeOfTheTarBall="";
@@ -181,7 +168,6 @@ void actOnTarCommand()
            ,__FILE__,__LINE__,projectedSizeOfTheTarBallHandle);
         getline(projectedSizeOfTheTarBallHandle,projectedSizeOfTheTarBall);
         projectedSizeOfTheTarBallHandle.close();
-        //dcout<<projectedSizeOfTheTarBall<<endl;
 
         /* divide current size by projected size */
         double projectedSizeOfTheTarBallDouble =
@@ -203,7 +189,6 @@ void actOnTarCommand()
         openForReading(alreadyDecryptedBackupPath,__FILE__,__LINE__,
                        sizeOfDecryptedBackupHandle);
         getline(sizeOfDecryptedBackupHandle,totalSizeToBeRestored);
-        //cout<<"totalSizeToBeRestored = "<<totalSizeToBeRestored<<endl;
         sizeOfDecryptedBackupHandle.close();
 
         /* get the restore path */
@@ -213,14 +198,12 @@ void actOnTarCommand()
         openForReading(fileThatHoldsTheRestorePath,__FILE__,__LINE__,
                        restorePathHandle);
         getline(restorePathHandle,restorePath);
-        //cout<<"restorePath = "<<restorePath<<endl;
         restorePathHandle.close();
 
         /* save the size of the backup that has been restored to this point */
         // example) //du -sb e6230-primary\*\*2018-10-02__05\:47am/ | awk '{ print $1 }' > sizeOfDirectory
         string sizeThatsBeenRestoredToThisPointPath=globalString.basePath+"sizeRestoredToThisPoint";
         string cmd="du -sb "+restorePath+" | awk '{ print $1 }' > "+sizeThatsBeenRestoredToThisPointPath;
-        //cout<<cmd<<endl;
         if(system(cmd.c_str()));
 
         /* get the size of the backup that has been restored to this point */
@@ -228,7 +211,6 @@ void actOnTarCommand()
         string sizeThatsBeenRestored="";
         openForReading(sizeThatsBeenRestoredToThisPointPath,__FILE__,__LINE__,sizeThatsBeenRestoredHandle);
         getline(sizeThatsBeenRestoredHandle,sizeThatsBeenRestored);
-        //cout<<"sizeThatsBeenRestored = "<<sizeThatsBeenRestored;
         sizeThatsBeenRestoredHandle.close();
 
         /* convert the numerical strings to doubles */
@@ -243,10 +225,10 @@ void actOnTarCommand()
 void display(double tarPercentageComplete)
 {
     ostringstream tarPercentageCompleteString;
-    tarPercentageCompleteString <<fixed<<setprecision(4)
+    tarPercentageCompleteString <<fixed<<setprecision(6)
                                 <<tarPercentageComplete<<"%";
     cout
-        //                 "xx.xxxx%       " - length of 15
+        //                 "xx.xxxxxx%     " - length of 15
         <<left<<setw(15)<<tarPercentageCompleteString.str()
         <<"\r";//<<endl;
     cout.flush();

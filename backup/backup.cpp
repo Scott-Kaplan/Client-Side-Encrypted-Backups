@@ -78,7 +78,8 @@ extern "C" void writeCleanUpAndExitFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void displayError(string &problem, string &correctiveAction);
-extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose);
+extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
+                                                           string &purpose);
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);
@@ -141,6 +142,7 @@ void createAScriptThatWillPerformTheBackup();
 void runTheScriptThatPerformsTheBackup();
 double getRemainingSizeInHomeDir();
 void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
+void checkForIllegalCharactersInChangedAndNewFilePaths();
 
 /*********************/
 /***** Functions *****/
@@ -618,7 +620,6 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     int configFile1LinesToCheck = 0;
     for (int i=0;getline(searchThisListForChangesHandle,line);++i)
     {
-        //dcout<<line<<endl;
         removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
@@ -626,13 +627,10 @@ void createAListOfFilesThatHaveChangedOrAreNew()
             ++configFile1LinesToCheck;
             findChangedAndNewFilesCmd=
                 "find \""+line+"\""
-                //"find "+
-                //line+
                 " -path '../.*' -prune -o -type f -newer "+
                 timeStampMarkerPath+
                 " -print >> "+
                 changedAndNewFilesPath;
-            //dcout << findChangedAndNewFilesCmd << endl;
             if(system(findChangedAndNewFilesCmd.c_str()));
             line.clear(); // erases contents of line
 
@@ -679,6 +677,7 @@ void createAListOfFilesThatHaveChangedOrAreNew()
             <<endl;
         exit(EXIT_SUCCESS);
     }
+    checkForIllegalCharactersInChangedAndNewFilePaths();
 }
 
 void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
@@ -1083,4 +1082,11 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
         }
     }
     checkIntegrityHandle.close();
+}
+
+void checkForIllegalCharactersInChangedAndNewFilePaths()
+{
+	// $ - not ok
+	// " - not ok
+	// ' - ok
 }

@@ -1,30 +1,34 @@
-// test ./smallRestore with 3 wrong sftp passwords
-
-// check that all paths that will be in the backup do not contain illegal characters before doing the backup
-	// ensure quotes are not anywhere in the entire path(including filename) to be backed up
-
-// (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
-
+// implement and test checkForIllegalCharactersInChangedAndNewFilePaths()
+	
 // save the size of the encrypted backup into the log file.
 
-// increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
+// remove all unused code and unused comments
 
-// fresh install on 16.04 at work, maybe retain config file 1 that had the problem
+// ensure all lines wrap at 80
+
+// copy config file 1 that has problem
+// fresh install of Client-Side-Encrypted-Backups on 16.04
+// ensure that install script make timestampmarker with timestamp of epoch.
 // on 16.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
+
 // on 18.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
+
 // test on virgin ubuntu 14.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 14.04
+
 // test on virgin ubuntu 16.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 16.04
+
 // test on virgin ubuntu 18.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 18.04
+
 // modify install.sh to install packages for Debian.  Don't test it
 // modify install.sh to install packages for Arch.  Don't test it
 // modify install.sh to install packages for Fedora.  Don't test it
 // modify install.sh to install packages for openSUSE.  Don't test it
 // modify install.sh to install packages for Slackware.  Don't test it
 // modify install.sh to install packages for Gentoo.  Don't test it
-// ensure all lines wrap at 80
+
 // ensure all declared file scope variables are used
 // ensure all ifstream and ofstream are closed
 // ensure all prototypes are used
@@ -311,3 +315,8 @@ void test__existenceOfAFile()
 35 // restore a good named backup where the path to it is incorrect.
 
 36 // rework displayUsage() in restore so it matches the format in backup
+
+37 // test ./smallRestore with 3 wrong sftp passwords
+
+38 // increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
+// average on the low side encrypt/decrypt per second is say 50Mb.  If say a backup or restore was 10Gb, that would be 1/200 of a change per second which is .005.  If 100Gb, that would be 1/2000 = .0005.  If 1TB that would be 1/20000 = .00005 which would not show up.  If 10TB that would be 1/200000 = .000005. So, 6 digits will show a ccrypt percentage change per second for encrypt/backup even up through (and slightly beyond 10Tb)
