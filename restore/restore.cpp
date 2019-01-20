@@ -79,14 +79,6 @@ void runTheScriptThatRestoresTheBackup();
 void deleteAllFilesIntheRestoreDirectory();
 void checkTheConfigurationFileIntegrity();
 
-/********************/
-/***** Constants ****/
-/********************/
-string tab0="";
-string tab1="  ";
-string tab2="    ";
-string tab3="      ";
-
 /********************************/
 /***** File Scope Variables *****/
 /********************************/
@@ -162,21 +154,25 @@ void displayUsage()
     cout
     <<"\nUsage:\n\nrestore "<<startUnderline
     <<"<path>/<backup-to-restore>\n\n"<<endUnderline
-    <<"Example:\n"
-      "If your backup is in the '/uploads' directory on the server and is named"
-      "\ne6230-pics-of-aunt-mary**2018-06-26__09:26pm\nthen you'd type-\n"
-      "restore "<<startUnderline<<
-      "/uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline
-    <<"\n\nHere is another example:\n"
-      "If your backup is in the same directory of where you initially log in "
-      "and is named\ne6230-pics-of-aunt-mary**2018-06-26__09:26pm\nthen you'd "
-      "type-\nrestore "<<startUnderline<<
-      "e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline
-    <<"\n\nNote: If the path that you have the backup in contains spaces, then"
-      "\nthe entire first parameter needs to be quoted like so-\n"
-      "restore "<<startUnderline<<
-      "\"/directory name/e6230-pics-of-aunt-mary**2018-06-26__09:26pm\""
-      <<endUnderline<<endl<<endl<<endl;
+    <<"Examples\n\n"
+    "  If your backup is in the '/uploads' directory on the server and it is named\n"
+    "  e6230-pics-of-aunt-mary**2018-06-26__09:26pm\n"
+    "  then you'd use-\n"
+    "  > restore "<<startUnderline<<
+    "/uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline<<"\n\n"
+    "  If your backup is in the same directory of where you initially log in(via sftp) "
+    "and it is named\n"
+    "  e6230-pics-of-aunt-mary**2018-06-26__09:26pm\n"
+    "  then you'd use-\n"
+    "  > restore "<<startUnderline<<
+    "e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline<<
+    "\n\n"
+    "Note:\n\n"
+    "  If the path that you have the backup in contains spaces, then\n"
+    "  the entire first parameter needs to be quoted like so-\n"
+    "  > restore "<<startUnderline<<
+    "\"/directory name/e6230-pics-of-aunt-mary**2018-06-26__09:26pm\""
+    <<endUnderline<<endl<<endl<<endl;
     exit(EXIT_FAILURE);
 }
 

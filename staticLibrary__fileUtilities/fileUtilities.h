@@ -25,19 +25,38 @@ SOFTWARE.
 #ifndef FILEUTILITIES_H_INCLUDED
 #define FILEUTILITIES_H_INCLUDED
 
+/**********************/
+/***** Namespaces *****/
+/**********************/
 using namespace std;
 
+/********************/
+/***** Includes *****/
+/********************/
 #include <string>
 
-#define startUnderline "\e[4m"
-#define endUnderline "\e[0m"
+/*********************/
+/***** Constants *****/
+/*********************/
+#define startUnderline  "\e[4m"
+#define endUnderline    "\e[0m"
+#define tab0            ""
+#define tab1            "  "
+#define tab2            "    "
+#define tab3            "      "
 
+/************************/
+/***** Enumerations *****/
+/************************/
 typedef enum
 {
     NEW_FILE = 2000,
     CONCATENATE_OTHERWISE_CREATE_NEW_FILE = 2001,
 }FileWritingType;
 
+/**********************/
+/***** Structures *****/
+/**********************/
 typedef struct
 {
     string basePath;
@@ -64,13 +83,5 @@ typedef struct
     string resultsOfTarCommand;
     string sizeOfBackupThatIsADecryptedTarBallPath;
 }globalStringS;
-
-typedef struct
-{
-    string tab0;
-    string tab1;
-    string tab2;
-    string tab3;
-}scriptLineFormatterS;
 
 #endif // FILEUTILITIES_H_INCLUDED

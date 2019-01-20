@@ -1,28 +1,17 @@
-// Put these in one place
-///********************/
-///***** Constants ****/
-///********************/
-//string tab0="";
-//string tab1="  ";
-//string tab2="    ";
-//string tab3="      ";
-
-// test displayCommandLineArgumentsAreWrong() in
-  // backup
-  // restore
-
-// rework displayUsage() in restore to match the format in backup
-
 // test ./smallRestore with 3 wrong sftp passwords
 
 // check that all paths that will be in the backup do not contain illegal characters before doing the backup
 	// ensure quotes are not anywhere in the entire path(including filename) to be backed up
 
 // (already implemented) ensure that install script make timestampmarker with timestamp of epoch.
-// save the size of the encrypted backup into the log file.  Doing this since making a strong statement that backups can't be corrupted.  That way if a server admin messes with the file the user will be able to confirm that the file is the wrong size and might conclude that it was mucked with.
-// increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
-// fresh install on 16.04 at work, but retain config file 1 that has the problem
 
+// save the size of the encrypted backup into the log file.
+
+// increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
+
+// fresh install on 16.04 at work, maybe retain config file 1 that had the problem
+// on 16.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
+// on 18.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
 // test on virgin ubuntu 14.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 14.04
 // test on virgin ubuntu 16.04 using virtualbox.  set both username and password to test
@@ -35,15 +24,12 @@
 // modify install.sh to install packages for openSUSE.  Don't test it
 // modify install.sh to install packages for Slackware.  Don't test it
 // modify install.sh to install packages for Gentoo.  Don't test it
-
-// restore bad path with good backup name
 // ensure all lines wrap at 80
 // ensure all declared file scope variables are used
 // ensure all ifstream and ofstream are closed
 // ensure all prototypes are used
 // ensure all enumerated values are used
 // ensure all comments are accurate
-// ensure all config file paths are accurate by their cout statements
 // ensure all #includes are used
 
 ----------------------------------------------------
@@ -317,3 +303,11 @@ void test__existenceOfAFile()
 32 // test ./smallBackup with 3 wrong sftp passwords
 
 33 // test displayUsage() in backup
+
+34 // test displayCommandLineArgumentsAreWrong() in
+  // backup
+  // restore
+
+35 // restore a good named backup where the path to it is incorrect.
+
+36 // rework displayUsage() in restore so it matches the format in backup

@@ -86,14 +86,6 @@ extern "C" void displayCommandLineArgumentsAreWrong(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 
-/********************/
-/***** Constants ****/
-/********************/
-string tab0="";
-string tab1="  ";
-string tab2="    ";
-string tab3="      ";
-
 /********************************/
 /***** File Scope Variables *****/
 /********************************/

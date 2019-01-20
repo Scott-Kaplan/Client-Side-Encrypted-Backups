@@ -284,14 +284,6 @@ void deleteFile(string &filename)
     if(system(deleteFileCmd.c_str()));
 }
 
-void getGlobalScriptLineFormatter(scriptLineFormatterS &f)
-{
-    f.tab0="";
-    f.tab1="  ";
-    f.tab2="    ";
-    f.tab3="      ";
-}
-
 void getGlobalStrings(globalStringS &globalString, string &purpose)
 {
     /* examples for the next line */
@@ -320,19 +312,19 @@ void getGlobalStrings(globalStringS &globalString, string &purpose)
     globalString.killTheTarProcess =
             "kill \"$(head -n 1 "+
             globalString.fileThatContainsTheTarProcessId+
-            // if the process doesn't exist don't output a message
+            // if the process doesn't exist don't display a message
             ")\" >/dev/null 2>&1";
 
     globalString.killTheTarStatusProcess =
             "kill \"$(head -n 1 "+
             globalString.fileThatContainsTheTarStatusProcessId+
-            // if the process doesn't exist don't output a message
+            // if the process doesn't exist don't display a message
             ")\" >/dev/null 2>&1";
 
     globalString.killTheCcryptStatusProcess=
             "kill \"$(head -n 1 "+
             globalString.fileThatContainsTheCcryptStatusProcessId+
-            // if the process doesn't exist don't output a message
+            // if the process doesn't exist don't display a message
             ")\" >/dev/null 2>&1";
 
     globalString.projectedSizeOfTheTarBallPath =
@@ -521,12 +513,6 @@ void retrieveUsernameAndDomain(string &username, string &domain, string &usernam
         string correctiveAction=
             "Please add an entry.";
         displayError(problem,correctiveAction);
-//        cout<<
-//            "\nError: Unable to extract the username and domain of the sftp "
-//            "server that you want to send the backup to.\nTo fix, please see "
-//            "this file -\n"
-//            <<usernameAndDomainPath<<endl<<endl;
-//        exit(EXIT_SUCCESS);
     }
 }
 
@@ -580,43 +566,41 @@ void saveTheTerminalPid(string &purpose)
 
 void writeCleanUpFunction(string &purpose, ofstream &scriptHandle)
 {
-    scriptLineFormatterS f;
-    getGlobalScriptLineFormatter(f);
     globalStringS globalString;
     getGlobalStrings(globalString,purpose);
 
     /* begin the cleanUpAndExit function */
-    scriptHandle<<f.tab0<<"cleanUp()"<<endl
-    <<f.tab0<<"{"<<endl
+    scriptHandle<<tab0<<"cleanUp()"<<endl
+    <<tab0<<"{"<<endl
 
     // kill the tar process if it is active
-    <<f.tab1<<"if [ -e \""<<globalString.fileThatContainsTheTarProcessId<<"\" ]; "
+    <<tab1<<"if [ -e \""<<globalString.fileThatContainsTheTarProcessId<<"\" ]; "
           <<"then"<<endl
-    <<f.tab2<<globalString.killTheTarProcess<<endl
-    <<f.tab1<<"fi"<<endl
+    <<tab2<<globalString.killTheTarProcess<<endl
+    <<tab1<<"fi"<<endl
 
     // kill the tar status process if it is active
-    <<f.tab1<<"if [ -e \""<<globalString.fileThatContainsTheTarStatusProcessId
+    <<tab1<<"if [ -e \""<<globalString.fileThatContainsTheTarStatusProcessId
           <<"\" ]; "<<"then"<<endl
-    <<f.tab2<<globalString.killTheTarStatusProcess<<endl
-    <<f.tab1<<"fi"<<endl
+    <<tab2<<globalString.killTheTarStatusProcess<<endl
+    <<tab1<<"fi"<<endl
 
     // kill the ccrypt status process if it is active
-    <<f.tab1<<"if [ -e \""
+    <<tab1<<"if [ -e \""
           <<globalString.fileThatContainsTheCcryptStatusProcessId
           <<"\" ]; then"<<endl
-    <<f.tab2<<globalString.killTheCcryptStatusProcess<<endl
-    <<f.tab1<<"fi"<<endl;
+    <<tab2<<globalString.killTheCcryptStatusProcess<<endl
+    <<tab1<<"fi"<<endl;
 
     if (purpose == "backup")
     {
         // delete all files in the backup directory
-        scriptHandle<<f.tab1<<globalString.deleteAllFilesInTheBackupDirectory<<endl;
+        scriptHandle<<tab1<<globalString.deleteAllFilesInTheBackupDirectory<<endl;
     }
     else // purpose == "restore"
     {
         // delete all files in the restore directory
-        scriptHandle<<f.tab1<<globalString.deleteAllFilesInTheRestoreDirectory<<endl;
+        scriptHandle<<tab1<<globalString.deleteAllFilesInTheRestoreDirectory<<endl;
     }
 
     scriptHandle
@@ -624,35 +608,32 @@ void writeCleanUpFunction(string &purpose, ofstream &scriptHandle)
     /* terminal window won't show the cursor because it was explicity removed */
     /* so that the progress percentage wouldn't show the cursor blinking. */
     /* This brings it back. */
-    <<f.tab1<<"tput cnorm"<<endl
+    <<tab1<<"tput cnorm"<<endl
 
     /* in case echo'ing of what's typed in ceases, this brings it back */
-    <<f.tab1<<"tset"<<endl
+    <<tab1<<"tset"<<endl
 
     /* end the cleanUp function*/
-    <<f.tab0<<"}"<<endl<<endl;
+    <<tab0<<"}"<<endl<<endl;
 }
 
 void writeCleanUpAndExitFunction(string &purpose, ofstream &scriptHandle)
 {
-    scriptLineFormatterS f;
-    getGlobalScriptLineFormatter(f);
-
     /* begin the cleanUpAndExit function */
     scriptHandle
-    <<f.tab0<<"cleanUpAndExit()"<<endl
+    <<tab0<<"cleanUpAndExit()"<<endl
 
-    <<f.tab0<<"{"<<endl
+    <<tab0<<"{"<<endl
 
     /* call the cleanUp function */
-    <<f.tab1<<"cleanUp"<<endl
+    <<tab1<<"cleanUp"<<endl
 
-    <<f.tab1<<"echo"<<endl
-    <<f.tab1<<"echo Exiting ..."<<endl
-    <<f.tab1<<"echo"<<endl
-    <<f.tab1<<"echo"<<endl
-    <<f.tab1<<"exit 1"<<endl
-    <<f.tab0<<"}"<<endl<<endl;
+    <<tab1<<"echo"<<endl
+    <<tab1<<"echo Exiting ..."<<endl
+    <<tab1<<"echo"<<endl
+    <<tab1<<"echo"<<endl
+    <<tab1<<"exit 1"<<endl
+    <<tab0<<"}"<<endl<<endl;
 }
 
 void displayError(string &problem, string &correctiveAction)
@@ -710,34 +691,6 @@ void displayCommandLineArgumentsAreWrong(int argc,
     // > restore /that_directory/howdy howdy
     cout<<"> "<<purpose<<commandLineArgs<<endl;
 
-    cout<<endl<<"ERROR - the wrong number of parameters were entered"<<endl
+    cout<<endl<<"ERROR - The wrong number of parameters were entered."<<endl
     <<endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
