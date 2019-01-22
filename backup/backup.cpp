@@ -142,7 +142,7 @@ void createAScriptThatWillPerformTheBackup();
 void runTheScriptThatPerformsTheBackup();
 double getRemainingSizeInHomeDir();
 void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
-void checkForIllegalCharactersInChangedAndNewFilePaths();
+void checkForIllegalCharacters(string &filteredChangedAndNewFilesPath);
 
 /*********************/
 /***** Functions *****/
@@ -231,6 +231,8 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
 
     cout<<endl<<startUnderline<<"Files found (after filtering)"<<endUnderline
     <<endl<<getTotalLinesInFile(filteredChangedAndNewFilesPath)<<endl;
+
+    checkForIllegalCharacters(filteredChangedAndNewFilesPath);
 }
 
 bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
@@ -677,7 +679,6 @@ void createAListOfFilesThatHaveChangedOrAreNew()
             <<endl;
         exit(EXIT_SUCCESS);
     }
-    checkForIllegalCharactersInChangedAndNewFilePaths();
 }
 
 void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
@@ -1084,9 +1085,67 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
     checkIntegrityHandle.close();
 }
 
-void checkForIllegalCharactersInChangedAndNewFilePaths()
+void checkForIllegalCharacters(string &filteredChangedAndNewFilesPath)
 {
 	// $ - not ok
 	// " - not ok
 	// ' - ok
+	ifstream checkForIllegalCharactersHandle;
+	openForReading(filteredChangedAndNewFilesPath,__FILE__,__LINE__,
+                                               checkForIllegalCharactersHandle);
+    string pathRead="";
+    while (getline(checkForIllegalCharactersHandle,pathRead))
+    {
+cout<<endl<<pathRead<<endl<<endl;
+        if (pathRead.find("$") != string::npos)
+        {
+            string problem = "The path \""+pathRead+"\" contains a '$' in it";
+            string correctiveAction= "Please remove this.";
+            displayError(problem,correctiveAction);
+        }
+    }
+    checkForIllegalCharactersHandle.close();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
