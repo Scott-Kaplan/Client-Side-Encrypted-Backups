@@ -1099,8 +1099,8 @@ void checkForIllegalCharacters(string &filteredChangedAndNewFilesPath)
 cout<<endl<<pathRead<<endl<<endl;
         if (pathRead.find("$") != string::npos)
         {
-            string problem = "The path \""+pathRead+"\" contains a '$' in it";
-            string correctiveAction= "Please remove this.";
+            string problem = "The path \""+pathRead+"\" contains a '$' in it.";
+            string correctiveAction= "Please remove the '$'.";
             displayError(problem,correctiveAction);
         }
     }
