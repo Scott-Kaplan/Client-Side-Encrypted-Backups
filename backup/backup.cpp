@@ -142,7 +142,8 @@ void createAScriptThatWillPerformTheBackup();
 void runTheScriptThatPerformsTheBackup();
 double getRemainingSizeInHomeDir();
 void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
-void checkForIllegalCharacters(string &filteredChangedAndNewFilesPath);
+void checkForIllegalCharactersInFile(string &filteredChangedAndNewFilesPath);
+void checkForIllegalCharactersInLine(string &path);
 
 /*********************/
 /***** Functions *****/
@@ -232,7 +233,7 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
     cout<<endl<<startUnderline<<"Files found (after filtering)"<<endUnderline
     <<endl<<getTotalLinesInFile(filteredChangedAndNewFilesPath)<<endl;
 
-    checkForIllegalCharacters(filteredChangedAndNewFilesPath);
+    checkForIllegalCharactersInFile(filteredChangedAndNewFilesPath);
 }
 
 bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
@@ -1070,6 +1071,7 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
+            checkForIllegalCharactersInLine(line);
             if (!fileExist(line,__FILE__,__LINE__,purpose) &&
                 !directoryExist(line,__FILE__,__LINE__,purpose))
             {
@@ -1085,67 +1087,48 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
     checkIntegrityHandle.close();
 }
 
-void checkForIllegalCharacters(string &filteredChangedAndNewFilesPath)
+void checkForIllegalCharactersInLine(string &path)
 {
-	// $ - not ok
-	// " - not ok
-	// ' - ok
-	ifstream checkForIllegalCharactersHandle;
-	openForReading(filteredChangedAndNewFilesPath,__FILE__,__LINE__,
-                                               checkForIllegalCharactersHandle);
-    string pathRead="";
-    while (getline(checkForIllegalCharactersHandle,pathRead))
+    /* '$' and '"' are not ok.  ' is ok */
+    if (path.find("\"") != string::npos)
     {
-cout<<endl<<pathRead<<endl<<endl;
+        string problem = "Inside \""+searchThisListForChangesPath+"\", \n"
+        "  the line \""+path+"\" \n  contains double quotes in it.";
+        string correctiveAction= "Please remove the extra double quotes.";
+        displayError(problem,correctiveAction);
+    }
+    if (path.find("$") != string::npos)
+    {
+        string problem = "Inside \""+searchThisListForChangesPath+"\", \n"
+        "  the line \""+path+"\" \n  contains a dollar sign in it.";
+        string correctiveAction= "Please remove the dollar sign.";
+        displayError(problem,correctiveAction);
+    }
+}
+
+void checkForIllegalCharactersInFile(string &filteredChangedAndNewFilesPath)
+{
+    /* '$' and '"' are not ok.  ' is ok */
+    ifstream checkForIllegalCharactersInFileHandle;
+	openForReading(filteredChangedAndNewFilesPath,__FILE__,__LINE__,
+                                       checkForIllegalCharactersInFileHandle);
+    string pathRead="";
+    while (getline(checkForIllegalCharactersInFileHandle,pathRead))
+    {
         if (pathRead.find("$") != string::npos)
         {
-            string problem = "The path \""+pathRead+"\" contains a '$' in it.";
-            string correctiveAction= "Please remove the '$'.";
+            string problem = "The path \""+pathRead+
+                                            "\" contains a dollar sign in it.";
+            string correctiveAction= "Please remove the dollar sign.";
+            displayError(problem,correctiveAction);
+        }
+        if (pathRead.find("\"") != string::npos)
+        {
+            string problem = "The path \""+pathRead+
+                                            "\" contains double quotes in it.";
+            string correctiveAction= "Please remove the extra double quotes.";
             displayError(problem,correctiveAction);
         }
     }
-    checkForIllegalCharactersHandle.close();
+    checkForIllegalCharactersInFileHandle.close();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

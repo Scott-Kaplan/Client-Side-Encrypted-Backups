@@ -190,7 +190,6 @@ bool fileExist(string &lookupFilePath,
     convert$HOME(lookupFilePath);
     globalStringS globalString;
     getGlobalStrings(globalString,resultsDirectory);
-
     string fileExistResults =
                 globalString.basePath+
                 "fileExistLookupFrom_"+fromFileName+

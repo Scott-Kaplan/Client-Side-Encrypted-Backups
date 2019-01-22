@@ -1,4 +1,10 @@
-// implement and test checkForIllegalCharactersInChangedAndNewFilePaths()
+// test checkForIllegalCharactersInFile() and checkForIllegalCharactersInLine()
+// #/home/sc"ott/delete/dirdir - works on 14.04
+// #/home/scott/delete/dir"dir - works on 14.04
+// #/home/scott/delete/dir" - works on 14.04
+//#/home/scott/delete
+//	# create dir" - works on 14.04
+//  # create dir"dir - works on 14.04
 	
 // save the size of the encrypted backup into the log file.
 
