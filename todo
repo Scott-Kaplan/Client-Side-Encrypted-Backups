@@ -1,11 +1,3 @@
-// test checkForIllegalCharactersInFile() and checkForIllegalCharactersInLine()
-// #/home/sc"ott/delete/dirdir - works on 14.04
-// #/home/scott/delete/dir"dir - works on 14.04
-// #/home/scott/delete/dir" - works on 14.04
-//#/home/scott/delete
-//	# create dir" - works on 14.04
-//  # create dir"dir - works on 14.04
-	
 // save the size of the encrypted backup into the log file.
 
 // remove all unused code and unused comments
@@ -326,3 +318,17 @@ void test__existenceOfAFile()
 
 38 // increase percentage to 6 significant digits for tar and ccrypt status - so larger backups show a progress percentage change
 // average on the low side encrypt/decrypt per second is say 50Mb.  If say a backup or restore was 10Gb, that would be 1/200 of a change per second which is .005.  If 100Gb, that would be 1/2000 = .0005.  If 1TB that would be 1/20000 = .00005 which would not show up.  If 10TB that would be 1/200000 = .000005. So, 6 digits will show a ccrypt percentage change per second for encrypt/backup even up through (and slightly beyond 10Tb)
+
+39 // test checkForIllegalCharactersInFile() and checkForIllegalCharactersInLine()
+// #/home/sc"ott/delete/dirdir - works on 14.04
+// #/home/scott/delete/dir"dir - works on 14.04
+// #/home/scott/delete/dir" - works on 14.04
+//#/home/scott/delete
+//	# create dir" - works on 14.04
+//  # create dir"dir - works on 14.04
+// #/home/sc$ott/delete/dirdir - works on 18.04
+// #/home/scott/delete/dir$dir - works on 18.04
+// #/home/scott/delete/dir$ - works on 18.04
+// #/home/scott/delete
+//  # create dir$ - works on 18.04
+//  # create dir$dir - works on 18.04
