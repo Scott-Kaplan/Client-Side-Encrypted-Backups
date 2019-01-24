@@ -1,7 +1,5 @@
 // save the size of the encrypted backup into the log file.
 
-// remove all unused code and unused comments
-
 // ensure all lines wrap at 80
 
 // copy config file 1 that has problem
@@ -20,19 +18,21 @@
 // test on virgin ubuntu 18.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 18.04
 
-// modify install.sh to install packages for Debian.  Don't test it
-// modify install.sh to install packages for Arch.  Don't test it
-// modify install.sh to install packages for Fedora.  Don't test it
-// modify install.sh to install packages for openSUSE.  Don't test it
-// modify install.sh to install packages for Slackware.  Don't test it
-// modify install.sh to install packages for Gentoo.  Don't test it
-
+// remove all unused code and unused comments
 // ensure all declared file scope variables are used
 // ensure all ifstream and ofstream are closed
 // ensure all prototypes are used
 // ensure all enumerated values are used
 // ensure all comments are accurate
 // ensure all #includes are used
+
+//-----------------------------------------------------------------
+// modify install.sh to install packages for Debian.  Don't test it
+// modify install.sh to install packages for Arch.  Don't test it
+// modify install.sh to install packages for Fedora.  Don't test it
+// modify install.sh to install packages for openSUSE.  Don't test it
+// modify install.sh to install packages for Slackware.  Don't test it
+// modify install.sh to install packages for Gentoo.  Don't test it
 
 ----------------------------------------------------
 ----------------------------------------------------
