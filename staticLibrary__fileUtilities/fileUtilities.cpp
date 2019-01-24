@@ -22,14 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*******************************/
-/********* Namespaces **********/
-/*******************************/
+/**********************/
+/***** Namespaces *****/
+/**********************/
 using namespace std;
 
-/*****************************/
-/********* Includes **********/
-/*****************************/
+/********************/
+/***** Includes *****/
+/********************/
 #include "fileUtilities.h"
 #include <iostream>
 #include <fstream>
@@ -38,9 +38,9 @@ using namespace std;
 #include <unistd.h>
 #include <string.h>
 
-/****************************************/
-/************** Share these *************/
-/****************************************/
+/***********************/
+/***** Share these *****/
+/***********************/
 extern "C" void openForReading(string &path,
                                string fromFileName,
                                int fromLineNumber,
@@ -91,15 +91,9 @@ extern "C" void displayCommandLineArgumentsAreWrong(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 
-///*******************************/
-///***** Function Prototypes *****/
-///*******************************/
-bool exist(string &path, string &purpose, string &lookupSpecifier);
-
-/*****************************/
-/********* Functions *********/
-/*****************************/
-
+/*********************/
+/***** Functions *****/
+/*********************/
 void openForReading(string &path,
                     string fromFileName,
                     int fromLineNumber,

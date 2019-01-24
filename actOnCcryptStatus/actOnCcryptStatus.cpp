@@ -22,14 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*******************************/
-/********* Namespaces **********/
-/*******************************/
+/**********************/
+/***** Namespaces *****/
+/**********************/
 using namespace std;
 
-/*****************************/
-/********* Includes **********/
-/*****************************/
+/********************/
+/***** Includes *****/
+/********************/
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -39,9 +39,9 @@ using namespace std;
 #include <sys/types.h>
 #include <signal.h>
 
-/********************************/
-/******* Static Libraries *******/
-/********************************/
+/*******************************/
+/***** From Static Library *****/
+/*******************************/
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
 extern "C" void openForReading(string &path,
                                string fromFileName,
@@ -60,9 +60,9 @@ extern "C" bool fileIsEmpty(string &path);
 extern "C" double getSizeOfFile(string &path);
 extern "C" string getFileName(string &path);
 
-/*******************************************/
-/********** File Scope Variables ***********/
-/*******************************************/
+/********************************/
+/***** File Scope Variables *****/
+/********************************/
 string backupTarBall="";
 globalStringS globalString;
 string backupTarBallPath="";
@@ -72,9 +72,9 @@ string encryptedBackupPathWithCptExtension="";
 string decryptionStartedPath="";
 string encryptionStartedPath="";
 
-/***************************************/
-/********* Function Prototypes *********/
-/***************************************/
+/*******************************/
+/***** Function Prototypes *****/
+/*******************************/
 void checkTheCommandLineArguments(int argc, char * const argv[]);
 void checkThatTheUserFinishedEnteringTheirCcryptPassword();
 void testIfTheBackupHasBeenFullyEncrypted();
@@ -92,9 +92,9 @@ bool encryptionInProgress();
 bool decryptHadStarted();
 bool encryptHadStarted();
 
-/*****************************/
-/********* Functions *********/
-/*****************************/
+/*********************/
+/***** Functions *****/
+/*********************/
 int main(int argc, char * const argv[])
 {
     checkTheCommandLineArguments(argc,argv);

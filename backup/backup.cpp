@@ -40,9 +40,9 @@ using namespace std;
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 #include <unistd.h>
 
-/****************************/
-/***** Static Libraries *****/
-/****************************/
+/*******************************/
+/***** From Static Library *****/
+/*******************************/
 extern "C" void openForReading(string &path,
                                string fromFileName,
                                int fromLineNumber,
@@ -148,7 +148,6 @@ void checkForIllegalCharactersInLine(string &path);
 /*********************/
 /***** Functions *****/
 /*********************/
-
 int main(int argc, char * const argv[])
 {
     clearTheTerminalWindow();

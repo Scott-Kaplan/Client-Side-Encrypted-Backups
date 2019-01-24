@@ -22,14 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*******************************/
-/********* Namespaces **********/
-/*******************************/
+/**********************/
+/***** Namespaces *****/
+/**********************/
 using namespace std;
 
-/*****************************/
-/********* Includes **********/
-/*****************************/
+/********************/
+/***** Includes *****/
+/********************/
 #include <iostream>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 #include <stdlib.h>
@@ -38,9 +38,9 @@ using namespace std;
 #include <iomanip> // setw() - sets column width of a field
 #include <sys/stat.h> // support for stat()
 
-/********************************/
-/******* Static Libraries *******/
-/********************************/
+/*******************************/
+/***** From Static Library *****/
+/*******************************/
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
 extern "C" void openForReading(string &path,
                     string fromFileName,
@@ -48,24 +48,24 @@ extern "C" void openForReading(string &path,
                     ifstream &readFileHandle);
 extern "C" double getSizeOfFile(string &path);
 
-/*******************************************/
-/********** File Scope Variables ***********/
-/*******************************************/
+/********************************/
+/***** File Scope Variables *****/
+/********************************/
 globalStringS globalString;
 string theBackupPath="";
 string estimatedSizeOfTheTarBall="";
 string purpose="";
 
-/***************************************/
-/********* Function Prototypes *********/
-/***************************************/
+/*******************************/
+/***** Function Prototypes *****/
+/*******************************/
 void checkTheCommandLineArguments(int argc, char * const argv[]);
 void actOnTarCommand();
 void display(double tarPercentageComplete);
 
-/*****************************/
-/********* Functions *********/
-/*****************************/
+/*********************/
+/***** Functions *****/
+/*********************/
 int main(int argc, char * const argv[])
 {
     checkTheCommandLineArguments(argc,argv);

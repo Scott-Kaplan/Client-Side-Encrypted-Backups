@@ -35,9 +35,9 @@ using namespace std;
 #include <stdlib.h>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 
-/****************************/
-/***** Static Libraries *****/
-/****************************/
+/*******************************/
+/***** From Static Library *****/
+/*******************************/
 extern "C" string getTimestamp();
 extern "C" void retrieveUsernameAndDomain
             (string &username, string &domain, string &usernameAndDomainPath);
@@ -69,16 +69,6 @@ extern "C" void displayCommandLineArgumentsAreWrong(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 
-/*******************************/
-/***** Function Prototypes *****/
-/*******************************/
-void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[]);
-void displayUsage();
-void createAScriptTheWillRestoreTheBackup();
-void runTheScriptThatRestoresTheBackup();
-void deleteAllFilesIntheRestoreDirectory();
-void checkTheConfigurationFileIntegrity();
-
 /********************************/
 /***** File Scope Variables *****/
 /********************************/
@@ -94,6 +84,16 @@ string scriptThatRestoresTheBackupPath=
                                 restoreDirectory+"scriptThatRestoresTheBackup";
 string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "0";
 string expectedOutputFromRunningTheTarCommand = "";
+
+/*******************************/
+/***** Function Prototypes *****/
+/*******************************/
+void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[]);
+void displayUsage();
+void createAScriptTheWillRestoreTheBackup();
+void runTheScriptThatRestoresTheBackup();
+void deleteAllFilesIntheRestoreDirectory();
+void checkTheConfigurationFileIntegrity();
 
 /*********************/
 /***** Functions *****/
