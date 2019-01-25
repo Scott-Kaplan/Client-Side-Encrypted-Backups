@@ -984,9 +984,31 @@ void createAScriptThatWillPerformTheBackup()
 
     /* Save a list of all files that made it into this backup to a log file */
     /* so the user can know anytime in the future what was backed up */
-    <<tab0<<"echo \"=> Contents of "<<theBackup<<" - \" >> "
-    <<logOfCompletedBackupsPath<<endl<<endl
-    <<tab0<<"more "<<filteredChangedAndNewFilesPath<<" >> "
+
+//    <<tab0<<"stat --printf=\"%s\" "<<theBackup<<" > sizeOfTheBackupThatsToBeEncrypted"<<endl<<endl
+
+    //<<tab0<<"echo \"=> Contents of "<<theBackup<<" - \" >> " <<logOfCompletedBackupsPath<<endl<<endl
+    <<tab0<<"echo \"=> "<<theBackup<<"\""
+        <<" >> "<<logOfCompletedBackupsPath<<endl
+
+    <<tab0<<"echo \"=> size: \""
+        <<" >> "<<logOfCompletedBackupsPath<<endl
+
+    <<"stat --printf=\"%s\" "<<theBackup<<" >> "<<logOfCompletedBackupsPath<<endl
+    <<tab0<<"echo \"=> contents: \""
+        <<" >> "<<logOfCompletedBackupsPath<<endl
+
+
+
+
+
+
+
+
+
+
+    <<tab0<<"cat "<<filteredChangedAndNewFilesPath<<" >> "
+    //<<tab0<<"more "<<filteredChangedAndNewFilesPath<<" >> "
     <<logOfCompletedBackupsPath<<endl
     <<tab0<<"echo >> "<<logOfCompletedBackupsPath<<endl
     <<tab0<<"echo"<<endl
