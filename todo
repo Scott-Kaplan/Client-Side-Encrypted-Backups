@@ -1,9 +1,3 @@
-// ensure logSizeOfBackup is accounted for in
-// install.sh
-// build.sh
-
-// save the size of the encrypted backup into the log file.
-
 // ensure all lines wrap at 80
 
 // copy config file 1 that has problem
@@ -336,3 +330,5 @@ void test__existenceOfAFile()
 // #/home/scott/delete
 //  # create dir$ - works on 18.04
 //  # create dir$dir - works on 18.04
+
+40 // save the size of the encrypted backup into the log file.
