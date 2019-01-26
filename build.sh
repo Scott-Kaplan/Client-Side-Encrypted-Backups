@@ -46,19 +46,29 @@ rm -f bin/Release/restore
 g++ -Wall -fexceptions -O2  -c restore.cpp -o obj/Release/restore.o
 g++  -o bin/Release/restore obj/Release/restore.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 
+echo
+echo Building the logSizeOfBackup binary ...
+cd ../logSizeOfBackup
+rm -f bin/Release/logSizeOfBackup
+g++ -Wall -fexceptions -O2  -c logSizeOfBackup.cpp -o obj/Release/logSizeOfBackup.o
+g++  -o bin/Release/logSizeOfBackup obj/Release/logSizeOfBackup.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+
+
 # copy the binaries to /usr/local/bin/ if all of them build
 # ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
 # ./backup/bin/Release/backup
 # ./actOnTarStatus/bin/Release/actOnTarStatus
 # ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
 # ./restore/bin/Release/restore
+# ./logSizeOfBackup/bin/Release/logSizeOfBackup
 echo
 cd ..
 if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a ] ||
    [ ! -e ./backup/bin/Release/backup ] ||
    [ ! -e ./actOnTarStatus/bin/Release/actOnTarStatus ] ||
    [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
-   [ ! -e ./restore/bin/Release/restore ];
+   [ ! -e ./restore/bin/Release/restore ] ||
+   [ ! -e ./logSizeOfBackup/bin/Release/logSizeOfBackup ];
 then
   echo ERROR: The build failed.  Please fix above.
   echo
@@ -69,4 +79,5 @@ else
   cp ./actOnTarStatus/bin/Release/actOnTarStatus /usr/local/bin
   cp ./actOnCcryptStatus/bin/Release/actOnCcryptStatus /usr/local/bin
   cp ./restore/bin/Release/restore /usr/local/bin
+  cp ./logSizeOfBackup/bin/Release/logSizeOfBackup /usr/local/bin
 fi

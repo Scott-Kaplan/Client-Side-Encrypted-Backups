@@ -983,32 +983,12 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"touch "<<timeStampMarkerPath<<endl
 
     /* Save a list of all files that made it into this backup to a log file */
-    /* so the user can know anytime in the future what was backed up */
-
-//    <<tab0<<"stat --printf=\"%s\" "<<theBackup<<" > sizeOfTheBackupThatsToBeEncrypted"<<endl<<endl
-
-    //<<tab0<<"echo \"=> Contents of "<<theBackup<<" - \" >> " <<logOfCompletedBackupsPath<<endl<<endl
+    /* so the user can know what was backed up */
     <<tab0<<"echo \"=> "<<theBackup<<"\""
-        <<" >> "<<logOfCompletedBackupsPath<<endl
-
-    <<tab0<<"echo \"=> size: \""
-        <<" >> "<<logOfCompletedBackupsPath<<endl
-
-    <<"stat --printf=\"%s\" "<<theBackup<<" >> "<<logOfCompletedBackupsPath<<endl
-    <<tab0<<"echo \"=> contents: \""
-        <<" >> "<<logOfCompletedBackupsPath<<endl
-
-
-
-
-
-
-
-
-
-
+    <<" >> "<<logOfCompletedBackupsPath<<endl
+    <<tab0<<"logSizeOfBackup "<<theBackup<<" "<<logOfCompletedBackupsPath<<endl
+    <<tab0<<"echo \"=> contents: \""<<" >> "<<logOfCompletedBackupsPath<<endl
     <<tab0<<"cat "<<filteredChangedAndNewFilesPath<<" >> "
-    //<<tab0<<"more "<<filteredChangedAndNewFilesPath<<" >> "
     <<logOfCompletedBackupsPath<<endl
     <<tab0<<"echo >> "<<logOfCompletedBackupsPath<<endl
     <<tab0<<"echo"<<endl
@@ -1120,10 +1100,15 @@ void checkForIllegalCharactersInLine(string &path)
     }
     if (path.find("$") != string::npos)
     {
-        string problem = "Inside \""+searchThisListForChangesPath+"\", \n"
-        "  the line \""+path+"\" \n  contains a dollar sign in it.";
-        string correctiveAction= "Please remove the dollar sign.";
-        displayError(problem,correctiveAction);
+        // '$' is not ok except in the first position in the string
+        // example- $HOME
+        if (path.at(0) != '$')
+        {
+            string problem = "Inside \""+searchThisListForChangesPath+"\", \n"
+            "  the line \""+path+"\" \n  contains a dollar sign in it.";
+            string correctiveAction= "Please remove the dollar sign.";
+            displayError(problem,correctiveAction);
+        }
     }
 }
 

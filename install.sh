@@ -228,11 +228,13 @@ echo "Starting to build the Client-Side-Encrypted-Backups static libraries and b
 # ./actOnTarStatus/bin/Release/actOnTarStatus
 # ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
 # ./restore/bin/Release/restore
+# ./logSizeOfBackup/bin/Release/logSizeOfBackup
 if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a ] ||
    [ ! -e ./backup/bin/Release/backup ] ||
    [ ! -e ./actOnTarStatus/bin/Release/actOnTarStatus ] ||
    [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
-   [ ! -e ./restore/bin/Release/restore ];
+   [ ! -e ./restore/bin/Release/restore ] ||
+   [ ! -e ./logSizeOfBackup/bin/Release/logSizeOfBackup ];
 then
   # there is no need to display additional error messages here since build.sh displayed them
   exit

@@ -1,3 +1,7 @@
+// ensure logSizeOfBackup is accounted for in
+// install.sh
+// build.sh
+
 // save the size of the encrypted backup into the log file.
 
 // ensure all lines wrap at 80
