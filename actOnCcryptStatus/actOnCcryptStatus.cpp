@@ -165,8 +165,8 @@ bool encryptionInProgress()
 bool decryptionInProgress()
 {
     bool decryptionIsInProgress = false;
-    /* As soon as decryption begins, a backup without the .cpt file is created */
-    /* if not started a backup without the .cpt file will be absent */
+    /* As soon as decryption begins, a backup without the .cpt file is */
+    /* created. If not started a backup without the .cpt file will be absent */
     if (fileExist(encryptedBackupPath,__FILE__,__LINE__,purpose))
     {
       decryptionIsInProgress = true;
@@ -228,7 +228,6 @@ void checkThatTheTerminalWindowIsStillOpen()
                    __FILE__,__LINE__,terminalPidHandle);
     getline(terminalPidHandle,pidString);
     terminalPidHandle.close();
-    // source https://stackoverflow.com/questions/12601759/determine-if-a-process-exists-from-its-process-id
     if (kill(atoi(pidString.c_str()), 0) != 0)
     {
         /* the user closed the terminal window, */
@@ -243,8 +242,9 @@ bool ccryptFinished()
     bool ccryptIsDone=false;
     if (purpose == "backup")
     {
-        /* the absence of the backup tar ball means that encryption has completed */
-        /* since the finished encrypted backup replaced the backup tar ball */
+        /* the absence of the backup tar ball means that encryption has */
+        /* completed since the finished encrypted backup replaced the backup */
+        /* tar ball */
         if (!fileExist(backupTarBallPath,__FILE__,__LINE__,purpose))
         {
             ccryptIsDone=true;
@@ -253,7 +253,8 @@ bool ccryptFinished()
     else // purpose = restore
     {
         /* the absence of *.cpt means that decryption has finished */
-        if (!fileExist(encryptedBackupPathWithCptExtension,__FILE__,__LINE__,purpose))
+        if (!fileExist(encryptedBackupPathWithCptExtension,__FILE__,__LINE__,
+                                                                       purpose))
         {
             ccryptIsDone=true;
         }
@@ -272,7 +273,8 @@ void displayCcryptStatus()
         double ccryptPercentageComplete=0.0;
         if  (purpose == "backup")
         {
-            // encryption hasn't finished yet, so calculate the % complete so far
+            // encryption hasn't finished yet, so calculate the % complete so
+            // far
             double sizeOfTheBackupTarBallToBeEncrypted =
                                             getSizeOfFile(backupTarBallPath);
             ccryptPercentageComplete =
@@ -305,7 +307,8 @@ void display(double ccryptPercentageComplete)
         // since encryption is done, display green checkmark and set to kill
         // this background process
         ccryptPercentageCompleteString<<
-            //Note:  15 extra trailing spaces here to clobber any prior xx.xxxxxx%
+            // Note:  15 extra trailing spaces are here to clobber any prior
+            //        xx.xxxxxx%
             "Done \033[0;32m\xE2\x9C\x94\033[0m               "<<endl;
         killThisProcess=true;
     }
@@ -337,7 +340,8 @@ void display(double ccryptPercentageComplete)
 
 void displayTitleOfCcryptProgress()
 {
-    if (!fileExist(globalString.ccryptTitlePrintedPath,__FILE__,__LINE__,purpose))
+    if (!fileExist(globalString.ccryptTitlePrintedPath,__FILE__,__LINE__,
+                                                                       purpose))
     {
         if (purpose=="backup")
         {

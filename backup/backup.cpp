@@ -96,29 +96,43 @@ string username="";
 string domain="";
 double storageSpaceOfFilesThatWillBeInTheBackup=0;
 globalStringS globalString;
-string searchThisListForChangesPath =           "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes";
-string landingDirectoryPath =                   "$HOME/.cloudbuddy/input/[3] landing_directory";
-string computerNamePath =                       "$HOME/.cloudbuddy/input/[4] computer_name";
-string dontBackupFilesThatStartWithThisPath =   "$HOME/.cloudbuddy/input/[5] don't_backup_files_that_start_with_this";
-string dontBackupFilesThatEndWithThisPath =     "$HOME/.cloudbuddy/input/[6] don't_backup_files_that_end_with_this";
-string dontBackupFilesThatContainThisPath =     "$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this";
-string timeStampMarkerPath =                    "$HOME/.cloudbuddy/input/timeStampMarker";
-string logOfCompletedBackupsPath =              "$HOME/.cloudbuddy/log/completed_backups";
-string currentTimeStampPath =                   "$HOME/.cloudbuddy/backup/currentTimeStamp";
-string changedAndNewFilesPath =                 "$HOME/.cloudbuddy/backup/changedAndNewFiles";
-string filteredChangedAndNewFilesPath =         "$HOME/.cloudbuddy/backup/filteredChangedAndNewFiles";
-string backupScriptPath =                       "$HOME/.cloudbuddy/backup/backupScript";
-string remainingSizeInHomeDirectoryPath =       "$HOME/.cloudbuddy/backup/remainingSizeOnTheDrive";
-string capturedTerminalOutput =                 "$HOME/.cloudbuddy/backup/capturedTerminalOutput";
-string tarPercentageCompletePath =              "$HOME/.cloudbuddy/backup/tarPercentageCompletePath";
+string searchThisListForChangesPath =
+        "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes";
+string landingDirectoryPath =
+        "$HOME/.cloudbuddy/input/[3] landing_directory";
+string computerNamePath =
+        "$HOME/.cloudbuddy/input/[4] computer_name";
+string dontBackupFilesThatStartWithThisPath =
+        "$HOME/.cloudbuddy/input/[5] don't_backup_files_that_start_with_this";
+string dontBackupFilesThatEndWithThisPath =
+        "$HOME/.cloudbuddy/input/[6] don't_backup_files_that_end_with_this";
+string dontBackupFilesThatContainThisPath =
+        "$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this";
+string timeStampMarkerPath =
+        "$HOME/.cloudbuddy/input/timeStampMarker";
+string logOfCompletedBackupsPath =
+        "$HOME/.cloudbuddy/log/completed_backups";
+string currentTimeStampPath =
+        "$HOME/.cloudbuddy/backup/currentTimeStamp";
+string changedAndNewFilesPath =
+        "$HOME/.cloudbuddy/backup/changedAndNewFiles";
+string filteredChangedAndNewFilesPath =
+        "$HOME/.cloudbuddy/backup/filteredChangedAndNewFiles";
+string backupScriptPath =
+        "$HOME/.cloudbuddy/backup/backupScript";
+string remainingSizeInHomeDirectoryPath =
+        "$HOME/.cloudbuddy/backup/remainingSizeOnTheDrive";
+string capturedTerminalOutput =
+        "$HOME/.cloudbuddy/backup/capturedTerminalOutput";
+string tarPercentageCompletePath =
+        "$HOME/.cloudbuddy/backup/tarPercentageCompletePath";
 string computerName="";
 string backupLabelName="";
-//string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "45";            // tested when 45 for all cases - including yes/no to continuing with the backup
-string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "44";              // this is the nominal case
+string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "44";
 
 // Note: In the next line, \\x60 escapes the back tick(`)
 string expectedOutputFromRunningTheTarCommand =
-                            "tar: Removing leading \\x60/' from member names";
+        "tar: Removing leading \\x60/' from member names";
 
 /*******************************/
 /***** Function Prototypes *****/
@@ -218,8 +232,9 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
     analyzeFilesToKeepHandle.close();
     filteredChangedAndNewFilesHandle.close();
 
-    /* since we already have the filtered list of files that we want to backup*/
-    /* delete the unfiltered list of new and changed files that we started with*/
+    /* since we already have the filtered list of files that we want to */
+    /* backup, delete the unfiltered list of new and changed files that we */
+    /* started with*/
     deleteFile(changedAndNewFilesPath);
 
     if (fileIsEmpty(filteredChangedAndNewFilesPath))
@@ -237,9 +252,6 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
 
 bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
 {
-    //dcout<<"\nBeginning string filter check-\nThis file\n"<<lineToKeepOrPitch<<endl;
-    //checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatStartWithThisPath);
-
     bool lineWanted = true;
     int lengthOfString = 0;
     string line="";
@@ -250,7 +262,6 @@ bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
                    dontBackupFilesThatStartWithThisHandle);
     while(getline(dontBackupFilesThatStartWithThisHandle,line))
     {
-        //dcout<<line<<endl;
         removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
@@ -260,23 +271,20 @@ bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
                           lineToKeepOrPitch.c_str(),
                           lengthOfString)))
             {
-                //dcout<<"will not be included in the backup\nbecause \""
-                //d    <<line<<"\" was contained at the beginning of the string"<<endl;
-                /* This file won't be backed up because it starts with a string */
-                /* contained in [5] don't_backup_files_that_start_with_this */
+                /* This file won't be backed up because it starts with a */
+                /* string contained in - */
+                /* [5] don't_backup_files_that_start_with_this */
                 lineWanted = false;
                 break;
             }
         }
     }
-    //dif (lineWanted) cout<<"so far will be included in the backup"<<endl;
     dontBackupFilesThatStartWithThisHandle.close();
     return lineWanted;
 }
 
 bool fileIsWantedBecauseEndingPathIsOk(string &lineToKeepOrPitch)
 {
-    //dcout<<"\nEnding string filter check-\nThis file\n"<<lineToKeepOrPitch<<endl;
     bool lineWanted = true;
     int lengthOfString = 0;
     int lengthOfLineToKeepOrPitch = 0;
@@ -291,7 +299,6 @@ bool fileIsWantedBecauseEndingPathIsOk(string &lineToKeepOrPitch)
 
     while(getline(dontBackupFilesThatEndWithThisHandle,line))
     {
-        //dcout<<line<<endl;
         removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
@@ -301,8 +308,6 @@ bool fileIsWantedBecauseEndingPathIsOk(string &lineToKeepOrPitch)
             offset = lengthOfLineToKeepOrPitch - lengthOfString;
             if (!(strcmp(line.c_str(),&lineToKeepOrPitch.c_str()[offset])))
             {
-                //dcout<<"will not be included in the backup\nbecause \""
-                //d    <<line<<"\" was contained at the end of the string"<<endl;
                 /* This file won't be backed up because it ends with a string */
                 /* contained in [6] don't_backup_files_that_end_with_this */
                 lineWanted = false;
@@ -310,14 +315,12 @@ bool fileIsWantedBecauseEndingPathIsOk(string &lineToKeepOrPitch)
             }
         }
     }
-    //dif (lineWanted) cout<<"so far will be included in the backup"<<endl;
     dontBackupFilesThatEndWithThisHandle.close();
     return lineWanted;
 }
 
 bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
 {
-    //dcout<<"\nEntire string filter check-\nThis file\n"<<lineToKeepOrPitch<<endl;
     bool lineWanted = true;
     const char * pch;
     const char * pch1;
@@ -330,7 +333,6 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
                    dontBackupFilesThatContainThisHandle);
     while(getline(dontBackupFilesThatContainThisHandle,line))
     {
-        //cout<<line<<endl;
         removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
@@ -338,14 +340,14 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
             pch = strstr(lineToKeepOrPitch.c_str(),line.c_str());
 
             // prevents any temporary files in $HOME/.cloudbuddy/backup/
-            // from going into the backup such as like one of these
-            // $HOME/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__1198
-            // $HOME/.cloudbuddy/backup/fileExistLookupFrom_backup.cpp_fromLineNumber__459
+            // from going into the backup such as (like one of these)
+            // $HOME/.cloudbuddy/backup/
+            //              fileExistLookupFrom_backup.cpp_fromLineNumber__1198
+            // $HOME/.cloudbuddy/backup/
+            //              fileExistLookupFrom_backup.cpp_fromLineNumber__459
             pch1 = strstr("/.cloudbuddy/backup/",line.c_str());
             if ((pch != NULL) || (pch1 != NULL))
             {
-                //dcout<<"will not be included in the backup\nbecause \""
-                //d    <<line<<"\" was contained in the string"<<endl;
                 /* This file won't be backed up because it contains a string */
                 /* found in [7] don't_backup_files_that_contain_this */
                 lineWanted = false;
@@ -353,7 +355,6 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
             }
         }
     }
-    //dif (lineWanted) cout<<"will be included in the backup"<<endl;
     dontBackupFilesThatContainThisHandle.close();
     return lineWanted;
 }
@@ -415,30 +416,36 @@ void displayUsage()
     " --> This is a parameter that makes up part of the name of your backup.\n"
     "If you don't want a label in your backup name, then use "
     <<startUnderline<<"no-label"<<endUnderline<<".\n"
-    "If you want a label, it needs to be less than a length of 128 and can only contain - \n"
-    "characters, numbers, periods, hyphens, underscores"
+    "If you want a label, it needs to be less than a length of 128 and can only"
+    " contain - \ncharacters, numbers, periods, hyphens, underscores"
     "\n\nExamples\n\n"
     "  > backup no-label\n\n"
-    "  This is how it will look on the server (computerName and timestamp will vary) - \n\n"
-    "  computerName**2018-05-01__12:28am\n\n\n"
+    "  This is how it will look on the server (computerName and timestamp will "
+    "vary) - \n\n  computerName**2018-05-01__12:28am\n\n\n"
     "  > backup pics-of-aunt-mary\n\n"
-    "  This is how it will look on the server (computerName and timestamp will vary) - \n\n"
-    "  computerName**pics-of-aunt-mary**2018-05-01__12:28am\n\n"
+    "  This is how it will look on the server (computerName and timestamp will "
+    "vary) - \n\n  computerName**pics-of-aunt-mary**2018-05-01__12:28am\n\n"
     <<endl;
     exit(EXIT_SUCCESS);
 }
 
 void checkTheIntegrityOfTheConfigurationFiles()
 {
-    checkThatConfigurationFileHasBeenInstalled(searchThisListForChangesPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled(globalString.usernameAndDomainPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled
+                        (searchThisListForChangesPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled
+                        (globalString.usernameAndDomainPath,purpose);
     checkThatConfigurationFileHasBeenInstalled(landingDirectoryPath,purpose);
     checkThatConfigurationFileHasBeenInstalled(computerNamePath,purpose);
-    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatStartWithThisPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatEndWithThisPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled(dontBackupFilesThatContainThisPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled
+                        (dontBackupFilesThatStartWithThisPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled
+                        (dontBackupFilesThatEndWithThisPath,purpose);
+    checkThatConfigurationFileHasBeenInstalled
+                        (dontBackupFilesThatContainThisPath,purpose);
     checkThatConfigurationFileHasBeenInstalled(timeStampMarkerPath,purpose);
-    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
+    retrieveUsernameAndDomain
+                        (username,domain,globalString.usernameAndDomainPath);
     retrieveTheLandingDirectory();
     retrieveTheComputerName();
 }
@@ -454,8 +461,6 @@ void retrieveTheLandingDirectory()
                    landingDirectoryHandle);
     while (getline(landingDirectoryHandle,line))
     {
-        //dcout<<line<<endl;
-        //removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -489,7 +494,6 @@ void retrieveTheComputerName()
                    computerNameHandle);
     while (getline(computerNameHandle,line))
     {
-        //dcout<<line<<endl;
         removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
@@ -524,8 +528,6 @@ void checkTheIntegrityOfTheComputerName(string &computerName)
     /* check that the computer name doesn't contain illegal symbols */
     for (unsigned int i=0;i<computerName.length();++i)
     {
-        //dcout<<endl<<computerName<<endl<<endl;
-        // source: http://www.cplusplus.com/reference/cctype/isalnum/
         if (!((isalnum(computerName[i])) ||
               (computerName[i]=='-') ||
               (computerName[i]=='_') ||
@@ -571,7 +573,6 @@ string createTheNameOfTheBackup(string &backupLabelName)
 }
 
 double getApproxSizeOfBackupBeforeTaringIt()
-// source: https://stackoverflow.com/questions/5840148/how-can-i-get-a-files-size-in-c
 {
     ifstream listOfFilesToBeTardHandle;
     openForReading(filteredChangedAndNewFilesPath,
@@ -591,7 +592,7 @@ double getApproxSizeOfBackupBeforeTaringIt()
     listOfFilesToBeTardHandle.close();
     return size;
 }
-
+LEFT OFF HERE
 void createAListOfFilesThatHaveChangedOrAreNew()
 {
     cout<<"\nCalculating the files that have changed or that are new, please "

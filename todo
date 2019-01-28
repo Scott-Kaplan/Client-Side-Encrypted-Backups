@@ -1,9 +1,17 @@
 // ensure all lines wrap at 80
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // backup
+  // logSizeOfBackup
+  // restore
+  // staticLibrary__fileUtilities
+  
 
 // copy config file 1 that has problem
 // fresh install of Client-Side-Encrypted-Backups on 16.04
 // ensure that install script make timestampmarker with timestamp of epoch.
 // on 16.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
+// ensure size in log file is correct
 
 // on 18.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
 

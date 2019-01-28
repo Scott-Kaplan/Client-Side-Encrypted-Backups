@@ -146,9 +146,9 @@ void actOnTarCommand()
     {
         /* tar is still running */
 
-        /* extract the name of the backup with path, this will always exist even */
-        /* when its finished, so no need to worry about when tar finishes and  */
-        /* there is no process id */
+        /* extract the name of the backup with path, this will always exist */
+        /* even when its finished, so no need to worry about when tar */
+        /* finishes and there is no process id */
         string theBackupPath="";
         ifstream fileContainingTheNameOfTheBackupWithPathHandle;
         openForReading(
@@ -201,21 +201,28 @@ void actOnTarCommand()
         restorePathHandle.close();
 
         /* save the size of the backup that has been restored to this point */
-        // example) //du -sb e6230-primary\*\*2018-10-02__05\:47am/ | awk '{ print $1 }' > sizeOfDirectory
-        string sizeThatsBeenRestoredToThisPointPath=globalString.basePath+"sizeRestoredToThisPoint";
-        string cmd="du -sb "+restorePath+" | awk '{ print $1 }' > "+sizeThatsBeenRestoredToThisPointPath;
+        // example)
+        // du -sb e6230-primary\*\*2018-10-02__05\:47am/ | awk '{ print $1 }' >
+        //                                                       sizeOfDirectory
+        string sizeThatsBeenRestoredToThisPointPath = globalString.basePath+
+                                                      "sizeRestoredToThisPoint";
+        string cmd = "du -sb "+restorePath+" | awk '{ print $1 }' > "+
+                                           sizeThatsBeenRestoredToThisPointPath;
         if(system(cmd.c_str()));
 
         /* get the size of the backup that has been restored to this point */
         ifstream sizeThatsBeenRestoredHandle;
         string sizeThatsBeenRestored="";
-        openForReading(sizeThatsBeenRestoredToThisPointPath,__FILE__,__LINE__,sizeThatsBeenRestoredHandle);
+        openForReading(sizeThatsBeenRestoredToThisPointPath,__FILE__,__LINE__,
+                                                   sizeThatsBeenRestoredHandle);
         getline(sizeThatsBeenRestoredHandle,sizeThatsBeenRestored);
         sizeThatsBeenRestoredHandle.close();
 
         /* convert the numerical strings to doubles */
-        double totalSizeToBeRestoredDouble = atof(totalSizeToBeRestored.c_str());
-        double sizeThatsBeenRestoredDouble = atof(sizeThatsBeenRestored.c_str());
+        double totalSizeToBeRestoredDouble =
+                                            atof(totalSizeToBeRestored.c_str());
+        double sizeThatsBeenRestoredDouble =
+                                            atof(sizeThatsBeenRestored.c_str());
 
         /* display the untar percentage complete */
         display((sizeThatsBeenRestoredDouble/totalSizeToBeRestoredDouble)*100);
