@@ -32,11 +32,8 @@ using namespace std;
 /********************/
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
-#include <sstream> // needed for ostringstream
 #include <iomanip> // setw() - sets column width of a field
-#include <sys/types.h>
 #include <signal.h>
 
 /*******************************/

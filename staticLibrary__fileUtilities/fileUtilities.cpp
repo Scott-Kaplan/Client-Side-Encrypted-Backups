@@ -33,7 +33,6 @@ using namespace std;
 #include "fileUtilities.h"
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
 #include <sstream>
 #include <unistd.h>
 #include <string.h>
@@ -161,8 +160,7 @@ bool fileExist(string &lookupFilePath,
                int fromLineNumber,
                string resultsDirectory)
 {
-    /* list only specific file */
-    //https://askubuntu.com/questions/811210/how-can-i-make-ls-only-display-files
+    /* the examples below are to list just a specific file (no directories) */
 
     // example in current directory
     // ls -ap | grep -v / | grep "filename" > results 2>&1
@@ -193,18 +191,19 @@ bool fileExist(string &lookupFilePath,
     extractPathAndFileName(lookupFilePath,dirThatTheFileIsIn,fileName);
     string fileExistCmd =
     //example)
-    //ls -ap "$HOME/.cloudbuddy/input/" | grep -v / | grep -F "[1] search_this_list_for_changes" > results 2>&1;
+    //ls -ap "$HOME/.cloudbuddy/input/" | grep -v / | grep -F
+    //"[1] search_this_list_for_changes" > results 2>&1;
         "ls -ap \""+dirThatTheFileIsIn+"\" | grep -v / | grep -F \""+fileName
                                             +"\" > "+fileExistResults+" 2>&1";
     if(system(fileExistCmd.c_str()));
     bool theFileExists = false;
     // The above command only looks for substrings rather than entire strings
-    // So say as an example for 'howdy' could yield these 4 lines-
+    // So say as an example for 'howdy', it could yield these 4 lines-
     // howdy1~
     // howdy1
     // howdyBk
     // howdy
-    // Only return true if an entire line is just 'howdy'
+    // So, out of these 4, only return true if an entire line is just 'howdy'
     ifstream exactMatchHandle;
     string line="";
     openForReading(fileExistResults,__FILE__,__LINE__,exactMatchHandle);
@@ -259,7 +258,8 @@ bool directoryExist(string &lookupDirectoryPath,
     if(system(directoryExistCmd.c_str()));
     ifstream directoryExistHandle;
     string line="";
-    openForReading(directoryExistResults,__FILE__,__LINE__,directoryExistHandle);
+    openForReading(directoryExistResults,__FILE__,__LINE__,
+                                                        directoryExistHandle);
     getline(directoryExistHandle,line);
     directoryExistHandle.close();
     deleteFile(directoryExistResults);
@@ -279,7 +279,7 @@ void deleteFile(string &filename)
 
 void getGlobalStrings(globalStringS &globalString, string &purpose)
 {
-    /* examples for the next line */
+    /* examples for the next line equate to one of these - */
     /* "$HOME/.cloudbuddy/backup/" - if it's backing up */
     /* "$HOME/.cloudbuddy/restore/" -  if it's restoring */
     globalString.basePath = "$HOME/.cloudbuddy/"+purpose+"/";
@@ -421,7 +421,6 @@ double getSizeOfFile(string &path)
 
 string getFileName(string &path)
 {
-    //source https://www.safaribooksonline.com/library/view/c-cookbook/0596007612/ch10s15.html
     string fileName = "";
     char sep = '/';
     size_t i = path.rfind(sep, path.length());
@@ -469,7 +468,8 @@ string getTimestamp()
     return currentTime.str();
 }
 
-void retrieveUsernameAndDomain(string &username, string &domain, string &usernameAndDomainPath)
+void retrieveUsernameAndDomain(string &username, string &domain,
+                                                string &usernameAndDomainPath)
 {
     bool usernameAndDomainFound = false;
     string line="";
@@ -513,7 +513,6 @@ void removeLeadingWhiteSpaces(string &line)
 {
     const string delimiter = " ";
     line.erase(0,line.find_first_not_of(delimiter));
-    // source: http://www.cplusplus.com/faq/sequences/strings/trim/
 }
 
 void clearTheTerminalWindow()
@@ -588,12 +587,14 @@ void writeCleanUpFunction(string &purpose, ofstream &scriptHandle)
     if (purpose == "backup")
     {
         // delete all files in the backup directory
-        scriptHandle<<tab1<<globalString.deleteAllFilesInTheBackupDirectory<<endl;
+        scriptHandle<<tab1<<globalString.deleteAllFilesInTheBackupDirectory
+        <<endl;
     }
     else // purpose == "restore"
     {
         // delete all files in the restore directory
-        scriptHandle<<tab1<<globalString.deleteAllFilesInTheRestoreDirectory<<endl;
+        scriptHandle<<tab1<<globalString.deleteAllFilesInTheRestoreDirectory
+        <<endl;
     }
 
     scriptHandle
@@ -651,7 +652,8 @@ void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose)
     }
 }
 
-void checkThatThereAreNoWhiteSpaces(string &line, string lineTitle, string &configurationFilePath)
+void checkThatThereAreNoWhiteSpaces(string &line, string lineTitle,
+                                                string &configurationFilePath)
 {
     int lengthOfString = strlen(line.c_str());
     for (int i=0; i<lengthOfString; ++i)

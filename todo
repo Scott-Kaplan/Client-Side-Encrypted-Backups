@@ -1,11 +1,66 @@
-// ensure all lines wrap at 80
+// ensure all handles from ifstream and ofstream are closed  
   // DONE actOnCcryptStatus
   // DONE actOnTarStatus
-  // backup
+  // DONE backup
   // logSizeOfBackup
   // restore
   // staticLibrary__fileUtilities
   
+// remove all unused code
+  // actOnCcryptStatus
+  // actOnTarStatus
+  // backup
+  // logSizeOfBackup
+  // restore
+  // staticLibrary__fileUtilities
+
+// remove all unused comments
+  // actOnCcryptStatus
+  // actOnTarStatus
+  // backup
+  // logSizeOfBackup
+  // restore
+  // staticLibrary__fileUtilities
+
+// ensure all declared file scope variables are used
+  // actOnCcryptStatus
+  // actOnTarStatus
+  // backup
+  // logSizeOfBackup
+  // restore
+  // staticLibrary__fileUtilities
+
+// ensure all prototypes are used
+  // actOnCcryptStatus
+  // actOnTarStatus
+  // backup
+  // logSizeOfBackup
+  // restore
+  // staticLibrary__fileUtilities
+
+// ensure all enumerated values are used
+  // actOnCcryptStatus
+  // actOnTarStatus
+  // backup
+  // logSizeOfBackup
+  // restore
+  // staticLibrary__fileUtilities
+
+// ensure all comments are accurate
+  // actOnCcryptStatus
+  // actOnTarStatus
+  // backup
+  // logSizeOfBackup
+  // restore
+  // staticLibrary__fileUtilities
+
+
+// modify install.sh to install packages for debian
+// modify install.sh to install packages for arch
+// modify install.sh to install packages for fedora
+// modify install.sh to install packages for opensuse
+// modify install.sh to install packages for slackware
+// modify install.sh to install packages for gentoo
 
 // copy config file 1 that has problem
 // fresh install of Client-Side-Encrypted-Backups on 16.04
@@ -24,26 +79,17 @@
 // test on virgin ubuntu 18.04 using virtualbox.  set both username and password to test
 // test ./smallBackup with ssh public key on 18.04
 
-// remove all unused code and unused comments
-// ensure all declared file scope variables are used
-// ensure all ifstream and ofstream are closed
-// ensure all prototypes are used
-// ensure all enumerated values are used
-// ensure all comments are accurate
-// ensure all #includes are used
-
-//-----------------------------------------------------------------
-// modify install.sh to install packages for Debian.  Don't test it
-// modify install.sh to install packages for Arch.  Don't test it
-// modify install.sh to install packages for Fedora.  Don't test it
-// modify install.sh to install packages for openSUSE.  Don't test it
-// modify install.sh to install packages for Slackware.  Don't test it
-// modify install.sh to install packages for Gentoo.  Don't test it
+// test debian
+// test arch
+// test fedora
+// test opensuse
+// test slackware
+// test gentoo
 
 ----------------------------------------------------
 ----------------------------------------------------
 ----------------------------------------------------
-no further action because done or didn't take action
+// done or intentionally didn't take action
 ----------------------------------------------------
 ----------------------------------------------------
 ----------------------------------------------------
@@ -340,3 +386,19 @@ void test__existenceOfAFile()
 //  # create dir$dir - works on 18.04
 
 40 // save the size of the encrypted backup into the log file.
+
+41 // ensure all lines wrap at 80
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities
+
+42 // ensure all #includes are used
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities

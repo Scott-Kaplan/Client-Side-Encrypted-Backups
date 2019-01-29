@@ -32,13 +32,9 @@ using namespace std;
 /********************/
 #include <iostream>
 #include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <sstream>
 #include <iomanip> // setw() - sets column width of a field
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
-#include <unistd.h>
 
 /*******************************/
 /***** From Static Library *****/
@@ -90,7 +86,7 @@ extern "C" void displayCommandLineArgumentsAreWrong(int argc,
 /********************************/
 /***** File Scope Variables *****/
 /********************************/
-string purpose="backup";  // for path $HOME/.cloudbuddy/backup
+string purpose="backup";  // for path $HOME/.cloudbuddy/backup/
 string landingDirectory="";
 string username="";
 string domain="";
@@ -592,7 +588,7 @@ double getApproxSizeOfBackupBeforeTaringIt()
     listOfFilesToBeTardHandle.close();
     return size;
 }
-LEFT OFF HERE
+
 void createAListOfFilesThatHaveChangedOrAreNew()
 {
     cout<<"\nCalculating the files that have changed or that are new, please "
@@ -606,9 +602,9 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     deleteFile(changedAndNewFilesPath); // Create this file from scratch below
     checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 
-    /* this creates a file with a list of all files that have changed since   */
-    /* the last backup was performed.  The filtering of what needs to be      */
-    /* actually backed up occurs below this.                                  */
+    /* this creates a file with a list of all files that have changed since */
+    /* the last backup was performed.  The filtering of what needs to be */
+    /* actually backed up occurs below this.*/
     openForReading(searchThisListForChangesPath,
                    __FILE__,
                    __LINE__,
@@ -686,7 +682,8 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
 {
     // In order to be able to perform the backup, a temporary storage space of
     // 2x the size of all of the files combined to be backed up is needed.
-    // The first factor is the size of the tar ball representing all the files in the backup
+    // The first factor is the size of the tar ball representing all the files
+    // in the backup.
     // The second factor is the size of that tar ball being encrypted
     // example)
     // Lets say all of the files combined that will go in this backup is 100MB.
@@ -709,8 +706,6 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
             (storageSpaceOfFilesThatWillBeInTheBackup*storageSpaceFactorNeeded);
 
     std::cout.imbue(std::locale(""));
-    //dcout<<"The space needed to perform the backup = "<<spaceNeededToPerformTheBackup<<endl;
-    //dcout<<"The space remaining in you home directory = "<<sizeRemainingInHomeDir<<endl;
     if (spaceNeededToPerformTheBackup > sizeRemainingInHomeDir)
     {
         cout<<endl<<"Sorry but there isn't enough disc space in your Home"
@@ -760,9 +755,6 @@ void createAScriptThatWillPerformTheBackup()
     backupScriptHandle
     <<tab0<<"#!/bin/bash"<<endl<<endl;
 
-    /* save the process Id of this terminal session */
-    //<<tab0<<"echo $$ > "<<globalString.processIdOfThisTerminalSessionPath<<endl;
-
     writeCleanUpFunction(purpose,backupScriptHandle);
     writeCleanUpAndExitFunction(purpose,backupScriptHandle);
 
@@ -795,8 +787,8 @@ void createAScriptThatWillPerformTheBackup()
 
     /* Ask the user if the list of files that appear look to be correct as */
     /* these will be in the backup. Abort if the user answers no */
-    <<tab0<<"message=\"Are you good with the above list of files being backed up?\""
-    <<endl
+    <<tab0<<"message=\"Are you good with the above list of files being backed "
+    <<"up?\""<<endl
     <<tab0<<"giveContinuationOptionToTheUser $message"<<endl<<endl
 
     /* tar the files that will be in the backup.  Do this in the background */
@@ -811,7 +803,8 @@ void createAScriptThatWillPerformTheBackup()
     // This next line overides the limitation of not being allowed to include
     // one or more colons in the name of the tarball
     <<" --force-local"
-    <<filteredChangedAndNewFilesIntoTarCmd<<" > "<<globalString.resultsOfTarCommand<<" 2>&1"
+    <<filteredChangedAndNewFilesIntoTarCmd<<" > "
+    <<globalString.resultsOfTarCommand<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
     // When creating large tarballs the pecentage complete is very useful,
     // otherwise the user just sees the session hanging and doesn't really know
@@ -844,9 +837,10 @@ void createAScriptThatWillPerformTheBackup()
 
     /* Get the size of the output from tar.  If it is different than expected */
     /* which is "Removing leading `/' from member names", as the user whether */
-    /* he/she wants to proceed with the backup.  If it's the same display,    */
-    /* 100% complete */
-    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"<<endl
+    /* he/she wants to proceed with the backup.  If it's the same, then */
+    /* display 100% complete */
+    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
+    <<endl
 
     <<tab2<<"if [ $sizeOfFile -ne "
           <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
@@ -864,7 +858,8 @@ void createAScriptThatWillPerformTheBackup()
     <<tab3<<"echo "<<endl
     <<tab3<<"echo But, instead it was - "<<endl
     <<tab3<<"echo "<<startUnderline<<endl
-    <<tab3<<"while read line; do echo \"$line\"; done < "<<globalString.resultsOfTarCommand<<endl
+    <<tab3<<"while read line; do echo \"$line\"; done < "
+    <<globalString.resultsOfTarCommand<<endl
     <<tab3<<"echo "<<endUnderline<<endl
     <<tab3<<"message2=\"Do you still want to continue with the backup?\""<<endl
     <<tab3<<"giveContinuationOptionToTheUser $message2"<<endl
@@ -887,8 +882,8 @@ void createAScriptThatWillPerformTheBackup()
     /* Save the total size of all of the files to be encrypted.  This is */
     /* needed as an input to being able to calculate the percentage complete */
     /* of any ongoing encryption or decryption of a backup */
-    // get the size of a file in bash - source https://unix.stackexchange.com/questions/16640/how-can-i-get-the-size-of-a-file-in-a-bash-script
-    <<tab0<<"stat --printf=\"%s\" "<<theBackup<<" > sizeOfTheBackupThatsToBeEncrypted"<<endl<<endl
+    <<tab0<<"stat --printf=\"%s\" "<<theBackup
+    <<" > sizeOfTheBackupThatsToBeEncrypted"<<endl<<endl
 
     /* hide the cursor as the cursor is distracting while viewing the */
     /* progress meter */
@@ -921,7 +916,8 @@ void createAScriptThatWillPerformTheBackup()
 
     /* List the size of the backup */
     <<tab0<<"echo"<<endl
-    <<tab0<<"echo \""<<startUnderline<<"Size of the backup"<<endUnderline<<"\""<<endl
+    <<tab0<<"echo \""<<startUnderline<<"Size of the backup"<<endUnderline<<"\""
+    <<endl
     <<tab0<<"tree --du -ah "<<theBackup<<".cpt | grep \" used in \" | colrm 6 "
     // This next line trims the leading whitespaces off of the output
     <<"| sed -e 's/^[ \t]*//'"<<endl<<endl
@@ -933,9 +929,10 @@ void createAScriptThatWillPerformTheBackup()
     /* user know it could take a short while to start for the ssh server to */
     /* respond to the request */
     <<tab0<<"echo"<<endl<<endl
-    <<tab0<<"echo \""<<startUnderline<<"About to start the transfer"<<endUnderline
-    <<"\""<<endl
-    <<tab0<<"echo \"Please hang on a few seconds (up to a minute) ... while the sftp server is contacted\""<<endl
+    <<tab0<<"echo \""<<startUnderline<<"About to start the transfer"
+    <<endUnderline<<"\""<<endl
+    <<tab0<<"echo \"Please hang on a few seconds (up to a minute) ... while the"
+    <<" sftp server is contacted\""<<endl
     <<tab0<<"echo"<<endl
 
     /* Create a script to transfer the encrypted backup to a destination */
@@ -957,10 +954,10 @@ void createAScriptThatWillPerformTheBackup()
     // creates an empty file named "transfer-complete" once the 'put' command
     // finishes successfully. The file won't be created if any of the following
     // failures occurred -
-    // 1) An incorrect sftp server, sftp username or sftp password is entered     // tested successfully
-    // 2) A Ctrl-C is entered during the transfer                                 // tested successfully
-    // 3) The session hangs.  In this case the user will likely close the window  // not tested but confident would work
-    // 4) There is an unknown error either on the server or on the local          // not tested but confident would work
+    // 1) An incorrect sftp server, sftp username or sftp password is entered
+    // 2) A Ctrl-C is entered during the transfer
+    // 3) The session hangs.  In this case the user will likely close the window
+    // 4) There is an unknown error either on the server or on the local
     //    machine. In this case, the file wouldn't be created. The behavior
     //    would be the same as entering Ctrl-C as 'put' would have to finish in
     //    order for execution to resume to this line and create the file.  The
@@ -1015,13 +1012,10 @@ void runTheScriptThatPerformsTheBackup()
 
 double getRemainingSizeInHomeDir()
 {
-    //source : https://stackoverflow.com/questions/33249591/how-can-i-only-get-the-number-of-bytes-available-on-a-disk-in-bash
     string getRemainingSizeInHomeDirCmd=
     "df ~ > "+remainingSizeInHomeDirectoryPath;
-    //31151732 This is 31 Mega Bytes// NOTE:  This is multiplied by 1000 Below to make the correct units which is Gigabytes
-
-    //the below line does not work on 18.04
-    //"df | grep $HOME | awk '{print $4}' > "+remainingSizeInHomeDirectoryPath;
+    // 31151732  This is 31 Mega Bytes.  NOTE:  It is multiplied by 1000
+    // below to make the correct units which is Gigabytes
 
     if (system(getRemainingSizeInHomeDirCmd.c_str()));
 
@@ -1047,10 +1041,11 @@ double getRemainingSizeInHomeDir()
     remainingSizeInHomeDirectoryHandle.close();
 
     // We want what's under the "Available" column (Which is column #4 out of 6)
-    string sizeRemainingInHomeDirectoryIn1KByteBlocks = getStringUnder(4,6,line);
+    string sizeRemainingInHomeDirectoryIn1KByteBlocks =
+                                                    getStringUnder(4,6,line);
 
-    /* return the remaining size in the home directory by converting the string to a double */
-    // source: https://stackoverflow.com/questions/21887274/convert-string-to-long-long-int
+    /* return the remaining size in the home directory by converting the */
+    /* string to a double */
     char* endptr = NULL;
     double remainingSizeInHomeDirectory =
         strtod(sizeRemainingInHomeDirectoryIn1KByteBlocks.c_str(), &endptr);
@@ -1102,7 +1097,7 @@ void checkForIllegalCharactersInLine(string &path)
     if (path.find("$") != string::npos)
     {
         // '$' is not ok except in the first position in the string
-        // example- $HOME
+        // such as in $HOME
         if (path.at(0) != '$')
         {
             string problem = "Inside \""+searchThisListForChangesPath+"\", \n"

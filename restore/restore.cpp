@@ -32,7 +32,6 @@ using namespace std;
 /********************/
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 
 /*******************************/
@@ -72,7 +71,7 @@ extern "C" void displayCommandLineArgumentsAreWrong(int argc,
 /********************************/
 /***** File Scope Variables *****/
 /********************************/
-string purpose="restore";  // for path $HOME/.cloudbuddy/restore
+string purpose="restore";  // for path $HOME/.cloudbuddy/restore/
 string username="";
 string domain="";
 string nameOfEncryptedBackupWhichIncludesPath="";
@@ -121,8 +120,10 @@ void deleteAllFilesIntheRestoreDirectory()
 
 void checkTheConfigurationFileIntegrity()
 {
-    checkThatConfigurationFileHasBeenInstalled(globalString.usernameAndDomainPath,purpose);
-    retrieveUsernameAndDomain(username,domain,globalString.usernameAndDomainPath);
+    checkThatConfigurationFileHasBeenInstalled
+                        (globalString.usernameAndDomainPath,purpose);
+    retrieveUsernameAndDomain
+                        (username,domain,globalString.usernameAndDomainPath);
 }
 
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
@@ -155,12 +156,14 @@ void displayUsage()
     <<"\nUsage:\n\nrestore "<<startUnderline
     <<"<path>/<backup-to-restore>\n\n"<<endUnderline
     <<"Examples\n\n"
-    "  If your backup is in the '/uploads' directory on the server and it is named\n"
-    "  e6230-pics-of-aunt-mary**2018-06-26__09:26pm\n"
+    "  If your backup is in the '/uploads' directory on the server and it is "
+    "named\n  e6230-pics-of-aunt-mary**2018-06-26__09:26pm\n"
     "  then you'd use-\n"
     "  > restore "<<startUnderline<<
-    "/uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline<<"\n\n"
-    "  If your backup is in the same directory of where you initially log in(via sftp) "
+    "/uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline
+    <<"\n\n"
+    "  If your backup is in the same directory of where you initially log "
+    "in(via sftp) "
     "and it is named\n"
     "  e6230-pics-of-aunt-mary**2018-06-26__09:26pm\n"
     "  then you'd use-\n"
@@ -192,7 +195,7 @@ void createAScriptTheWillRestoreTheBackup()
 
     /***** IMPORTANT NOTE *****/
     /***** Later on in this program a "rm -rf restorePath" is performed.  *****/
-    /***** So, if you need to change this be extremely careful.           *****/
+    /***** If you need to change this, please be extremely careful.       *****/
     string restorePath="$HOME/restored-from-backup/"+nameOfEncryptedBackup;
 
     ofstream scriptThatRestoresTheBackupHandle;
@@ -230,10 +233,10 @@ void createAScriptTheWillRestoreTheBackup()
     // creates an empty file named "transfer-complete" once the 'get' command
     // finishes successfully. The file won't be created if any of the following
     // failures occurred -
-    // 1) An incorrect sftp server, sftp username or sftp password is entered     // tested successfully
-    // 2) A Ctrl-C is entered during the transfer                                 // tested successfully
-    // 3) The session hangs.  In this case the user will likely close the window  // not tested but confident would work
-    // 4) There is an unknown error either on the server or on the local          // not tested but confident would work
+    // 1) An incorrect sftp server, sftp username or sftp password is entered
+    // 2) A Ctrl-C is entered during the transfer
+    // 3) The session hangs.  In this case the user will likely close the window
+    // 4) There is an unknown error either on the server or on the local
     //    machine. In this case, the file wouldn't be created. The behavior
     //    would be the same as entering Ctrl-C as 'get' would have to finish in
     //    order for execution to resume to this line and create the file.  The
@@ -280,7 +283,8 @@ void createAScriptTheWillRestoreTheBackup()
     // time the decryption command is run. There will be two files when not done
     // and one once decryption finishes.
     <<tab0<<"echo \"About to start decrypting your backup ...\""<<endl
-    <<tab0<<"echo"<<endl<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<".cpt"<<endl<<endl
+    <<tab0<<"echo"<<endl<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<".cpt"
+    <<endl<<endl
 
     /* Ensure the user sucessfully decrypted the backup.  If not, mention it */
     /* and exit the script.  Note that the .cpt is dropped off the backup */
@@ -308,7 +312,8 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab0<<"echo"<<endl
 
     /* save the name of the restore path to a file */
-    <<tab0<<"echo "<<restorePath<< " > "<<globalString.basePath+"restorePath"<<endl
+    <<tab0<<"echo "<<restorePath<< " > "<<globalString.basePath+"restorePath"
+    <<endl
 
     /* create destination directory that the backup will be restored in */
     // It is necessary to delete and start from nothing when restoring a backup
@@ -364,7 +369,8 @@ void createAScriptTheWillRestoreTheBackup()
     /* which is "Removing leading `/' from member names", as the user whether */
     /* he/she wants to proceed with the backup.  If it's the same display,    */
     /* 100% complete */
-    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"<<endl
+    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
+    <<endl
     <<tab2<<"if [ $sizeOfFile -ne "
           <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
           <<endl
@@ -381,7 +387,8 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab3<<"echo "<<endl
     <<tab3<<"echo But, instead it was - "<<endl
     <<tab3<<"echo "<<startUnderline<<endl
-    <<tab3<<"while read line; do echo \"$line\"; done < "<<globalString.resultsOfTarCommand<<endl
+    <<tab3<<"while read line; do echo \"$line\"; done < "
+    <<globalString.resultsOfTarCommand<<endl
     <<tab3<<"echo "<<endUnderline<<endl
     <<tab3<<"message2=\"Do you still want to continue with the backup?\""<<endl
     <<tab3<<"giveContinuationOptionToTheUser $message2"<<endl
