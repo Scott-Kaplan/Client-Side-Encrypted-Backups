@@ -32,6 +32,7 @@ using namespace std;
 /********************/
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 
 /*******************************/
@@ -194,8 +195,8 @@ void createAScriptTheWillRestoreTheBackup()
     createRestoreDirectory();
 
     /***** IMPORTANT NOTE *****/
-    /***** Later on in this program a "rm -rf restorePath" is performed.  *****/
-    /***** If you need to change this, please be extremely careful.       *****/
+    /***** Later on in this program a "rm -rf <restorePath>" is performed. ****/
+    /***** If you need to change this, please be extremely careful.        ****/
     string restorePath="$HOME/restored-from-backup/"+nameOfEncryptedBackup;
 
     ofstream scriptThatRestoresTheBackupHandle;

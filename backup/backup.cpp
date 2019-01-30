@@ -33,7 +33,9 @@ using namespace std;
 #include <iostream>
 #include <fstream>
 #include <string.h>
-#include <iomanip> // setw() - sets column width of a field
+#include <iomanip>
+#include <cstdlib>
+#include <sstream>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 
 /*******************************/
@@ -144,8 +146,6 @@ void checkTheIntegrityOfTheConfigurationFiles();
 void retrieveTheLandingDirectory();
 void retrieveTheComputerName();
 void checkTheIntegrityOfTheComputerName(string &computerName);
-string createTheNameOfTheBackup(string &backupLabelName);
-double getApproxSizeOfBackupBeforeTaringIt();
 void checkThatThereIsEnoughDiskSpaceToPerformTheBackup();
 void createAListOfFilesThatHaveChangedOrAreNew();
 void createAScriptThatWillPerformTheBackup();
@@ -208,21 +208,12 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
     /* in the backup and retains only the ones that you do want to backup */
     while (getline(analyzeFilesToKeepHandle,lineToKeepOrPitch))
     {
-        //dcout<<"lineToKeepOrPitch = \n"<<lineToKeepOrPitch<<endl;
         if (fileIsWantedBecauseBeginningOfPathIsOk(lineToKeepOrPitch) &&
             fileIsWantedBecauseEndingPathIsOk(lineToKeepOrPitch) &&
             fileIsWantedBecauseEntirePathIsOk(lineToKeepOrPitch))
         {
             /* the file made the cut, so we want it in the backup. */
-            //dcout<<"retain"<<endl;
             filteredChangedAndNewFilesHandle<<lineToKeepOrPitch<<endl;
-        }
-        else
-        {
-            /* discard the file because we do not want it in the backup*/
-            //dcout<<"Skip this file so it won't be a part of the backup\n"
-            //     <<lineToKeepOrPitch<<endl;
-            //dcout<<"discard"<<endl;
         }
     }
     analyzeFilesToKeepHandle.close();
@@ -644,8 +635,8 @@ void createAListOfFilesThatHaveChangedOrAreNew()
             <<left<<setw(18)<<percentageSearched.str()
             <<"     \r";
             cout.flush();
-            //do not delete this next line.  When uncommented it shows every
-            //percentage line one after another
+            //for debugging -
+            //when uncommented it shows every percentage line one after another
             //cout<<endl;
         }
     }
@@ -876,7 +867,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab2<<"break"<<endl
     <<tab1<<"fi"<<endl // done if the file "theTarCommandIsDone"
 
-    //<<"echo done with tar command"<<endl
+    // this concludes the tar command
     <<tab0<<"done"<<endl<<endl
 
     /* Save the total size of all of the files to be encrypted.  This is */

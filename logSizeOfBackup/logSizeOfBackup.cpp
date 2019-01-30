@@ -32,6 +32,7 @@ using namespace std;
 /********************/
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 
 /*******************************/

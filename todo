@@ -1,44 +1,12 @@
-// ensure all handles from ifstream and ofstream are closed  
+// ensure all from static libraries are used
   // DONE actOnCcryptStatus
   // DONE actOnTarStatus
-  // DONE backup
-  // logSizeOfBackup
+  // backup
+  // DONE logSizeOfBackup
   // restore
   // staticLibrary__fileUtilities
   
-// remove all unused code
-  // actOnCcryptStatus
-  // actOnTarStatus
-  // backup
-  // logSizeOfBackup
-  // restore
-  // staticLibrary__fileUtilities
-
-// remove all unused comments
-  // actOnCcryptStatus
-  // actOnTarStatus
-  // backup
-  // logSizeOfBackup
-  // restore
-  // staticLibrary__fileUtilities
-
 // ensure all declared file scope variables are used
-  // actOnCcryptStatus
-  // actOnTarStatus
-  // backup
-  // logSizeOfBackup
-  // restore
-  // staticLibrary__fileUtilities
-
-// ensure all prototypes are used
-  // actOnCcryptStatus
-  // actOnTarStatus
-  // backup
-  // logSizeOfBackup
-  // restore
-  // staticLibrary__fileUtilities
-
-// ensure all enumerated values are used
   // actOnCcryptStatus
   // actOnTarStatus
   // backup
@@ -53,7 +21,6 @@
   // logSizeOfBackup
   // restore
   // staticLibrary__fileUtilities
-
 
 // modify install.sh to install packages for debian
 // modify install.sh to install packages for arch
@@ -396,6 +363,38 @@ void test__existenceOfAFile()
   // DONE staticLibrary__fileUtilities
 
 42 // ensure all #includes are used
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities
+
+43 // ensure all handles from ifstream and ofstream are closed  
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities
+
+44 // ensure all #defines, enumerated values and structures members are used
+  // N/A actOnCcryptStatus
+  // N/A actOnTarStatus
+  // N/A backup
+  // N/A logSizeOfBackup
+  // N/A restore
+  // DONE staticLibrary__fileUtilities
+
+45 // remove all unused code
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities
+
+46 // ensure all prototypes are used
   // DONE actOnCcryptStatus
   // DONE actOnTarStatus
   // DONE backup

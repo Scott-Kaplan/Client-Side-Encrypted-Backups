@@ -36,6 +36,7 @@ using namespace std;
 #include <sstream>
 #include <unistd.h>
 #include <string.h>
+#include <cstdlib>
 
 /***********************/
 /***** Share these *****/
@@ -85,7 +86,6 @@ extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);
-
 extern "C" void displayCommandLineArgumentsAreWrong(int argc,
                                                     char * const argv[],
                                                     string &purpose);
@@ -279,9 +279,9 @@ void deleteFile(string &filename)
 
 void getGlobalStrings(globalStringS &globalString, string &purpose)
 {
-    /* examples for the next line equate to one of these - */
-    /* "$HOME/.cloudbuddy/backup/" - if it's backing up */
-    /* "$HOME/.cloudbuddy/restore/" -  if it's restoring */
+    /* examples for the next line equate to one of these -    */
+    /* "$HOME/.cloudbuddy/backup/"  - when backing up         */
+    /* "$HOME/.cloudbuddy/restore/" - when restoring a backup */
     globalString.basePath = "$HOME/.cloudbuddy/"+purpose+"/";
 
     globalString.theTarCommandIsDone =
@@ -481,7 +481,6 @@ void retrieveUsernameAndDomain(string &username, string &domain,
                    fillUsernameAndDomainHandle);
     while (getline(fillUsernameAndDomainHandle,line))
     {
-        //dcout<<line<<endl;
         removeLeadingWhiteSpaces(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
@@ -523,7 +522,7 @@ void clearTheTerminalWindow()
 void extractPathAndFileName
                         (string &stringToParse, string &path, string &fileName)
 {
-    /* there is no directory, it's just the filename*/
+    /* there is no directory, it's just the filename */
     if (stringToParse.find('/') == string::npos)
     {
         fileName = stringToParse;

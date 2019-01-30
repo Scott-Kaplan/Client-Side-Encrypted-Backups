@@ -62,9 +62,7 @@ typedef struct
     string basePath;
     string deleteAllFilesInTheBackupDirectory;
     string deleteAllFilesInTheRestoreDirectory;
-    string theBackupPath;
     string theTarCommandIsDone;
-    string tarProcessId;
     string killTheTarProcess;
     string fileThatContainsTheTarProcessId;
     string killTheTarStatusProcess;

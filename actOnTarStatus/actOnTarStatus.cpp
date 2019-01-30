@@ -31,10 +31,12 @@ using namespace std;
 /***** Includes *****/
 /********************/
 #include <iostream>
-#include "../staticLibrary__fileUtilities/fileUtilities.h"
 #include <fstream>
-#include <iomanip> // setw() - sets column width of a field
-#include <sys/stat.h> // support for stat()
+#include <iomanip>
+#include <sys/stat.h>
+#include <cstdlib>
+#include <sstream>
+#include "../staticLibrary__fileUtilities/fileUtilities.h"
 
 /*******************************/
 /***** From Static Library *****/

@@ -32,9 +32,11 @@ using namespace std;
 /********************/
 #include <iostream>
 #include <fstream>
-#include "../staticLibrary__fileUtilities/fileUtilities.h"
-#include <iomanip> // setw() - sets column width of a field
+#include <iomanip>
 #include <signal.h>
+#include <cstdlib>
+#include <sstream>
+#include "../staticLibrary__fileUtilities/fileUtilities.h"
 
 /*******************************/
 /***** From Static Library *****/
@@ -44,18 +46,12 @@ extern "C" void openForReading(string &path,
                                string fromFileName,
                                int fromLineNumber,
                                ifstream &readFileHandle);
-extern "C" void openForWriting(string &path,
-                               string fromFileName,
-                               int fromLineNumber,
-                               ofstream &writeFileHandle,
-                               FileWritingType FileWritingType);
 extern "C" bool fileExist(string &lookupFilePath,
                           string fromFileName,
                           int fromLineNumber,
                           string resultsDirectory);
 extern "C" bool fileIsEmpty(string &path);
 extern "C" double getSizeOfFile(string &path);
-extern "C" string getFileName(string &path);
 
 /********************************/
 /***** File Scope Variables *****/
@@ -74,20 +70,15 @@ string encryptionStartedPath="";
 /*******************************/
 void checkTheCommandLineArguments(int argc, char * const argv[]);
 void checkThatTheUserFinishedEnteringTheirCcryptPassword();
-void testIfTheBackupHasBeenFullyEncrypted();
 void checkThatTheTerminalWindowIsStillOpen();
 bool ccryptHasStarted();
 bool ccryptIsInProcessTable();
-void calculateAndShowTheEncryptionPercentageComplete();
 void display(double ccryptPercentageComplete);
 void displayTitleOfCcryptProgress();
 void extractPaths();
 void displayCcryptStatus();
-bool ccryptFinished();
 bool decryptionInProgress();
 bool encryptionInProgress();
-bool decryptHadStarted();
-bool encryptHadStarted();
 
 /*********************/
 /***** Functions *****/
