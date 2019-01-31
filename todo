@@ -1,24 +1,8 @@
-// ensure all from static libraries are used
+// ensure all comments are accurate
   // DONE actOnCcryptStatus
-  // DONE actOnTarStatus
+  // actOnTarStatus
   // backup
   // DONE logSizeOfBackup
-  // restore
-  // staticLibrary__fileUtilities
-  
-// ensure all declared file scope variables are used
-  // actOnCcryptStatus
-  // actOnTarStatus
-  // backup
-  // logSizeOfBackup
-  // restore
-  // staticLibrary__fileUtilities
-
-// ensure all comments are accurate
-  // actOnCcryptStatus
-  // actOnTarStatus
-  // backup
-  // logSizeOfBackup
   // restore
   // staticLibrary__fileUtilities
 
@@ -401,3 +385,20 @@ void test__existenceOfAFile()
   // DONE logSizeOfBackup
   // DONE restore
   // DONE staticLibrary__fileUtilities
+
+47 // ensure all from static libraries are used
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities
+
+48 // ensure all declared file scope variables are used
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities
+  

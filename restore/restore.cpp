@@ -38,22 +38,14 @@ using namespace std;
 /*******************************/
 /***** From Static Library *****/
 /*******************************/
-extern "C" string getTimestamp();
 extern "C" void retrieveUsernameAndDomain
             (string &username, string &domain, string &usernameAndDomainPath);
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
-extern "C" bool fileExist(string &lookupFilePath,
-                          string fromFileName,
-                          int fromLineNumber,
-                          string resultsDirectory);
-extern "C" void clearTheTerminalWindow();
 extern "C" void openForWriting(string &path,
                                string fromFileName,
                                int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
-void createRestoreDirectory();
-extern "C" string getFileName(string &path);
 extern "C" void extractPathAndFileName
                         (string &stringToParse, string &path, string &fileName);
 extern "C" void writeCleanUpAndExitFunction
@@ -94,6 +86,7 @@ void createAScriptTheWillRestoreTheBackup();
 void runTheScriptThatRestoresTheBackup();
 void deleteAllFilesIntheRestoreDirectory();
 void checkTheConfigurationFileIntegrity();
+void createRestoreDirectory();
 
 /*********************/
 /***** Functions *****/

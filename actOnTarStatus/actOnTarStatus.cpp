@@ -52,8 +52,6 @@ extern "C" double getSizeOfFile(string &path);
 /***** File Scope Variables *****/
 /********************************/
 globalStringS globalString;
-string theBackupPath="";
-string estimatedSizeOfTheTarBall="";
 string purpose="";
 
 /*******************************/

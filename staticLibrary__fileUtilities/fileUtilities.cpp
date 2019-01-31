@@ -59,8 +59,6 @@ extern "C" string getStringUnder(int columnNumberWanted,
                                  string &lineToBeParsed);
 extern "C" double getTotalLinesInFile(string &pathToCountLines);
 extern "C" double getSizeOfFile(string &path);
-extern "C" string getFileName(string &path);
-extern "C" string getTimestamp();
 extern "C" void retrieveUsernameAndDomain(string &username, string &domain,
                                           string &retrieveUsernameAndDomain);
 extern "C" void removeLeadingWhiteSpaces(string &line);
@@ -417,55 +415,6 @@ double getSizeOfFile(string &path)
     size = ftell(p_file);
     fclose(p_file);
     return size;
-}
-
-string getFileName(string &path)
-{
-    string fileName = "";
-    char sep = '/';
-    size_t i = path.rfind(sep, path.length());
-    if (i != string::npos)
-    {
-        fileName = (path.substr(i+1, path.length() - i));
-    }
-    return fileName;
-}
-
-string getTimestamp()
-{
-    struct tm *loctime; // the current time
-    char month[4];
-    char day[4];
-    char year[6];
-    char hour[4];
-    char minute[4];
-    char second[4];
-    char middayMarking[4]; // AM or PM
-    time_t secondsSince1970;
-
-    // Get the current time
-    secondsSince1970 = time (NULL);
-
-    // Convert local time representation
-    loctime = localtime (&secondsSince1970);
-
-    strftime (month,4,"%m",loctime);            // get the month
-    strftime (day, 4, "%d", loctime);           // get the day
-    strftime(hour, 4, "%I", loctime);           // get the hour
-    strftime(minute, 4, "%M", loctime);         // get the minute(s)
-    strftime(second, 4, "%S", loctime);         // get the second(s)
-    strftime(middayMarking, 4, "%P", loctime);  // get am or pm
-    strftime (year, 6, "%Y", loctime);          // get the year
-
-    ostringstream currentTime;
-    currentTime<<   year<<"_"<<
-                    month<<"_"<<
-                    day<<"__"<<
-                    hour<<"_"<<
-                    minute<<"_"<<
-                    second<<
-                    middayMarking;
-    return currentTime.str();
 }
 
 void retrieveUsernameAndDomain(string &username, string &domain,

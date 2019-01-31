@@ -120,10 +120,6 @@ string backupScriptPath =
         "$HOME/.cloudbuddy/backup/backupScript";
 string remainingSizeInHomeDirectoryPath =
         "$HOME/.cloudbuddy/backup/remainingSizeOnTheDrive";
-string capturedTerminalOutput =
-        "$HOME/.cloudbuddy/backup/capturedTerminalOutput";
-string tarPercentageCompletePath =
-        "$HOME/.cloudbuddy/backup/tarPercentageCompletePath";
 string computerName="";
 string backupLabelName="";
 string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "44";

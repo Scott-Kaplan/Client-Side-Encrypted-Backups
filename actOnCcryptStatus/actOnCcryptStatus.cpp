@@ -56,7 +56,6 @@ extern "C" double getSizeOfFile(string &path);
 /********************************/
 /***** File Scope Variables *****/
 /********************************/
-string backupTarBall="";
 globalStringS globalString;
 string backupTarBallPath="";
 string purpose="";
@@ -71,7 +70,7 @@ string encryptionStartedPath="";
 void checkTheCommandLineArguments(int argc, char * const argv[]);
 void checkThatTheUserFinishedEnteringTheirCcryptPassword();
 void checkThatTheTerminalWindowIsStillOpen();
-bool ccryptHasStarted();
+bool encryptionOrDecryptionHasStarted();
 bool ccryptIsInProcessTable();
 void display(double ccryptPercentageComplete);
 void displayTitleOfCcryptProgress();
@@ -106,21 +105,21 @@ void checkTheCommandLineArguments(int argc, char * const argv[])
 
 void checkThatTheUserFinishedEnteringTheirCcryptPassword()
 {
-    /* Test to see if the user has finished entering their encryption password*/
-    /* If they haven't then these will be true - */
-    /* 1) This means that encrypting the backup tar ball has not started yet, */
-    /*    so there won't be a <backup tarball>.cpt file */
-    /* 2) and ccrypt is listed in the process table as it is is still running */
-    /*    waiting for the user to enter or re-enter their encryption password */
-    /* When 1) and 2) are both true, do not display a ccrypt status, just exit*/
-    /* as this will give the user as much time as he/she needs. */
-    if (!ccryptHasStarted() && ccryptIsInProcessTable())
+    /* Test to see if the user has finished entering their encryption */
+    /* password.  If the user hasn't this will be true - */
+    /* 1) encrypting the backup tar ball has not started yet, so there won't */
+    /*    be a <backup tarball>.cpt file */
+    /* 2) ccrypt is listed in the process table (it is waiting for the user */
+    /*    to enter or re-enter the encryption password) */
+    /* When 1) and 2) are both true, do not display a ccrypt status, just */
+    /* exit */
+    if (!encryptionOrDecryptionHasStarted() && ccryptIsInProcessTable())
     {
         exit(EXIT_SUCCESS);
     }
 }
 
-bool ccryptHasStarted()
+bool encryptionOrDecryptionHasStarted()
 {
     bool ccryptHasStartedFlag = false;
     if ((purpose == "backup") && encryptionInProgress())
@@ -141,8 +140,8 @@ bool ccryptHasStarted()
 bool encryptionInProgress()
 {
     bool encryptionIsInProgress = false;
-    /* As soon as encryption begins, a *.cpt file is created */
-    /* if not started a *.cpt file will be absent */
+    /* As soon as encryption begins, a *.cpt file is created otherwise its */
+    /* absent */
     if (fileExist(encryptedBackupPath,__FILE__,__LINE__,purpose))
     {
       encryptionIsInProgress = true;
@@ -153,8 +152,8 @@ bool encryptionInProgress()
 bool decryptionInProgress()
 {
     bool decryptionIsInProgress = false;
-    /* As soon as decryption begins, a backup without the .cpt file is */
-    /* created. If not started a backup without the .cpt file will be absent */
+    /* As soon as decryption begins, a backup without the .cpt extension is */
+    /* created. Otherwise its absent */
     if (fileExist(encryptedBackupPath,__FILE__,__LINE__,purpose))
     {
       decryptionIsInProgress = true;
@@ -218,8 +217,8 @@ void checkThatTheTerminalWindowIsStillOpen()
     terminalPidHandle.close();
     if (kill(atoi(pidString.c_str()), 0) != 0)
     {
-        /* the user closed the terminal window, */
-        /* so kill this ccrypt status process   */
+        /* the user closed the terminal window, so kill this ccrypt status */
+        /* process */
         if(system(globalString.killTheCcryptStatusProcess.c_str()));
         exit(EXIT_SUCCESS);
     }
@@ -295,7 +294,8 @@ void display(double ccryptPercentageComplete)
         // since encryption is done, display green checkmark and set to kill
         // this background process
         ccryptPercentageCompleteString<<
-            // Note:  15 extra trailing spaces are here to clobber any prior
+            // Note:  15 extra trailing spaces are here to clobber anything in
+            //        this position prior
             //        xx.xxxxxx%
             "Done \033[0;32m\xE2\x9C\x94\033[0m               "<<endl;
         killThisProcess=true;
