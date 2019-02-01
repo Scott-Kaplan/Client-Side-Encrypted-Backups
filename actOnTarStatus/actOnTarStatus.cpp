@@ -101,36 +101,28 @@ void actOnTarCommand()
     {
         /* tar finished */
 
-        // Notes on all the possible scenarios
+        // Notes on all the possible scenarios that gets us to this execution
+        // point -
 
         // Case 1
         // The user closed the terminal window before the tar command could
-        // finish. There is no further action in this binary since the terminal
-        // window no longer exists.
+        // finish.
 
         // Case 2
         // The tar command finished successfully.  This is known by checking the
-        // output of tar in the 'backup' program and getting the expected
-        // output.  It displays 100% complete in the 'backup' program once it
-        // finishes successfully.  There is no further action in this binary.
+        // output of tar with the expected output.  "100%" is displayed.
 
         // Case 3
         // The tar command did not finish successfully.  This is known by
-        // checking the output of tar in the 'backup' program and getting
-        // unexpected output.  It does not display 100% complete even if the
-        // user elects to continue.  If they want to cancel the backup, the
-        // entire backup directory contents are deleted and the process id of
-        // both tar and ccrypt are killed if either were active.  There is no
-        // further action in this binary.
+        // checking the output of tar and getting unexpected output.  It does
+        // not display 100% complete even if the user elects to continue the
+        // backup/restore
 
         // Case 4
         // The user pressed Ctrl-C while the tar command was in process
-        // This does not close the terminal window.  Instead the behavior is
-        // to cleanup and terminate the script.
-        // There is no further action in this binary since this is caught in
-        // the 'backup' program
+        // This does not close the terminal window.
 
-        /* kill this tar status process */
+        /* kill this process */
         if(system(globalString.killTheTarStatusProcess.c_str()));
 
         /* create an empty theTarCommandIsDone file, this acts as a marker */
@@ -145,8 +137,7 @@ void actOnTarCommand()
         /* tar is still running */
 
         /* extract the name of the backup with path, this will always exist */
-        /* even when its finished, so no need to worry about when tar */
-        /* finishes and there is no process id */
+        /* even when tar finishes */
         string theBackupPath="";
         ifstream fileContainingTheNameOfTheBackupWithPathHandle;
         openForReading(
@@ -155,7 +146,7 @@ void actOnTarCommand()
         getline(fileContainingTheNameOfTheBackupWithPathHandle,theBackupPath);
         fileContainingTheNameOfTheBackupWithPathHandle.close();
 
-        /* get the current size of the Tar Ball */
+        /* get the current size of the tar ball */
         double currentSizeOfTheTarBall = getSizeOfFile(theBackupPath);
 
         /* extract the projected size of the tar ball */
@@ -167,7 +158,7 @@ void actOnTarCommand()
         getline(projectedSizeOfTheTarBallHandle,projectedSizeOfTheTarBall);
         projectedSizeOfTheTarBallHandle.close();
 
-        /* divide current size by projected size */
+        /* divide the current size by the tar ball by the projected size */
         double projectedSizeOfTheTarBallDouble =
                                         atof(projectedSizeOfTheTarBall.c_str());
         double tarPercentageComplete =

@@ -137,8 +137,6 @@ void openForWriting(string &path,
 
 void convert$HOME(string &path)
 {
-    /* $HOME varies dependent on the directory that the binary is called from */
-    /* need to always make that this is the user's home directory */
     if (path.substr(0,5)=="$HOME")
     {
         string remainingStringAfter$HOME=path.substr(5);
@@ -160,23 +158,21 @@ bool fileExist(string &lookupFilePath,
 {
     /* the examples below are to list just a specific file (no directories) */
 
-    // example in current directory
+    // example) search for a file while in its directory
     // ls -ap | grep -v / | grep "filename" > results 2>&1
 
-    // success
     // ls -ap "PathUpToFileName"| grep -v / | grep "filename" > results 2>&1
-    // saves
-    // filename
+    // input: filename exists
+    // output: filename gets saved into the results file
 
-    // successful failure because filename1 doesn't exist
     // ls -ap "PathUpToFileName" | grep -v / | grep "filename1" > results 2>&1
-    // saves
-    // nothing as expected
+    // input: filename1 doesn't exist
+    // output: nothing saved into the results file
 
-    // successful failure because Movies is a directory
     // ls -ap "PathUpToFileName" | grep -v / | grep "Movies" > results 2>&1
-    // saves
-    // nothing as expected
+    // input: Movies is a directory
+    // output: nothing saved into the results file
+
     convert$HOME(lookupFilePath);
     globalStringS globalString;
     getGlobalStrings(globalString,resultsDirectory);
@@ -195,13 +191,17 @@ bool fileExist(string &lookupFilePath,
                                             +"\" > "+fileExistResults+" 2>&1";
     if(system(fileExistCmd.c_str()));
     bool theFileExists = false;
-    // The above command only looks for substrings rather than entire strings
-    // So say as an example for 'howdy', it could yield these 4 lines-
+    // The above command only searches for substrings rather than entire strings
+    // The above command searching for say 'howdy', could yeilds hist like
+    //
     // howdy1~
     // howdy1
     // howdyBk
     // howdy
-    // So, out of these 4, only return true if an entire line is just 'howdy'
+    //
+    // from these above 4 hits, we only want to return true if the whole line
+    // is 'howdy'
+    //
     ifstream exactMatchHandle;
     string line="";
     openForReading(fileExistResults,__FILE__,__LINE__,exactMatchHandle);
@@ -223,23 +223,23 @@ bool directoryExist(string &lookupDirectoryPath,
                int fromLineNumber,
                string resultsDirectory)
 {
-    // example in current directory
+    // example) search for a directory while in its directory
     // ls -d Videos/ > results 2>&1
 
-    // success
     // ls -d "$HOME/Videos/" > results 2>&1
-    // saves
-    // Videos/
+    // input: the Videos directory exists
+    // output: Videos/ gets saved in the results file
 
     // successful failure because filename is a file
     // ls -d "$HOME/filename/" > results 2>&1
-    // saves
-    // ls: cannot access filename/: Not a directory
+    // input: filename is a file
+    // output: This gets saved in the results file -
+    //         ls: cannot access filename/: Not a directory
 
-    // successful failure because Videos1 is not a directory
     // ls -d "$HOME/Videos1/" > results 2>&1
-    // saves
-    // ls: cannot access Videos1/: No such file or directory
+    // input: the Videos1 directory does not exist
+    // output: This gets saved in the results file -
+    //         ls: cannot access Videos1/: No such file or directory
 
     convert$HOME(lookupDirectoryPath);
     globalStringS globalString;
@@ -277,9 +277,9 @@ void deleteFile(string &filename)
 
 void getGlobalStrings(globalStringS &globalString, string &purpose)
 {
-    /* examples for the next line equate to one of these -    */
-    /* "$HOME/.cloudbuddy/backup/"  - when backing up         */
-    /* "$HOME/.cloudbuddy/restore/" - when restoring a backup */
+    /* examples for the next line equate to one of these - */
+    /* "$HOME/.cloudbuddy/backup/"  - when the user is backing up */
+    /* "$HOME/.cloudbuddy/restore/" - when the user is restoring */
     globalString.basePath = "$HOME/.cloudbuddy/"+purpose+"/";
 
     globalString.theTarCommandIsDone =
@@ -488,10 +488,11 @@ void extractPathAndFileName
 
 void saveTheTerminalPid(string &purpose)
 {
-    /* the purpose of this function is to have the ability to check whether */
-    /* the user closed the terminal window during an encryption/decryption. */
-    /* In this case, the background process showing the encryption/decryption */
-    /* status will get canceled (killed) */
+    /* The purpose of this function is to have the ability to check whether */
+    /* the user closed the terminal window through the terminal process id */
+    /* during an encryption/decryption.  When this occurs, the background */
+    /* process for backup/restore status is killed (so it doesn't otherwise */
+    /* run forever) */
 
     globalStringS globalString;
     getGlobalStrings(globalString,purpose);
@@ -546,13 +547,13 @@ void writeCleanUpFunction(string &purpose, ofstream &scriptHandle)
     }
 
     scriptHandle
-    /* if the user Ctrl-C'd while either tar or ccrypt was going the */
+    /* If the user Ctrl-C'd while either tar or ccrypt was going the */
     /* terminal window won't show the cursor because it was explicity removed */
-    /* so that the progress percentage wouldn't show the cursor blinking. */
-    /* This brings it back. */
+    /* so that the progress percentage wouldn't show it blinking. */
+    /* This brings the cursor back. */
     <<tab1<<"tput cnorm"<<endl
 
-    /* in case echo'ing of what's typed in ceases, this brings it back */
+    /* in case echo'ing of what is typed in ceases, this brings it back */
     <<tab1<<"tset"<<endl
 
     /* end the cleanUp function*/
@@ -629,7 +630,7 @@ void displayCommandLineArgumentsAreWrong(int argc,
         commandLineArgs+=argv[i];
     }
 
-    // examples:
+    // examples of wrong usage:
     // > backup howdy there
     // > restore /that_directory/howdy howdy
     cout<<"> "<<purpose<<commandLineArgs<<endl;

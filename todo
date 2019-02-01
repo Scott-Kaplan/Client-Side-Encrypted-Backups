@@ -1,10 +1,10 @@
 // ensure all comments are accurate
   // DONE actOnCcryptStatus
-  // actOnTarStatus
+  // DONE actOnTarStatus
   // backup
   // DONE logSizeOfBackup
   // restore
-  // staticLibrary__fileUtilities
+  // DONE staticLibrary__fileUtilities
 
 // modify install.sh to install packages for debian
 // modify install.sh to install packages for arch
