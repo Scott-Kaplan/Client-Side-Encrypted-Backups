@@ -84,7 +84,7 @@ extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);
-extern "C" void displayCommandLineArgumentsAreWrong(int argc,
+extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 
@@ -619,7 +619,7 @@ void checkThatThereAreNoWhiteSpaces(string &line, string lineTitle,
     }
 }
 
-void displayCommandLineArgumentsAreWrong(int argc,
+void displayIncorrectCommandLineArguments(int argc,
                                          char * const argv[],
                                          string &purpose)
 {

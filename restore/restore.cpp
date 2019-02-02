@@ -57,7 +57,7 @@ extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void convert$HOME(string &path);
 extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
                                                            string &purpose);
-extern "C" void displayCommandLineArgumentsAreWrong(int argc,
+extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 
@@ -124,10 +124,10 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
     if (argc != 2)
     {
-        // Examples of what is expected
+        // Examples of what is expected -
         // > restore /uploads/e6230**2018-06-26__09:26pm
         // > restore /uploads/e6230**pics-of-aunt-mary**2018-06-26__09:26pm
-        displayCommandLineArgumentsAreWrong(argc,argv,purpose);
+        displayIncorrectCommandLineArguments(argc,argv,purpose);
         displayUsage();
     }
 
@@ -135,7 +135,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
     /* with checking the validity of the parameter. */
     nameOfEncryptedBackupWhichIncludesPath = argv[1];
 
-    /* display what the user typed in to launch*/
+    /* echo what the user typed in to run this binary */
     cout<<"> restore "<<nameOfEncryptedBackupWhichIncludesPath<<endl;
 
     extractPathAndFileName
@@ -223,31 +223,24 @@ void createAScriptTheWillRestoreTheBackup()
     <<"<<END_SCRIPT"<<endl
     <<tab0<<"cd "<<directoryThatTheEncryptedBackupIsIn<<endl
     <<tab0<<"get "<<nameOfEncryptedBackup<<endl
-    // The next line
-    // creates an empty file named "transfer-complete" once the 'get' command
-    // finishes successfully. The file won't be created if any of the following
-    // failures occurred -
+    // The next line creates an empty file named "transfer-complete" once the
+    // 'get' command finishes successfully. The file won't be created if any of
+    // the following failures occurred -
     // 1) An incorrect sftp server, sftp username or sftp password is entered
     // 2) A Ctrl-C is entered during the transfer
-    // 3) The session hangs.  In this case the user will likely close the window
+    // 3) The session hangs.  In this case the user will have likely closed
+    //    the window.
     // 4) There is an unknown error either on the server or on the local
-    //    machine. In this case, the file wouldn't be created. The behavior
-    //    would be the same as entering Ctrl-C as 'get' would have to finish in
-    //    order for execution to resume to this line and create the file.  The
-    //    reason for this is the sftp is in a script itself and if an error was
-    //    encountered, execution would exit the script and not get a chance to
-    //    create this file.
+    //    machine
     <<tab0<<"!command touch transfer-complete"<<endl
     // The next line ends the sftp script
     <<tab0<<"END_SCRIPT"<<endl<<endl
     <<tab0<<"echo"<<endl<<endl
-    /* If the backup to be downloaded wasn't found, the transfer-complete */
-    /* file still gets created since the 'get' command still finished */
-    /* successfully even though nothing was downloaded.  The */
-    /* 'transfer-complete' file is checked here in case the transfer was */
-    /* interrupted. */
+    // The next line checks that the get command finished successfully.
     <<tab0<<"if [ ! -e \"transfer-complete\" ] || [ ! -e \""<<restoreDirectory
           <<nameOfEncryptedBackup<<"\" ]; then "<<endl
+    // Note that the next line can be additionally reached when the backup
+    // wasn't found
     <<tab1<<"echo Error: Unable to locate the backup '\""
           <<nameOfEncryptedBackupWhichIncludesPath<<"\"'"<<endl
     <<tab1<<"echo"<<endl
@@ -265,24 +258,20 @@ void createAScriptTheWillRestoreTheBackup()
     <<"done & echo $! > "<<globalString.fileThatContainsTheCcryptStatusProcessId
     <<")"<<endl<<endl
 
-    /* rename the encrypted backup to have the natural .cpt extension on it */
-    /* the reason for doing this is to have the ability to exit the script */
+    /* Rename the encrypted backup to have the natural .cpt extension on it. */
+    /* The reason for doing this is to have the ability to exit the script */
     /* if the user enters the wrong decryption password and is therefore */
     /* unable to decrypt their backup */
     <<"mv "<<nameOfEncryptedBackup<<" "<<nameOfEncryptedBackup<<".cpt"<<endl
 
     /* decrypt the backup */
-    // Note: With the below decryption command, the temporary file created
-    // (after it has started & before it finishes) has a different suffix each
-    // time the decryption command is run. There will be two files when not done
-    // and one once decryption finishes.
     <<tab0<<"echo \"About to start decrypting your backup ...\""<<endl
     <<tab0<<"echo"<<endl<<"ccrypt -d -f -T "<<nameOfEncryptedBackup<<".cpt"
     <<endl<<endl
 
     /* Ensure the user sucessfully decrypted the backup.  If not, mention it */
-    /* and exit the script.  Note that the .cpt is dropped off the backup */
-    /* only after it has been decrypted*/
+    /* and exit the script.  Note that the .cpt extension is dropped from the */
+    /* backup only after the backup has been fully decrypted */
     <<tab0<<"if [ ! -f \""<<nameOfEncryptedBackup<<"\" ]; then "<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
@@ -310,14 +299,14 @@ void createAScriptTheWillRestoreTheBackup()
     <<endl
 
     /* create destination directory that the backup will be restored in */
-    // It is necessary to delete and start from nothing when restoring a backup
-    // because untar progress % complete will initially show greater than
-    // 100% otherwise
+    // It is necessary to start the reference point from zero when showing the
+    // untar percentage complete, otherwise it would initially show greater than
+    // 100%
     <<tab0<<"rm -rf "<<restorePath<<endl
     <<tab0<<"mkdir "<<restorePath<<endl<<endl
 
-    /* untar the backup.  Do this in the background so the tar command */
-    /* progress (percentage complete) can be given in the foreground */
+    /* untar the backup.  Do this in the background so the untar percentage */
+    /* complete can be given in the foreground */
     // example:
     // (tar jxf nameOfEncryptedBackup --force-local -C restorePath >
     // resultsPath 2>&1 & echo $! > pathThatContainsTheTarProcessId)
@@ -328,7 +317,8 @@ void createAScriptTheWillRestoreTheBackup()
     // the next line restores the backup to the specified location
     <<" -C "<<restorePath
     // the next line sends all output from executing the tar command to a file
-    // so the output can be analyzed to see if tar returned something unexpected
+    // so the output can be analyzed to see if untar returned something
+    // unexpected
     <<" > "<<globalString.resultsOfTarCommand<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
     // When untar'ing large tarballs the pecentage complete is very useful,
@@ -356,36 +346,30 @@ void createAScriptTheWillRestoreTheBackup()
     /* output of the tar command */
     <<tab1<<"if [ -e \""<<globalString.theTarCommandIsDone<<"\" ]; then"<<endl
 
-    /* bring the cursor back now that tar is done */
+    /* bring the cursor back now that untar is done */
     <<tab2<<"tput cnorm"<<endl
 
-    /* Get the size of the output from tar.  If it is different than expected */
-    /* which is "Removing leading `/' from member names", as the user whether */
-    /* he/she wants to proceed with the backup.  If it's the same display,    */
-    /* 100% complete */
+    /* Get the size of the output from untar which is expected to be nothing */
     <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
     <<endl
+
+    /* The backup may have not been successfully restored */
     <<tab2<<"if [ $sizeOfFile -ne "
           <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
           <<endl
     <<tab3<<"echo"<<endl
-    <<tab3<<"echo $sizeOfFile"<<endl
-    <<tab3<<"echo"<<endl
-    <<tab3<<"echo"<<endl
-    <<tab3<<"echo Warning: Normally, the output from running the tar command "
-          <<"would have been -"<<endl
-    <<tab3<<"echo "<<startUnderline<<endl
-    <<tab3<<"printf \""<<expectedOutputFromRunningTheTarCommand<<"\""<<endl
-    <<tab3<<"echo "<<endUnderline<<endl
+    <<tab3<<"echo WARNING - This unexpected output was found when trying to "
+    <<"restore your backup."<<endl
     <<tab3<<"echo "<<endl
-    <<tab3<<"echo "<<endl
-    <<tab3<<"echo But, instead it was - "<<endl
     <<tab3<<"echo "<<startUnderline<<endl
     <<tab3<<"while read line; do echo \"$line\"; done < "
     <<globalString.resultsOfTarCommand<<endl
     <<tab3<<"echo "<<endUnderline<<endl
-    <<tab3<<"message2=\"Do you still want to continue with the backup?\""<<endl
-    <<tab3<<"giveContinuationOptionToTheUser $message2"<<endl
+    <<tab3<<"echo "<<endl
+    <<tab3<<"echo \""<<"The attempt to restore the backup can be found here - "
+    <<restorePath<<"\""<<endl
+
+    /* The backup was successfully restored */
     <<tab2<<"else"<<endl
     // this next line is the setting for a green checkmark
     <<tab3<<"GREEN_CHECK_MARK=\"\033[0;32m\xE2\x9C\x94\033[0m\""<<endl
@@ -394,20 +378,17 @@ void createAScriptTheWillRestoreTheBackup()
     // was 100.00%, otherwise would have Done checkmark%
     <<tab3<<"echo -e \"\\rDone ${GREEN_CHECK_MARK}     \""<<endl
     <<tab3<<"echo"<<endl
-    <<tab2<<"fi"<<endl
+    <<tab3<<"echo \""<<startUnderline<<"Your backup was successfully restored"
+    <<endUnderline<<"\""<<endl
+    <<tab3<<"echo \""<<"It can be found in - "<<restorePath<<"\""<<endl
 
-    <<tab2<<"break"<<endl
+    <<tab2<<"fi"<<endl // done with analyzing the output from untar
+    <<tab2<<"break"<<endl // break from the while loop
     <<tab1<<"fi"<<endl // done with analyzing the output of the tar command
+    <<tab0<<"done"<<endl<<endl // done with the while loop
 
-    <<tab0<<"done"<<endl<<endl
-
-    /* Let the user know that the backup restored successfully */
-    <<tab0<<"echo \""<<startUnderline<<"Your backup was successfully restored"
-    <<endUnderline
-    <<"\""<<endl
-    <<tab0<<"echo \""<<"It can be found in "<<restorePath<<"\""<<endl
     <<tab0<<"echo"<<endl
-
+    // delete all files in the $HOME/.cloudbuddy/restore directory
     <<tab0<<"cleanUp"<<endl;
 
     scriptThatRestoresTheBackupHandle.close();

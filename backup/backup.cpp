@@ -81,7 +81,7 @@ extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);
-extern "C" void displayCommandLineArgumentsAreWrong(int argc,
+extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 
@@ -349,7 +349,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
         // Examples of what is expected
         // > backup no-label
         // > backup pics-of-aunt-mary
-        displayCommandLineArgumentsAreWrong(argc,argv,purpose);
+        displayIncorrectCommandLineArguments(argc,argv,purpose);
         displayUsage();
     }
     else

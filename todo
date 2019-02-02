@@ -3,7 +3,7 @@
   // DONE actOnTarStatus
   // backup
   // DONE logSizeOfBackup
-  // restore
+  // DONE restore
   // DONE staticLibrary__fileUtilities
 
 // modify install.sh to install packages for debian
