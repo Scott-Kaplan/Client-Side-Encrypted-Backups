@@ -796,7 +796,7 @@ void createAScriptThatWillPerformTheBackup()
     // binary
     <<" & echo $! > "<<globalString.fileThatContainsTheTarProcessId<<")"
     <<endl<<endl
-LEFT OFF HERE
+
     <<tab0<<"echo"<<endl
     <<tab0<<"echo \""<<startUnderline
     <<"Progress of creating a tarball of your backup"<<endUnderline<<"\""<<endl
@@ -813,20 +813,19 @@ LEFT OFF HERE
     /* get the total backup from running tar once it has finished */
     <<tab0<<"while sleep 1; do"<<endl
 
-    /* check that the file theTarCommandIsDone exists.  If so, anaylze the */
-    /* output of the tar command */
+    /* check that theTarCommandIsDone file exists.  If so, anaylze the output */
+    /* of the tar command */
     <<tab1<<"if [ -e \""<<globalString.theTarCommandIsDone<<"\" ]; then"<<endl
 
     /* bring the cursor back now that tar is done */
     <<tab2<<"tput cnorm"<<endl
 
     /* Get the size of the output from tar.  If it is different than expected */
-    /* which is "Removing leading `/' from member names", as the user whether */
-    /* he/she wants to proceed with the backup.  If it's the same, then */
-    /* display 100% complete */
+    /* which is "Removing leading `/' from member names", ask the user */
+    /* whether he/she wants to proceed with the backup.  If it's the same, */
+    /* then display 100% done when complete */
     <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
     <<endl
-
     <<tab2<<"if [ $sizeOfFile -ne "
           <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
           <<endl
@@ -851,22 +850,22 @@ LEFT OFF HERE
     <<tab2<<"else"<<endl
     // this next line is the setting for a green checkmark
     <<tab3<<"GREEN_CHECK_MARK=\"\033[0;32m\xE2\x9C\x94\033[0m\""<<endl
-    // Note: the next line with the \\r brings cursor back to the beginning
+    // Note: the next line with the \\r brings the cursor back to the beginning
     // and the 2 extra spaces overwrites the % in case the last progress output
-    // was 100.00%, otherwise would have Done checkmark%
+    // was 100.00%, otherwise it would have this instead-  Done checkmark%
     <<tab3<<"echo -e \"\\rDone ${GREEN_CHECK_MARK}     \""<<endl
     <<tab3<<"echo"<<endl
     <<tab2<<"fi"<<endl
 
     <<tab2<<"break"<<endl
-    <<tab1<<"fi"<<endl // done if the file "theTarCommandIsDone"
+    <<tab1<<"fi"<<endl // done with handling theTarCommandIsDone file
 
     // this concludes the tar command
     <<tab0<<"done"<<endl<<endl
 
     /* Save the total size of all of the files to be encrypted.  This is */
     /* needed as an input to being able to calculate the percentage complete */
-    /* of any ongoing encryption or decryption of a backup */
+    /* of any ongoing encryption/decryption of the backup */
     <<tab0<<"stat --printf=\"%s\" "<<theBackup
     <<" > sizeOfTheBackupThatsToBeEncrypted"<<endl<<endl
 
@@ -885,8 +884,8 @@ LEFT OFF HERE
     <<tab0<<"echo \"About to start encrypting your backup ...\""<<endl
     <<tab0<<"echo"<<endl<<"ccrypt -f -T "<<theBackup<<endl<<endl
 
-    /* Ensure encryption password that the user entered twice matches.  If it */
-    /* does not, mention it and exit the script */
+    /* Ensure that the encryption password that the user entered twice */
+    /* matches.  If it does not, mention it and exit the script */
     <<tab0<<"if [ ! -f \""<<theBackup<<".cpt\" ]; then "<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
@@ -911,8 +910,8 @@ LEFT OFF HERE
     <<tab0<<"mv "<<theBackup<<".cpt "<<theBackup<<endl
 
     /* Let the user know that the script is about to start running.  Let the */
-    /* user know it could take a short while to start for the ssh server to */
-    /* respond to the request */
+    /* user know it could take a short time before the sftp server responds */
+    /* to the request */
     <<tab0<<"echo"<<endl<<endl
     <<tab0<<"echo \""<<startUnderline<<"About to start the transfer"
     <<endUnderline<<"\""<<endl
@@ -920,7 +919,7 @@ LEFT OFF HERE
     <<" sftp server is contacted\""<<endl
     <<tab0<<"echo"<<endl
 
-    /* Create a script to transfer the encrypted backup to a destination */
+    /* Create a sftp script to transfer the encrypted backup to a destination */
     /* machine */
     // Use -vv in the next line if have any issues, as this shows lots of
     // debug info.  However when doing this, need to also comment out the line
@@ -941,14 +940,10 @@ LEFT OFF HERE
     // failures occurred -
     // 1) An incorrect sftp server, sftp username or sftp password is entered
     // 2) A Ctrl-C is entered during the transfer
-    // 3) The session hangs.  In this case the user will likely close the window
+    // 3) The session hangs.  In this case the user will have likely closed
+    //    the window.
     // 4) There is an unknown error either on the server or on the local
-    //    machine. In this case, the file wouldn't be created. The behavior
-    //    would be the same as entering Ctrl-C as 'put' would have to finish in
-    //    order for execution to resume to this line and create the file.  The
-    //    reason for this is the sftp is in a script itself and if an error was
-    //    encountered, execution would exit the script and not get a chance to
-    //    create this file.
+    //    machine
     <<tab0<<"!command touch transfer-complete"<<endl
     // The next line ends the sftp script
     <<tab0<<"END_SCRIPT"<<endl<<endl
@@ -977,7 +972,7 @@ LEFT OFF HERE
     <<tab0<<"echo"<<endl
 
     /* Let the user know that the backup completed successfully with a note */
-    /* of where they can find the log listing the files that were backed up */
+    /* of where they can find a log listing the files that were backed up */
     <<tab0<<"echo \""<<startUnderline<<"The backup is complete"<<endUnderline
     <<"\""<<endl
     <<tab0<<"echo \""<<"The log file ("<<logOfCompletedBackupsPath
@@ -988,7 +983,7 @@ LEFT OFF HERE
     /* end the backup script */
     backupScriptHandle.close();
 }
-
+loh
 void runTheScriptThatPerformsTheBackup()
 {
     string runTheBackupScriptCommand="/bin/bash "+backupScriptPath;
