@@ -1,17 +1,30 @@
-// ensure all comments are accurate
-  // DONE actOnCcryptStatus
-  // DONE actOnTarStatus
-  // backup
-  // DONE logSizeOfBackup
-  // DONE restore
-  // DONE staticLibrary__fileUtilities
+// modify install.sh to install packages for
+//		DONE arch
+//		DONE centos
+//		DONE debian
+//		DONE fedora
+// gentoo
+// opensuse
+// slackware
+//		DONE ubuntu
 
-// modify install.sh to install packages for debian
-// modify install.sh to install packages for arch
-// modify install.sh to install packages for fedora
-// modify install.sh to install packages for opensuse
-// modify install.sh to install packages for slackware
-// modify install.sh to install packages for gentoo
+/* place this block into install.sh */
+// distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
+// if [ $distribution eq "arch" ]; then
+//   yes | pacman -S g++ tree ccrypt
+
+// elif [ $distribution eq "centos" ]; then
+//   yum -y install g++ tree ccrypt
+
+// elif [ $distribution eq "debian" ]; then
+//   apt-get install -y g++ tree ccrypt
+
+// elif [ $distribution eq "fedora" ]; then
+//   apt-get install -y g++ tree ccrypt
+
+// elif [ $distribution eq "ubuntu" ]; then
+//   apt-get install -y g++ tree ccrypt
+// fi
 
 // copy config file 1 that has problem
 // fresh install of Client-Side-Encrypted-Backups on 16.04
@@ -402,3 +415,10 @@ void test__existenceOfAFile()
   // DONE restore
   // DONE staticLibrary__fileUtilities
   
+49 // ensure all comments are accurate
+  // DONE actOnCcryptStatus
+  // DONE actOnTarStatus
+  // DONE backup
+  // DONE logSizeOfBackup
+  // DONE restore
+  // DONE staticLibrary__fileUtilities

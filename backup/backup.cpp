@@ -983,7 +983,7 @@ void createAScriptThatWillPerformTheBackup()
     /* end the backup script */
     backupScriptHandle.close();
 }
-loh
+
 void runTheScriptThatPerformsTheBackup()
 {
     string runTheBackupScriptCommand="/bin/bash "+backupScriptPath;
@@ -994,28 +994,24 @@ double getRemainingSizeInHomeDir()
 {
     string getRemainingSizeInHomeDirCmd=
     "df ~ > "+remainingSizeInHomeDirectoryPath;
-    // 31151732  This is 31 Mega Bytes.  NOTE:  It is multiplied by 1000
-    // below to make the correct units which is Gigabytes
-
     if (system(getRemainingSizeInHomeDirCmd.c_str()));
+    // example)
+    // 31151732 (3.11 MB)
 
-    /* extract string equivalent of remaining size in Home directory */
+    /* extract string equivalent of remaining size in $HOME */
     string line="";
     ifstream remainingSizeInHomeDirectoryHandle;
     openForReading(remainingSizeInHomeDirectoryPath,
                    __FILE__,
                    __LINE__,
                    remainingSizeInHomeDirectoryHandle);
-    /* This is an example of what the file contains
+    // example)
+    // Filesystem           1K-blocks      Used Available Use% Mounted on
+    // /home/user/.Private  201453536 162199868  28997348  85% /home/user
 
-    Filesystem           1K-blocks      Used Available Use% Mounted on
-    /home/user/.Private  201453536 162199868  28997348  85% /home/user
-
-    */
     // discard the first line, as this just contains column titles
     getline(remainingSizeInHomeDirectoryHandle,line);
-    // this is the second line which contains the actual values.  This is the
-    // line that we want to parse.
+    // get the second line which contains the values
     getline(remainingSizeInHomeDirectoryHandle,line);
 
     remainingSizeInHomeDirectoryHandle.close();
@@ -1024,13 +1020,16 @@ double getRemainingSizeInHomeDir()
     string sizeRemainingInHomeDirectoryIn1KByteBlocks =
                                                     getStringUnder(4,6,line);
 
-    /* return the remaining size in the home directory by converting the */
-    /* string to a double */
+    /* return the remaining size in $HOME by converting a string into a */
+    /* double */
     char* endptr = NULL;
     double remainingSizeInHomeDirectory =
         strtod(sizeRemainingInHomeDirectoryIn1KByteBlocks.c_str(), &endptr);
+
+    /* convert from bytes to KBytes */
     int conversionFrom1KByteBlocksToBytes = 1000;
     remainingSizeInHomeDirectory *= conversionFrom1KByteBlocksToBytes;
+
     return remainingSizeInHomeDirectory;
 }
 
