@@ -182,17 +182,15 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
 {
     string lineToKeepOrPitch;
 
-    /* This contains all files that are new or have been modified since the */
-    /* last backup.  Some of these we don't want to backup.  The filtering */
-    /* code that occurs below will toss out the files that you don't want */
-    /* backed up */
+    /* This contains a list of all files that are new or have been modified */
+    /* since the last backup. */
     ifstream analyzeFilesToKeepHandle;
     openForReading(changedAndNewFilesPath,
                    __FILE__,
                    __LINE__,
                    analyzeFilesToKeepHandle);
 
-    /* this will contain only the files that we want to backup*/
+    /* this will contain only the files that we want to backup */
     ofstream filteredChangedAndNewFilesHandle;
     openForWriting(filteredChangedAndNewFilesPath,
                    __FILE__,
@@ -200,8 +198,8 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
                    filteredChangedAndNewFilesHandle,
                    NEW_FILE);
 
-    /* This is the loop that filters out all of the files that you don't want */
-    /* in the backup and retains only the ones that you do want to backup */
+    /* This is the loop that filters out all of the files that aren't wanted */
+    /* in the backup and retains only the ones that are. */
     while (getline(analyzeFilesToKeepHandle,lineToKeepOrPitch))
     {
         if (fileIsWantedBecauseBeginningOfPathIsOk(lineToKeepOrPitch) &&
@@ -215,9 +213,8 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
     analyzeFilesToKeepHandle.close();
     filteredChangedAndNewFilesHandle.close();
 
-    /* since we already have the filtered list of files that we want to */
-    /* backup, delete the unfiltered list of new and changed files that we */
-    /* started with*/
+    /* Since we now have the filtered list of files that we want to backup, */
+    /* delete the unfiltered one. */
     deleteFile(changedAndNewFilesPath);
 
     if (fileIsEmpty(filteredChangedAndNewFilesPath))
@@ -321,18 +318,17 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
             (!line.empty()))    // skip empty lines
         {
             pch = strstr(lineToKeepOrPitch.c_str(),line.c_str());
-
-            // prevents any temporary files in $HOME/.cloudbuddy/backup/
-            // from going into the backup such as (like one of these)
-            // $HOME/.cloudbuddy/backup/
-            //              fileExistLookupFrom_backup.cpp_fromLineNumber__1198
-            // $HOME/.cloudbuddy/backup/
-            //              fileExistLookupFrom_backup.cpp_fromLineNumber__459
             pch1 = strstr("/.cloudbuddy/backup/",line.c_str());
             if ((pch != NULL) || (pch1 != NULL))
             {
                 /* This file won't be backed up because it contains a string */
-                /* found in [7] don't_backup_files_that_contain_this */
+                /* found in [7] don't_backup_files_that_contain_this or it is */
+                /* a temporary file contained in $HOME/.cloudbuddy/backup/ */
+                /* such as like one of these - */
+                /* $HOME/.cloudbuddy/backup/ */
+                /*       fileExistLookupFrom_backup.cpp_fromLineNumber__1198 */
+                /* $HOME/.cloudbuddy/backup/ */
+                /*       fileExistLookupFrom_backup.cpp_fromLineNumber__459 */
                 lineWanted = false;
                 break;
             }
@@ -346,6 +342,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
     if (argc != 2)
     {
+        /* One expected parameter was not passed in. */
         // Examples of what is expected
         // > backup no-label
         // > backup pics-of-aunt-mary
@@ -354,16 +351,15 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
     }
     else
     {
-        /* the expected number of parameters (1) were passed in, so continue */
-        /* with checking the validity of the parameter. */
+        /* One parameter was passed in, so check it's validity */
         backupLabelName = argv[1];
 
-        /* display what the user typed in to launch*/
+        /* Echo what the user typed in to run this binary */
         cout<<"> backup "<<backupLabelName<<endl;
 
         if (backupLabelName != "no-label")
         {
-            /* check to make sure that the backup label name isn't too long */
+            /* check that the label isn't too long */
             if (backupLabelName.length() >= 128)
             {
                 cout<<endl<<"ERROR - the length of the second parameter can't "
@@ -371,8 +367,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
                 displayUsage();
             }
 
-            /* check that the backup label name doesn't contain illegal */
-            /* symbols */
+            /* check that the label doesn't contain illegal symbols */
             for (unsigned int i=0;i<backupLabelName.length();++i)
             {
                 if (!((isalnum(backupLabelName[i])) ||
@@ -500,7 +495,7 @@ void retrieveTheComputerName()
 
 void checkTheIntegrityOfTheComputerName(string &computerName)
 {
-    /* check to make sure that the computer name length isn't too long */
+    /* check that the computer name isn't too long */
     if (computerName.length() >= 32)
     {
         cout<<"ERROR: the length of the computer name in the file \"[4] "
@@ -540,8 +535,8 @@ string createTheNameOfTheBackup(string &backupLabelName)
     timeStampHandle.close();
     deleteFile(currentTimeStampPath);
 
-    /* set the name of the backup as it will appear on the server after the */
-    /* sftp transfer */
+    /* set the name of the backup as it will appear on the destination sftp */
+    /* server */
     string theBackup="";
     if (backupLabelName == "no-label")
     {
@@ -555,7 +550,7 @@ string createTheNameOfTheBackup(string &backupLabelName)
     return theBackup;
 }
 
-double getApproxSizeOfBackupBeforeTaringIt()
+double getSizeOfAllFilesThatWillGoIntoTheBackupPriorToTar()
 {
     ifstream listOfFilesToBeTardHandle;
     openForReading(filteredChangedAndNewFilesPath,
@@ -588,22 +583,19 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     ifstream searchThisListForChangesHandle;
     deleteFile(changedAndNewFilesPath); // Create this file from scratch below
     checkThatAllDirectoriesAndFilesInConfigFile1Exist();
-
-    /* this creates a file with a list of all files that have changed since */
-    /* the last backup was performed.  The filtering of what needs to be */
-    /* actually backed up occurs below this.*/
     openForReading(searchThisListForChangesPath,
                    __FILE__,
                    __LINE__,
                    searchThisListForChangesHandle);
     double totalLinesInConfigFile1 =
                             getTotalLinesInFile(searchThisListForChangesPath);
-
-    /* create a file that lists all files that have changed or are new before */
-    /* any filtering is done*/
     cout<<endl<<startUnderline<<"Files found (before filtering)"<<endUnderline
     <<"    "<<startUnderline<<"Files searched"<<endUnderline<<endl;
     int configFile1LinesToCheck = 0;
+
+    /* This creates a file with a list of all files that have changed since */
+    /* the last backup was performed.  Note that no filtering has occurred to */
+    /* this point. */
     for (int i=0;getline(searchThisListForChangesHandle,line);++i)
     {
         removeLeadingWhiteSpaces(line);
@@ -647,8 +639,8 @@ void createAListOfFilesThatHaveChangedOrAreNew()
         displayError(problem,correctiveAction);
     }
 
-    /* when search before filtering is done, display 100% in Files Searched */
-    /* column */
+    /* when the search before filtering completes, display 100% in the */
+    /* "Files Searched column" */
     cout
     << left << setw(34)<<getTotalLinesInFile(changedAndNewFilesPath)
     << left << setw(18)<<"100%"
@@ -667,13 +659,18 @@ void createAListOfFilesThatHaveChangedOrAreNew()
 
 void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
 {
-    // In order to be able to perform the backup, a temporary storage space of
+    // In order to be able to perform a backup, a temporary storage space of
     // 2x the size of all of the files combined to be backed up is needed.
+    //
     // The first factor is the size of the tar ball representing all the files
     // in the backup.
+    // Note that this below calculation is high because tar has not yet
+    // occurred on the files to be backed up which would compress the size.
+    //
     // The second factor is the size of that tar ball being encrypted
-    // example)
-    // Lets say all of the files combined that will go in this backup is 100MB.
+    //
+    // example -
+    // Lets say the size of all the files that will go into the backup is 100MB.
     // So, you will additionally need 2x this, which is 200MB.  This extra space
     // needed is only temporary.  As soon as the backup is transfered, the 2x
     // extra storage space is immediately freed.
@@ -681,7 +678,7 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
     int storageSpaceFactorNeeded = 2;
 
     storageSpaceOfFilesThatWillBeInTheBackup =
-                                        getApproxSizeOfBackupBeforeTaringIt();
+                        getSizeOfAllFilesThatWillGoIntoTheBackupPriorToTar();
     ofstream projectedSizeOfTheTarBallHandle;
     openForWriting(globalString.projectedSizeOfTheTarBallPath,__FILE__,__LINE__,
                    projectedSizeOfTheTarBallHandle,NEW_FILE);
@@ -705,7 +702,9 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
 
 void createAScriptThatWillPerformTheBackup()
 {
-    /* create input to the tar command with filtered changed and new files */
+    /* One parameter passed into the tar command contained in the script */
+    /* below is the filtered changed and new files.  This creates a string */
+    /* equal to that parameter. */
     string lineRead="";
     ifstream filteredChangedAndNewFilesHandle;
     openForReading(filteredChangedAndNewFilesPath,
@@ -732,7 +731,7 @@ void createAScriptThatWillPerformTheBackup()
     fileContainingTheNameOfTheBackupWithPathHandle.close();
 
     /* Create a bash script that transfers the encrypted backup to a ssh */
-    /* via sftp*/
+    /* server via sftp */
     ofstream backupScriptHandle;
     openForWriting(backupScriptPath,
                    __FILE__,
@@ -772,8 +771,8 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"while read line; do echo \"$line\"; done < "
     <<filteredChangedAndNewFilesPath<<endl<<endl
 
-    /* Ask the user if the list of files that appear look to be correct as */
-    /* these will be in the backup. Abort if the user answers no */
+    /* Ask the user if the displayed list of files are OK to go into the */
+    /* backup.  Abort if the user answers no. */
     <<tab0<<"message=\"Are you good with the above list of files being backed "
     <<"up?\""<<endl
     <<tab0<<"giveContinuationOptionToTheUser $message"<<endl<<endl
@@ -793,12 +792,11 @@ void createAScriptThatWillPerformTheBackup()
     <<filteredChangedAndNewFilesIntoTarCmd<<" > "
     <<globalString.resultsOfTarCommand<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
-    // When creating large tarballs the pecentage complete is very useful,
-    // otherwise the user just sees the session hanging and doesn't really know
-    // if or when tar will finish
+    // This is used to show the tar percentage complete from the actOnTarStatus
+    // binary
     <<" & echo $! > "<<globalString.fileThatContainsTheTarProcessId<<")"
     <<endl<<endl
-
+LEFT OFF HERE
     <<tab0<<"echo"<<endl
     <<tab0<<"echo \""<<startUnderline
     <<"Progress of creating a tarball of your backup"<<endUnderline<<"\""<<endl

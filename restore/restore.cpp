@@ -124,6 +124,7 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
 {
     if (argc != 2)
     {
+        /* One expected parameter was not passed in. */
         // Examples of what is expected -
         // > restore /uploads/e6230**2018-06-26__09:26pm
         // > restore /uploads/e6230**pics-of-aunt-mary**2018-06-26__09:26pm
@@ -131,11 +132,10 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
         displayUsage();
     }
 
-    /* the expected number of parameters (1) were passed in, so continue */
-    /* with checking the validity of the parameter. */
+    /* Capture the parameter */
     nameOfEncryptedBackupWhichIncludesPath = argv[1];
 
-    /* echo what the user typed in to run this binary */
+    /* Echo what the user typed in to run this binary */
     cout<<"> restore "<<nameOfEncryptedBackupWhichIncludesPath<<endl;
 
     extractPathAndFileName
