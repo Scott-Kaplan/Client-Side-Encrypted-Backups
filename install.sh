@@ -15,7 +15,7 @@ fi
 
 currentUser=$SUDO_USER
 
-# If this installation has previously happened, then the "$HOME/.cloudbuddy/input" directory will already contain the users settings.  In this case save a copy of these in case the user would like to restore them.
+# If this installation has previously happened, then the "$HOME/.cloudbuddy/input" directory will already contain the user's settings.  In this case save a copy of these in case the user would like to restore them.
 if [ -e "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes" ]
 then
 	dirToCreate=$(date +"input__prior_to_%m.%d.%Y_%I:%M%p")
@@ -246,8 +246,26 @@ fi
 # ccrypt
 echo Installing the necessary software which is: g++, tree, ccrypt
 echo
-# Note: This next line assumes that you are running on Ubuntu.  If not, adjust for your distribution
-apt-get install -y g++ tree ccrypt
+distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
+if [ $distribution = "arch" ]; then
+	yes | pacman -S g++ tree ccrypt
+elif [ $distribution = "centos" ]; then
+	yum -y install g++ tree ccrypt
+elif [ $distribution = "debian" ]; then
+	apt-get install -y g++ tree ccrypt
+elif [ $distribution = "fedora" ]; then
+	apt-get install -y g++ tree ccrypt
+elif [ $distribution = "ubuntu" ]; then
+	apt-get install -y g++ tree ccrypt
+else
+  echo ERROR
+	echo    Unable to detect your linux distribution.
+	echo HOW TO FIX
+	echo    You will need to install these: g++, tree, ccrypt
+  echo    Once complete, there is no need to rerun this installation script since you will have everything installed.
+  echo
+  exit
+fi
 echo
 
 # Verify that the necessary software was installed.  Othwise, exit this script
