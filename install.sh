@@ -219,27 +219,6 @@ touch --date=@0 $HOME/.cloudbuddy/input/timeStampMarker # set the timestamp to e
 chown $currentUser:$currentUser $HOME/.cloudbuddy/input/timeStampMarker
 echo
 
-echo "Starting to build the Client-Side-Encrypted-Backups static libraries and binaries ..."
-./build.sh
-
-# exit if the following wasn't built
-# ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
-# ./backup/bin/Release/backup
-# ./actOnTarStatus/bin/Release/actOnTarStatus
-# ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
-# ./restore/bin/Release/restore
-# ./logSizeOfBackup/bin/Release/logSizeOfBackup
-if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a ] ||
-   [ ! -e ./backup/bin/Release/backup ] ||
-   [ ! -e ./actOnTarStatus/bin/Release/actOnTarStatus ] ||
-   [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
-   [ ! -e ./restore/bin/Release/restore ] ||
-   [ ! -e ./logSizeOfBackup/bin/Release/logSizeOfBackup ];
-then
-  # there is no need to display additional error messages here since build.sh displayed them
-  exit
-fi
-
 # The following software needs to be installed
 # g++
 # tree
@@ -275,4 +254,25 @@ if (! which g++ | grep -q g++) ||
 then
   echo ERROR: The necessary software was not installed.  Please fix the above.
   echo
+fi
+
+echo "Starting to build the Client-Side-Encrypted-Backups static libraries and binaries ..."
+./build.sh
+
+# exit if the following wasn't built
+# ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
+# ./backup/bin/Release/backup
+# ./actOnTarStatus/bin/Release/actOnTarStatus
+# ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
+# ./restore/bin/Release/restore
+# ./logSizeOfBackup/bin/Release/logSizeOfBackup
+if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a ] ||
+   [ ! -e ./backup/bin/Release/backup ] ||
+   [ ! -e ./actOnTarStatus/bin/Release/actOnTarStatus ] ||
+   [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
+   [ ! -e ./restore/bin/Release/restore ] ||
+   [ ! -e ./logSizeOfBackup/bin/Release/logSizeOfBackup ];
+then
+  # there is no need to display additional error messages here since build.sh displayed them
+  exit
 fi
