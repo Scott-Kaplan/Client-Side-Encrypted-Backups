@@ -233,7 +233,7 @@ elif [ $distribution = "centos" ]; then
 elif [ $distribution = "debian" ]; then
 	apt-get install -y g++ tree ccrypt
 elif [ $distribution = "fedora" ]; then
-	apt-get install -y g++ tree ccrypt
+	yum -y install g++ tree ccrypt
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
 else
