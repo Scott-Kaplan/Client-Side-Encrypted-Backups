@@ -27,13 +27,10 @@ elif [ $distribution = "centos" ]; then
 elif [ $distribution = "debian" ]; then
 	apt-get install -y g++ tree ccrypt
 elif [ $distribution = "fedora" ]; then
-	#yum -y install g++ tree ccrypt
-	# sudo dnf install -y ccrypt -- this works
-	# Tested on Fedora 29.  Previous versions of Fedora were not tested.
+	# Successfully tested on Fedora version 29.  Previous Fedora versions may work, but have yet to be tested.
 	yum -y install gcc-c++
 	yum -y install tree
 	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
-	
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
 else

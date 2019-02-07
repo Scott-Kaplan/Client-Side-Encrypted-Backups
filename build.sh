@@ -14,6 +14,8 @@ fi
   
 echo Building the fileUtilities static library ...
 cd ./staticLibrary__fileUtilities
+mkdir -p bin/Release
+mkdir -p obj/Release
 rm -f bin/Release/libstaticLibrary__fileUtilities.a
 g++ -Wall -O2  -c fileUtilities.cpp -o obj/Release/fileUtilities.o
 ar -r -s bin/Release/libstaticLibrary__fileUtilities.a obj/Release/fileUtilities.o
