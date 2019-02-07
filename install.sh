@@ -7,11 +7,12 @@ echo "Starting the Client-Side-Encrypted-Backups installation ..."
 echo
 
 currentUser=$SUDO_USER
-echo $currentUser
-echo
+#echo $currentUser
+#echo
 
-echo $HOME
-echo
+#echo $HOME
+#echo
+pwd
 exit
 
 
