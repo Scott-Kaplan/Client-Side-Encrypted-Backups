@@ -6,16 +6,16 @@ echo
 echo "Starting the Client-Side-Encrypted-Backups installation ..."
 echo
 
-currentUser=$SUDO_USER
+#currentUser=$SUDO_USER
 #echo $currentUser
 #echo
 
 #echo $HOME
 #echo
 #pwd
-HOME="howdy"
-echo $HOME
-exit
+#HOME="howdy"
+#echo $HOME
+#exit
 
 
 
@@ -41,6 +41,7 @@ elif [ $distribution = "centos" ]; then
 	yum -y install g++ tree ccrypt
 elif [ $distribution = "debian" ]; then
 	apt-get install -y g++ tree ccrypt
+	
 elif [ $distribution = "fedora" ]; then
 	# Successfully tested on Fedora version 29.  Previous Fedora versions may work, but have yet to be tested.
 	echo Installing g++
@@ -51,6 +52,10 @@ elif [ $distribution = "fedora" ]; then
 	echo
 	echo Installing ccrypt
 	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
+	
+	# $HOME results to /root/ when invoked by sudo, but we don't want that.  We want the user's home directory 
+	HOME="/home/liveuser"
+	
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
 else
