@@ -18,6 +18,11 @@ echo
 #exit
 
 
+	fullDir="$pwd"
+	echo $fullDir
+	exit
+
+
 
 if [ "$(whoami)" != "root" ];
 then
