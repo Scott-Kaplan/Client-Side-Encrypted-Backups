@@ -17,7 +17,9 @@ echo
 #echo $HOME
 #exit
 
-
+LEFT OFF HERE
+extract pwd for everything up to the 3rd /
+then move this below
 	HOME=$(pwd)
 	echo $HOME
 	exit
