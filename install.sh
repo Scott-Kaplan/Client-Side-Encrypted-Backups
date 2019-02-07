@@ -6,6 +6,13 @@ echo
 echo "Starting the Client-Side-Encrypted-Backups installation ..."
 echo
 
+
+echo $HOME
+echo
+exit
+
+
+
 if [ "$(whoami)" != "root" ];
 then
 	echo "Because this script installs some dependencies and copies built binaries into \"/usr/local/bin\", you'll need to run as superuser."
