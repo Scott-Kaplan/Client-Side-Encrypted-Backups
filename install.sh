@@ -18,8 +18,8 @@ echo
 #exit
 
 
-	fullDir=$(pwd)
-	echo $fullDir
+	HOME=$(pwd)
+	echo $HOME
 	exit
 
 
