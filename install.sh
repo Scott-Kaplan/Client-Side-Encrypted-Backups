@@ -13,6 +13,8 @@ currentUser=$SUDO_USER
 #echo $HOME
 #echo
 pwd
+$HOME = howdy
+echo $HOME
 exit
 
 
