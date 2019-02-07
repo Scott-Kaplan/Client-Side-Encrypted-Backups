@@ -13,6 +13,50 @@ then
   exit
 fi
 
+# The following software needs to be installed
+# g++
+# tree
+# ccrypt
+echo Installing the necessary software which is: g++, tree, ccrypt
+echo
+distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
+if [ $distribution = "arch" ]; then
+	yes | pacman -S g++ tree ccrypt
+elif [ $distribution = "centos" ]; then
+	yum -y install g++ tree ccrypt
+elif [ $distribution = "debian" ]; then
+	apt-get install -y g++ tree ccrypt
+elif [ $distribution = "fedora" ]; then
+	#yum -y install g++ tree ccrypt
+	# sudo dnf install -y ccrypt -- this works
+	# Tested on Fedora 29.  Previous versions of Fedora were not tested.
+	yum -y install gcc-c++
+	yum -y install tree
+	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
+	
+elif [ $distribution = "ubuntu" ]; then
+	apt-get install -y g++ tree ccrypt
+else
+  echo ERROR
+	echo    Unable to detect your linux distribution.
+	echo HOW TO FIX
+	echo    You will need to install these: g++, tree, ccrypt
+  echo    Once complete, there is no need to rerun this installation script since you will have everything installed.
+  echo
+  exit
+fi
+echo
+
+# Verify that the necessary software was installed.  Othwise, exit this script
+if (! which g++ | grep -q g++) ||
+   (! which tree | grep -q tree) ||
+   (! which ccrypt | grep -q ccrypt);
+then
+  echo ERROR: The necessary software was not installed.  Please address the errors above.
+  echo
+  exit
+fi
+
 currentUser=$SUDO_USER
 
 # If this installation has previously happened, then the "$HOME/.cloudbuddy/input" directory will already contain the user's settings.  In this case save a copy of these in case the user would like to restore them.
@@ -218,43 +262,6 @@ echo "Done.  This is located in $HOME/.cloudbuddy/input"
 touch --date=@0 $HOME/.cloudbuddy/input/timeStampMarker # set the timestamp to epoch
 chown $currentUser:$currentUser $HOME/.cloudbuddy/input/timeStampMarker
 echo
-
-# The following software needs to be installed
-# g++
-# tree
-# ccrypt
-echo Installing the necessary software which is: g++, tree, ccrypt
-echo
-distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
-if [ $distribution = "arch" ]; then
-	yes | pacman -S g++ tree ccrypt
-elif [ $distribution = "centos" ]; then
-	yum -y install g++ tree ccrypt
-elif [ $distribution = "debian" ]; then
-	apt-get install -y g++ tree ccrypt
-elif [ $distribution = "fedora" ]; then
-	yum -y install g++ tree ccrypt
-elif [ $distribution = "ubuntu" ]; then
-	apt-get install -y g++ tree ccrypt
-else
-  echo ERROR
-	echo    Unable to detect your linux distribution.
-	echo HOW TO FIX
-	echo    You will need to install these: g++, tree, ccrypt
-  echo    Once complete, there is no need to rerun this installation script since you will have everything installed.
-  echo
-  exit
-fi
-echo
-
-# Verify that the necessary software was installed.  Othwise, exit this script
-if (! which g++ | grep -q g++) ||
-   (! which tree | grep -q tree) ||
-   (! which ccrypt | grep -q ccrypt);
-then
-  echo ERROR: The necessary software was not installed.  Please fix the above.
-  echo
-fi
 
 echo "Starting to build the Client-Side-Encrypted-Backups static libraries and binaries ..."
 ./build.sh
