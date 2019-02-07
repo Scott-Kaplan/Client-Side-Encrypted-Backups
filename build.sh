@@ -23,6 +23,8 @@ ar -r -s bin/Release/libstaticLibrary__fileUtilities.a obj/Release/fileUtilities
 echo
 echo Building the backup binary ...
 cd ../backup
+mkdir -p bin/Release
+mkdir -p obj/Release
 rm -f bin/Release/backup
 g++ -Wall -fexceptions -O2  -c backup.cpp -o obj/Release/backup.o
 g++ -o bin/Release/backup obj/Release/backup.o -s  ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -30,6 +32,8 @@ g++ -o bin/Release/backup obj/Release/backup.o -s  ../staticLibrary__fileUtiliti
 echo
 echo Building the actOnTarStatus binary ...
 cd ../actOnTarStatus
+mkdir -p bin/Release
+mkdir -p obj/Release
 rm -f bin/Release/actOnTarStatus
 g++ -Wall -fexceptions -O2  -c actOnTarStatus.cpp -o obj/Release/actOnTarStatus.o
 g++  -o bin/Release/actOnTarStatus obj/Release/actOnTarStatus.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -37,6 +41,8 @@ g++  -o bin/Release/actOnTarStatus obj/Release/actOnTarStatus.o -s ../staticLibr
 echo
 echo Building the actOnCcryptStatus binary ...
 cd ../actOnCcryptStatus
+mkdir -p bin/Release
+mkdir -p obj/Release
 rm -f bin/Release/actOnCcryptStatus
 g++ -Wall -fexceptions -O2  -c actOnCcryptStatus.cpp -o obj/Release/actOnCcryptStatus.o
 g++  -o bin/Release/actOnCcryptStatus obj/Release/actOnCcryptStatus.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -44,6 +50,8 @@ g++  -o bin/Release/actOnCcryptStatus obj/Release/actOnCcryptStatus.o -s ../stat
 echo
 echo Building the restore binary ...
 cd ../restore
+mkdir -p bin/Release
+mkdir -p obj/Release
 rm -f bin/Release/restore
 g++ -Wall -fexceptions -O2  -c restore.cpp -o obj/Release/restore.o
 g++  -o bin/Release/restore obj/Release/restore.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -51,6 +59,8 @@ g++  -o bin/Release/restore obj/Release/restore.o -s ../staticLibrary__fileUtili
 echo
 echo Building the logSizeOfBackup binary ...
 cd ../logSizeOfBackup
+mkdir -p bin/Release
+mkdir -p obj/Release
 rm -f bin/Release/logSizeOfBackup
 g++ -Wall -fexceptions -O2  -c logSizeOfBackup.cpp -o obj/Release/logSizeOfBackup.o
 g++  -o bin/Release/logSizeOfBackup obj/Release/logSizeOfBackup.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
