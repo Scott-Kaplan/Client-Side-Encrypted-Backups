@@ -13,7 +13,7 @@ currentUser=$SUDO_USER
 #echo $HOME
 #echo
 #pwd
-HOME = howdy
+HOME="howdy"
 echo $HOME
 exit
 
