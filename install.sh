@@ -53,7 +53,10 @@ elif [ $distribution = "fedora" ]; then
 	echo Installing ccrypt
 	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
 	
-	# $HOME results to /root/ when invoked by sudo, but we don't want that.  We want the user's home directory 
+	# $HOME results to /root, but we don't want that.  This corrects $HOME to be the user's home directory
+	fullDir="$pwd"
+	echo $fullDir
+	exit
 	HOME="/home/liveuser"
 	
 elif [ $distribution = "ubuntu" ]; then
