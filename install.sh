@@ -4,6 +4,7 @@
 clear
 echo
 echo "Starting the Client-Side-Encrypted-Backups installation ..."
+echo
 
 if [ "$(whoami)" != "root" ];
 then
@@ -66,7 +67,6 @@ then
   cp $HOME/.cloudbuddy/input/* $HOME/.cloudbuddy/$dirToCreate
 fi
 
-echo
 echo "Creating the directories ..."
 # if these directories already exist, -p suppreses the warning
 mkdir -p $HOME/.cloudbuddy
