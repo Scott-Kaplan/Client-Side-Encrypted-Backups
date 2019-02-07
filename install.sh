@@ -18,7 +18,7 @@ echo
 #exit
 
 
-	fullDir=$pwd
+	fullDir=$(pwd)
 	echo $fullDir
 	exit
 
