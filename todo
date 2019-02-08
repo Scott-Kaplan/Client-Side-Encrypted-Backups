@@ -1,12 +1,12 @@
 // modify install.sh to install packages for
 //		DONE arch
 //		DONE centos
-//		DONE debian
-//		DONE fedora
+//		DONE debian  10G
+//		DONE fedora  
 // gentoo
-// opensuse
+// opensuse  5G
 // slackware
-//		DONE ubuntu
+//		DONE ubuntu  25G
 
 /* place this block into install.sh */
 // distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)

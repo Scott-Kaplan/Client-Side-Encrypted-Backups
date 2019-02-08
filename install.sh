@@ -17,12 +17,12 @@ echo
 #echo $HOME
 #exit
 
-LEFT OFF HERE
-extract pwd for everything up to the 3rd /
-then move this below
-	HOME=$(pwd)
-	echo $HOME
-	exit
+#LEFT OFF HERE
+#extract pwd for everything up to the 3rd /
+#then move this below
+	#HOME=$(pwd)
+	#echo $HOME
+	#exit
 
 
 
@@ -61,9 +61,9 @@ elif [ $distribution = "fedora" ]; then
 	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
 	
 	# $HOME results to /root, but we don't want that.  This corrects $HOME to be the user's home directory
-	fullDir="$pwd"
-	echo $fullDir
-	exit
+	#fullDir="$pwd"
+	#echo $fullDir
+	#exit
 	HOME="/home/liveuser"
 	
 elif [ $distribution = "ubuntu" ]; then
