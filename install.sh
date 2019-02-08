@@ -317,5 +317,5 @@ then
   exit
 fi
 
-echo -- Installation is complete
+echo SUCCESS - Installation is complete.
 echo
