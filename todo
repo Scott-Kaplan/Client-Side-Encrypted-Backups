@@ -1,54 +1,75 @@
-// modify install.sh to install packages for
-//		DONE arch
-//		DONE centos
-//		DONE debian  10G
-//		DONE fedora  
-// gentoo
-// opensuse  5G
-// slackware
-//		DONE ubuntu  25G
-
-/* place this block into install.sh */
-// distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
-// if [ $distribution eq "arch" ]; then
-//   yes | pacman -S g++ tree ccrypt
-
-// elif [ $distribution eq "centos" ]; then
-//   yum -y install g++ tree ccrypt
-
-// elif [ $distribution eq "debian" ]; then
-//   apt-get install -y g++ tree ccrypt
-
-// elif [ $distribution eq "fedora" ]; then
-//   apt-get install -y g++ tree ccrypt
-
-// elif [ $distribution eq "ubuntu" ]; then
-//   apt-get install -y g++ tree ccrypt
-// fi
-
-// copy config file 1 that has problem
-// fresh install of Client-Side-Encrypted-Backups on 16.04
-// ensure that install script make timestampmarker with timestamp of epoch.
-// on 16.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
-// ensure size in log file is correct
-
 // on 18.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
 
-// test on virgin ubuntu 14.04 using virtualbox.  set both username and password to test
-// test ./smallBackup with ssh public key on 14.04
+// DONE fedora (10G virtual machine)
+// DONE modify install.sh
+	// change hard code of "/home/scott" to capture everything prior to the last slash
+// DONE smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
 
-// test on virgin ubuntu 16.04 using virtualbox.  set both username and password to test
-// test ./smallBackup with ssh public key on 16.04
+// arch
+// DONE modify install.sh
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
 
-// test on virgin ubuntu 18.04 using virtualbox.  set both username and password to test
-// test ./smallBackup with ssh public key on 18.04
+// centos
+// DONE modify install.sh
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
 
-// test debian
-// test arch
-// test fedora
-// test opensuse
-// test slackware
-// test gentoo
+// debian (10G virtual machine)
+// DONE modify install.sh
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
+
+// gentoo
+// modify install.sh
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
+
+// opensuse (5G virtual machine)
+// modify install.sh
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
+
+// slackware
+// modify install.sh
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
+
+// ubuntu 14.04
+// DONE modify install.sh
+// smallBackup
+// enable ssh public key
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
+
+// ubuntu 18.04
+// DONE modify install.sh
+// smallBackup
+// enable ssh public key
+// smallBackup
+// largeBackup
+// run build.sh seperate to ensure it displays ok
+
+// ubuntu 16.04
+// DONE modify install.sh
+// make copy of config file 1 that has problem
+// ensure that install script make timestampmarker with timestamp of epoch.
+// on 16.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
+// smallBackup
+// enable ssh public key
+// smallBackup
+// largeBackup
+// ensure size in log file is correct
+// run build.sh seperate to ensure it displays ok
 
 ----------------------------------------------------
 ----------------------------------------------------
