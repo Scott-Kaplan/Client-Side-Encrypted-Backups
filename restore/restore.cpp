@@ -303,7 +303,7 @@ void createAScriptTheWillRestoreTheBackup()
     // untar percentage complete, otherwise it would initially show greater than
     // 100%
     <<tab0<<"rm -rf "<<restorePath<<endl
-    <<tab0<<"mkdir "<<restorePath<<endl<<endl
+    <<tab0<<"mkdir -p "<<restorePath<<endl<<endl
 
     /* untar the backup.  Do this in the background so the untar percentage */
     /* complete can be given in the foreground */
