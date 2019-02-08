@@ -64,10 +64,10 @@ elif [ $distribution = "fedora" ]; then
 	#fullDir="$pwd"
 	#echo $fullDir
 	#exit
-	echo
-	echo $HOME
-	echo s
-	HOME="/home/liveuser"
+	#echo
+	#echo $HOME
+	#echo
+	HOME="/home/scott"
 	
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
