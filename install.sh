@@ -64,6 +64,9 @@ elif [ $distribution = "fedora" ]; then
 	#fullDir="$pwd"
 	#echo $fullDir
 	#exit
+	echo
+	echo $HOME
+	echo s
 	HOME="/home/liveuser"
 	
 elif [ $distribution = "ubuntu" ]; then
@@ -313,3 +316,6 @@ then
   # there is no need to display additional error messages here since build.sh displayed them
   exit
 fi
+
+echo -- Installation is complete
+echo
