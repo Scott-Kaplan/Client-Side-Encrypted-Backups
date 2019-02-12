@@ -360,10 +360,10 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
         if (backupLabelName != "no-label")
         {
             /* check that the label isn't too long */
-            if (backupLabelName.length() >= 128)
+            if (backupLabelName.length() > 128)
             {
                 cout<<endl<<"ERROR - the length of the second parameter can't "
-                "exceed 128"<<endl<<endl;
+                "exceed 128."<<endl<<endl;
                 displayUsage();
             }
 
@@ -496,11 +496,14 @@ void retrieveTheComputerName()
 void checkTheIntegrityOfTheComputerName(string &computerName)
 {
     /* check that the computer name isn't too long */
-    if (computerName.length() >= 32)
+    if (computerName.length() > 32)
     {
-        cout<<"ERROR: the length of the computer name in the file \"[4] "
-            <<"computer_name\" can't exceed 32"<<endl;
-        displayUsage();
+        string problem =
+                    "\""+computerNamePath+"\" "
+                    "contains a 'computer name' that exceeds a length of 32.";
+        string correctiveAction =
+                    "Please make the computer name a length of 32 or less.";
+        displayError(problem,correctiveAction);
     }
 
     /* check that the computer name doesn't contain illegal symbols */
@@ -511,9 +514,13 @@ void checkTheIntegrityOfTheComputerName(string &computerName)
               (computerName[i]=='_') ||
               (computerName[i]=='.')))
         {
-            cout<<"ERROR: Only letters, numbers, periods, hyphens and "
-                  "underscores can be used in from-computer-name"<<endl;
-            displayUsage();
+            string problem =
+                "The 'computer name' in \""+computerNamePath+
+                "\" contains illegal characters.";
+            string correctiveAction =
+                "Please change it to only contain - "
+                "letters, numbers, periods, hyphens, underscores.";
+            displayError(problem,correctiveAction);
         }
     }
 }
@@ -1098,15 +1105,13 @@ void checkForIllegalCharactersInFile(string &filteredChangedAndNewFilesPath)
     {
         if (pathRead.find("$") != string::npos)
         {
-            string problem = "The path \""+pathRead+
-                                            "\" contains a dollar sign in it.";
+            string problem = "\""+pathRead+"\" contains a dollar sign in it.";
             string correctiveAction= "Please remove the dollar sign.";
             displayError(problem,correctiveAction);
         }
         if (pathRead.find("\"") != string::npos)
         {
-            string problem = "The path \""+pathRead+
-                                            "\" contains double quotes in it.";
+            string problem = "\""+pathRead+"\" contains double quotes in it.";
             string correctiveAction= "Please remove the extra double quotes.";
             displayError(problem,correctiveAction);
         }

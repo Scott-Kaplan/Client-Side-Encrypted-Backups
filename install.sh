@@ -147,7 +147,7 @@ chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[1] search_this_list_fo
 
 cat > "$HOME/.cloudbuddy/input/[2] username_and_domain" << EOF
 # This file contains the username and domain of the server that you want your backups to be transferred to.
-# You can use CloudBuddy (https:\\cloudbuddy.cloud) or any other ssh server.
+# You can use CloudBuddy (https://cloudbuddy.cloud) or any other ssh server.
 
 # One line needs to be added to this file that meets this criteria-
 # <user>@<domain-of-the-ssh-server>
@@ -174,7 +174,11 @@ cat > "$HOME/.cloudbuddy/input/[3] landing_directory" << EOF
 
 # If you are not using CloudBuddy as your backup server and you would like your backups to reside in your base directory,
 # then just remove the '#' from the next line
-#/
+#.
+
+# If you are not using CloudBuddy as your backup server and you would like your backups to reside in this directory (as an example)-  important-backups/pics
+# then you would remove the '#' from the next line
+#important-backups/pics
 EOF
 chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[3] landing_directory"
 

@@ -62,7 +62,6 @@
 // ubuntu 16.04
 // DONE modify install.sh
 // make copy of config file 1 that has problem
-// ensure that install script make timestampmarker with timestamp of epoch.
 // on 16.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
 // smallBackup
 // enable ssh public key
@@ -443,3 +442,11 @@ void test__existenceOfAFile()
   // DONE logSizeOfBackup
   // DONE restore
   // DONE staticLibrary__fileUtilities
+
+50 // ensure that the install script makes timestampmarker with timestamp of epoch.
+
+51 // #tested for illegal length in $HOME/.cloudbuddy/[4] computer_name
+//0ddcbd19c08c44e58e01d03fd634084eHOWDY
+
+52 // #tested for illegal characters in $HOME/.cloudbuddy/[4] computer_name
+//#*0ddcbd19c08c44e58e01d03fd634084

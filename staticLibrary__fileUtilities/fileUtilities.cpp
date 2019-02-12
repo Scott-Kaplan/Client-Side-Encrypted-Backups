@@ -450,7 +450,7 @@ void retrieveUsernameAndDomain(string &username, string &domain,
     {
         string problem=
             "The configuration file \""+usernameAndDomainPath
-            +"\" needs to contain an entry.";
+            +"\" needs to contain a valid entry.";
         string correctiveAction=
             "Please add an entry.";
         displayError(problem,correctiveAction);
