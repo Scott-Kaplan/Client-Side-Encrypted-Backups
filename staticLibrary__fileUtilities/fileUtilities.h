@@ -73,6 +73,7 @@ typedef struct
     string fileContainingTheBackupTarBallPath;
     string fileContainingTheEncryptedBackupPath;
     string usernameAndDomainPath;
+    string landingDirectoryPath;
     string ccryptTitlePrintedPath;
     string ccryptFinishedGracefully;
     string binaryThatShowsTheTarStatus;

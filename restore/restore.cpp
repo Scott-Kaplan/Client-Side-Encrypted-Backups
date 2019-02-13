@@ -55,8 +55,8 @@ extern "C" void writeCleanUpFunction
 extern "C" void clearTheTerminalWindow();
 extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void convert$HOME(string &path);
-extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
-                                                           string &purpose);
+extern "C" void checkThatTheConfigurationFileHasBeenInstalled(string &path,
+                                                              string &purpose);
 extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
@@ -85,7 +85,7 @@ void displayUsage();
 void createAScriptTheWillRestoreTheBackup();
 void runTheScriptThatRestoresTheBackup();
 void deleteAllFilesIntheRestoreDirectory();
-void checkTheConfigurationFileIntegrity();
+void checkTheIntegrityOfTheConfigurationFiles();
 void createRestoreDirectory();
 
 /*********************/
@@ -97,7 +97,7 @@ int main(int argc, char * const argv[])
     checkThatTheCommandLineArgumentsAreCorrect(argc,argv);
     getGlobalStrings(globalString,purpose);
     deleteAllFilesIntheRestoreDirectory();
-    checkTheConfigurationFileIntegrity();
+    checkTheIntegrityOfTheConfigurationFiles();
     saveTheTerminalPid(purpose);
     createAScriptTheWillRestoreTheBackup();
     runTheScriptThatRestoresTheBackup();
@@ -112,12 +112,16 @@ void deleteAllFilesIntheRestoreDirectory()
     if(system(deleteFilesCommand.c_str()));
 }
 
-void checkTheConfigurationFileIntegrity()
+void checkTheIntegrityOfTheConfigurationFiles()
 {
-    checkThatConfigurationFileHasBeenInstalled
+    checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.usernameAndDomainPath,purpose);
     retrieveUsernameAndDomain
                         (username,domain,globalString.usernameAndDomainPath);
+    checkThatTheConfigurationFileHasBeenInstalled
+                        (globalString.landingDirectoryPath,purpose);
+LEFT OFF HERE
+    retrieveTheLandingDirectory();
 }
 
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])

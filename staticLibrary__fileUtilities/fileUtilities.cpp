@@ -79,8 +79,8 @@ extern "C" bool directoryExist(string &lookupPath,
                                int fromLineNumber,
                                string resultsDirectory);
 extern "C" void displayError(string &problem, string &correctiveAction);
-extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
-                                                           string &purpose);
+extern "C" void checkThatTheConfigurationFileHasBeenInstalled(string &path,
+                                                              string &purpose);
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
                                                string &configurationFilePath);
@@ -323,6 +323,9 @@ void getGlobalStrings(globalStringS &globalString, string &purpose)
 
     globalString.usernameAndDomainPath =
             "$HOME/.cloudbuddy/input/[2] username_and_domain";
+
+    globalString.landingDirectoryPath =
+            "$HOME/.cloudbuddy/input/[3] landing_directory";
 
     globalString.ccryptTitlePrintedPath =
             globalString.basePath+"ccryptStatusTitleAlreadyPrinted";
@@ -586,7 +589,8 @@ void displayError(string &problem, string &correctiveAction)
     exit(EXIT_SUCCESS);
 }
 
-void checkThatConfigurationFileHasBeenInstalled(string &path, string &purpose)
+void checkThatTheConfigurationFileHasBeenInstalled(string &path,
+                                                   string &purpose)
 {
     convert$HOME(path);
     if (!fileExist(path,__FILE__,__LINE__,purpose))

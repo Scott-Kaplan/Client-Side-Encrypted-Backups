@@ -76,7 +76,7 @@ extern "C" void writeCleanUpAndExitFunction
                                  (string &purpose, ofstream &scriptHandle);
 extern "C" void saveTheTerminalPid(string &purpose);
 extern "C" void displayError(string &problem, string &correctiveAction);
-extern "C" void checkThatConfigurationFileHasBeenInstalled(string &path,
+extern "C" void checkThatTheConfigurationFileHasBeenInstalled(string &path,
                                                            string &purpose);
 extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
                                                string lineTitle,
@@ -96,8 +96,6 @@ double storageSpaceOfFilesThatWillBeInTheBackup=0;
 globalStringS globalString;
 string searchThisListForChangesPath =
         "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes";
-string landingDirectoryPath =
-        "$HOME/.cloudbuddy/input/[3] landing_directory";
 string computerNamePath =
         "$HOME/.cloudbuddy/input/[4] computer_name";
 string dontBackupFilesThatStartWithThisPath =
@@ -409,19 +407,20 @@ void displayUsage()
 
 void checkTheIntegrityOfTheConfigurationFiles()
 {
-    checkThatConfigurationFileHasBeenInstalled
+    checkThatTheConfigurationFileHasBeenInstalled
                         (searchThisListForChangesPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled
+    checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.usernameAndDomainPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled(landingDirectoryPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled(computerNamePath,purpose);
-    checkThatConfigurationFileHasBeenInstalled
+    checkThatTheConfigurationFileHasBeenInstalled
+                        (globalString.landingDirectoryPath,purpose);
+    checkThatTheConfigurationFileHasBeenInstalled(computerNamePath,purpose);
+    checkThatTheConfigurationFileHasBeenInstalled
                         (dontBackupFilesThatStartWithThisPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled
+    checkThatTheConfigurationFileHasBeenInstalled
                         (dontBackupFilesThatEndWithThisPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled
+    checkThatTheConfigurationFileHasBeenInstalled
                         (dontBackupFilesThatContainThisPath,purpose);
-    checkThatConfigurationFileHasBeenInstalled(timeStampMarkerPath,purpose);
+    checkThatTheConfigurationFileHasBeenInstalled(timeStampMarkerPath,purpose);
     retrieveUsernameAndDomain
                         (username,domain,globalString.usernameAndDomainPath);
     retrieveTheLandingDirectory();
@@ -433,7 +432,7 @@ void retrieveTheLandingDirectory()
     bool landingDirectoryFound = false;
     string line="";
     ifstream landingDirectoryHandle;
-    openForReading(landingDirectoryPath,
+    openForReading(globalString.landingDirectoryPath,
                    __FILE__,
                    __LINE__,
                    landingDirectoryHandle);
@@ -443,7 +442,8 @@ void retrieveTheLandingDirectory()
             (!line.empty()))    // skip empty lines
         {
             checkThatThereAreNoWhiteSpaces
-                        (line,"landing directory line",landingDirectoryPath);
+                                    (line,"landing directory line",
+                                     globalString.landingDirectoryPath);
 
             landingDirectoryFound = true;
             landingDirectory = line;
@@ -453,7 +453,7 @@ void retrieveTheLandingDirectory()
     if (!landingDirectoryFound)
     {
         string problem=
-            "The configuration file \""+landingDirectoryPath
+            "The configuration file \""+globalString.landingDirectoryPath
             +"\" needs to contain an entry.";
         string correctiveAction=
             "Please add an entry.";
