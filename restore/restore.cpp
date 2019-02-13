@@ -94,6 +94,7 @@ int main(int argc, char * const argv[])
     checkTheIntegrityOfTheConfigurationFiles();
     saveTheTerminalPid(purpose);
     createAScriptTheWillRestoreTheBackup();
+exit(EXIT_SUCCESS);
     runTheScriptThatRestoresTheBackup();
     return 0;
 }
@@ -111,6 +112,14 @@ void checkTheIntegrityOfTheConfigurationFiles()
     checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.usernameAndDomainPath,purpose);
     retrieveTheUsernameAndDomain(purpose);
+
+
+left off here
+this is coming out as blank
+cout<<globalString.username<<endl;
+
+
+
     checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.landingDirectoryPath,purpose);
     retrieveTheLandingDirectory(purpose);

@@ -480,7 +480,6 @@ void retrieveTheLandingDirectory(string &resultsDirectory)
             checkThatThereAreNoWhiteSpaces
                                     (line,"landing directory line",
                                      globalString.landingDirectoryPath);
-
             landingDirectoryFound = true;
             globalString.landingDirectory = line;
         }

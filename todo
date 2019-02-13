@@ -450,3 +450,9 @@ void test__existenceOfAFile()
 
 52 // #tested for illegal characters in $HOME/.cloudbuddy/[4] computer_name
 //#*0ddcbd19c08c44e58e01d03fd634084
+
+53 // the restore binary now uses the landing directory from the config file instead of the path being passed in
+// updated usage
+// didn't need to modify github instructions.
+
+54 // the landingDirectory read from the config file does not allow spaces.  If the user enters it, an error message is displayed saying to remove the space
