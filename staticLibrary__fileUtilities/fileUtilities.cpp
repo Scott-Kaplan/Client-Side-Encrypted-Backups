@@ -59,8 +59,8 @@ extern "C" string getStringUnder(int columnNumberWanted,
                                  string &lineToBeParsed);
 extern "C" double getTotalLinesInFile(string &pathToCountLines);
 extern "C" double getSizeOfFile(string &path);
-extern "C" void retrieveUsernameAndDomain(string &username, string &domain,
-                                          string &retrieveUsernameAndDomain);
+extern "C" void retrieveTheUsernameAndDomain(string &resultsDirectory);
+extern "C" void retrieveTheLandingDirectory(string &resultsDirectory);
 extern "C" void removeLeadingWhiteSpaces(string &line);
 extern "C" void clearTheTerminalWindow();
 extern "C" void extractPathAndFileName(string &stringToParse, string &path,
@@ -420,14 +420,14 @@ double getSizeOfFile(string &path)
     return size;
 }
 
-void retrieveUsernameAndDomain(string &username, string &domain,
-                                                string &usernameAndDomainPath)
+void retrieveTheUsernameAndDomain(string &resultsDirectory)
 {
+    globalStringS globalString;
+    getGlobalStrings(globalString,resultsDirectory);
     bool usernameAndDomainFound = false;
     string line="";
     ifstream fillUsernameAndDomainHandle;
-
-    openForReading(usernameAndDomainPath,
+    openForReading(globalString.usernameAndDomainPath,
                    __FILE__,
                    __LINE__,
                    fillUsernameAndDomainHandle);
@@ -438,13 +438,14 @@ void retrieveUsernameAndDomain(string &username, string &domain,
             (!line.empty()))    // skip empty lines
         {
             checkThatThereAreNoWhiteSpaces
-                        (line,"username and domain line",usernameAndDomainPath);
+                                    (line,"username and domain line",
+                                     globalString.usernameAndDomainPath);
             size_t positionOfLastAtSign = line.find_last_of("@");
             if (positionOfLastAtSign != string::npos)
             {
                 usernameAndDomainFound = true;
-                username = line.substr(0,positionOfLastAtSign);
-                domain = line.substr(positionOfLastAtSign+1);
+                globalString.username = line.substr(0,positionOfLastAtSign);
+                globalString.domain = line.substr(positionOfLastAtSign+1);
             }
         }
     }
@@ -452,8 +453,44 @@ void retrieveUsernameAndDomain(string &username, string &domain,
     if (!usernameAndDomainFound)
     {
         string problem=
-            "The configuration file \""+usernameAndDomainPath
+            "The configuration file \""+globalString.usernameAndDomainPath
             +"\" needs to contain a valid entry.";
+        string correctiveAction=
+            "Please add an entry.";
+        displayError(problem,correctiveAction);
+    }
+}
+
+void retrieveTheLandingDirectory(string &resultsDirectory)
+{
+    globalStringS globalString;
+    getGlobalStrings(globalString,resultsDirectory);
+    bool landingDirectoryFound = false;
+    string line="";
+    ifstream landingDirectoryHandle;
+    openForReading(globalString.landingDirectoryPath,
+                   __FILE__,
+                   __LINE__,
+                   landingDirectoryHandle);
+    while (getline(landingDirectoryHandle,line))
+    {
+        if ((line[0] != '#') && // skip comment lines
+            (!line.empty()))    // skip empty lines
+        {
+            checkThatThereAreNoWhiteSpaces
+                                    (line,"landing directory line",
+                                     globalString.landingDirectoryPath);
+
+            landingDirectoryFound = true;
+            globalString.landingDirectory = line;
+        }
+    }
+    landingDirectoryHandle.close();
+    if (!landingDirectoryFound)
+    {
+        string problem=
+            "The configuration file \""+globalString.landingDirectoryPath
+            +"\" needs to contain an entry.";
         string correctiveAction=
             "Please add an entry.";
         displayError(problem,correctiveAction);
@@ -636,7 +673,7 @@ void displayIncorrectCommandLineArguments(int argc,
 
     // examples of wrong usage:
     // > backup howdy there
-    // > restore /that_directory/howdy howdy
+    // > restore howdy howdy
     cout<<"> "<<purpose<<commandLineArgs<<endl;
 
     cout<<endl<<"ERROR - The wrong number of parameters were entered."<<endl

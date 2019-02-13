@@ -81,6 +81,9 @@ typedef struct
     string processIdOfThisTerminalSessionPath;
     string resultsOfTarCommand;
     string sizeOfBackupThatIsADecryptedTarBallPath;
+    string landingDirectory;
+    string username;
+    string domain;
 }globalStringS;
 
 #endif // FILEUTILITIES_H_INCLUDED

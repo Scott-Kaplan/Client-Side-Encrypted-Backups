@@ -38,16 +38,14 @@ using namespace std;
 /*******************************/
 /***** From Static Library *****/
 /*******************************/
-extern "C" void retrieveUsernameAndDomain
-            (string &username, string &domain, string &usernameAndDomainPath);
+extern "C" void retrieveTheUsernameAndDomain(string &resultsDirectory);
+extern "C" void retrieveTheLandingDirectory(string &resultsDirectory);
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
 extern "C" void openForWriting(string &path,
                                string fromFileName,
                                int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
-extern "C" void extractPathAndFileName
-                        (string &stringToParse, string &path, string &fileName);
 extern "C" void writeCleanUpAndExitFunction
                 (string directory, ofstream &scriptThatRestoresTheBackupHandle);
 extern "C" void writeCleanUpFunction
@@ -65,11 +63,7 @@ extern "C" void displayIncorrectCommandLineArguments(int argc,
 /***** File Scope Variables *****/
 /********************************/
 string purpose="restore";  // for path $HOME/.cloudbuddy/restore/
-string username="";
-string domain="";
-string nameOfEncryptedBackupWhichIncludesPath="";
 string nameOfEncryptedBackup="";
-string directoryThatTheEncryptedBackupIsIn ="";
 globalStringS globalString;
 string restoreDirectory="$HOME/.cloudbuddy/restore/";
 string scriptThatRestoresTheBackupPath=
@@ -116,12 +110,10 @@ void checkTheIntegrityOfTheConfigurationFiles()
 {
     checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.usernameAndDomainPath,purpose);
-    retrieveUsernameAndDomain
-                        (username,domain,globalString.usernameAndDomainPath);
+    retrieveTheUsernameAndDomain(purpose);
     checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.landingDirectoryPath,purpose);
-LEFT OFF HERE
-    retrieveTheLandingDirectory();
+    retrieveTheLandingDirectory(purpose);
 }
 
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
@@ -130,50 +122,33 @@ void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])
     {
         /* One expected parameter was not passed in. */
         // Examples of what is expected -
-        // > restore /uploads/e6230**2018-06-26__09:26pm
-        // > restore /uploads/e6230**pics-of-aunt-mary**2018-06-26__09:26pm
+        // > restore e6230**2018-06-26__09:26pm
+        // > restore e6230**pics-of-aunt-mary**2018-06-26__09:26pm
         displayIncorrectCommandLineArguments(argc,argv,purpose);
         displayUsage();
     }
 
     /* Capture the parameter */
-    nameOfEncryptedBackupWhichIncludesPath = argv[1];
+    // Note:
+    //  The path where a backup is assumed to exist is specified
+    //  in config file- $HOME/.cloudbuddy/input/[3] landing_directory
+    nameOfEncryptedBackup = argv[1];
 
     /* Echo what the user typed in to run this binary */
-    cout<<"> restore "<<nameOfEncryptedBackupWhichIncludesPath<<endl;
-
-    extractPathAndFileName
-        (nameOfEncryptedBackupWhichIncludesPath,
-         directoryThatTheEncryptedBackupIsIn,
-         nameOfEncryptedBackup);
+    cout<<"> restore "<<nameOfEncryptedBackup<<endl;
 }
 
 void displayUsage()
 {
     cout
     <<"\nUsage:\n\nrestore "<<startUnderline
-    <<"<path>/<backup-to-restore>\n\n"<<endUnderline
+    <<"<name-of-backup>\n\n"<<endUnderline
     <<"Examples\n\n"
-    "  If your backup is in the '/uploads' directory on the server and it is "
-    "named\n  e6230-pics-of-aunt-mary**2018-06-26__09:26pm\n"
-    "  then you'd use-\n"
+    "  If your backup is named\n  e6230-pics-of-aunt-mary**2018-06-26__09:26pm"
+    "\n  then you'd use-\n"
     "  > restore "<<startUnderline<<
-    "/uploads/e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline
-    <<"\n\n"
-    "  If your backup is in the same directory of where you initially log "
-    "in(via sftp) "
-    "and it is named\n"
-    "  e6230-pics-of-aunt-mary**2018-06-26__09:26pm\n"
-    "  then you'd use-\n"
-    "  > restore "<<startUnderline<<
-    "e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline<<
-    "\n\n"
-    "Note:\n\n"
-    "  If the path that you have the backup in contains spaces, then\n"
-    "  the entire first parameter needs to be quoted like so-\n"
-    "  > restore "<<startUnderline<<
-    "\"/directory name/e6230-pics-of-aunt-mary**2018-06-26__09:26pm\""
-    <<endUnderline<<endl<<endl<<endl;
+    "e6230-pics-of-aunt-mary**2018-06-26__09:26pm"<<endUnderline
+    <<endl<<endl;
     exit(EXIT_FAILURE);
 }
 
@@ -223,9 +198,9 @@ void createAScriptTheWillRestoreTheBackup()
     // The next line is needed to suppress the one time message of: "Warning:
     // Permanently added '<domain,ip>' (ECDSA) to the list of known hosts."
     <<"-o LogLevel=error "
-    <<username<<"@"<<domain
+    <<globalString.username<<"@"<<globalString.domain
     <<"<<END_SCRIPT"<<endl
-    <<tab0<<"cd "<<directoryThatTheEncryptedBackupIsIn<<endl
+    <<tab0<<"cd "<<globalString.landingDirectory<<endl
     <<tab0<<"get "<<nameOfEncryptedBackup<<endl
     // The next line creates an empty file named "transfer-complete" once the
     // 'get' command finishes successfully. The file won't be created if any of
@@ -246,7 +221,7 @@ void createAScriptTheWillRestoreTheBackup()
     // Note that the next line can be additionally reached when the backup
     // wasn't found
     <<tab1<<"echo Error: Unable to locate the backup '\""
-          <<nameOfEncryptedBackupWhichIncludesPath<<"\"'"<<endl
+          <<nameOfEncryptedBackup<<"\"'"<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"cleanUpAndExit"<<endl
     <<tab0<<"fi"<<endl<<endl
@@ -410,7 +385,7 @@ void runTheScriptThatRestoresTheBackup()
                                 "/bin/bash "+scriptThatRestoresTheBackupPath;
     cout<<
         "\nBeginning the process to restore your backup: "
-        <<nameOfEncryptedBackupWhichIncludesPath<<endl<<endl<<
+        <<nameOfEncryptedBackup<<endl<<endl<<
         "Reaching out to the server, please hang on a few seconds ... (up to a "
         "minute)"<<endl<<endl;
     if(system(restoreTheBackupScriptCommand.c_str()));

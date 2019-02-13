@@ -66,8 +66,8 @@ extern "C" string getStringUnder(int columnNumberWanted,
                                  int totalNumberOfColumns,
                                  string &lineToBeParsed);
 extern "C" double getTotalLinesInFile(string &pathToCountLines);
-extern "C" void retrieveUsernameAndDomain
-            (string &username, string &domain, string &usernameAndDomainPath);
+extern "C" void retrieveTheUsernameAndDomain(string &resultsDirectory);
+extern "C" void retrieveTheLandingDirectory(string &resultsDirectory);
 extern "C" void removeLeadingWhiteSpaces(string &line);
 extern "C" void clearTheTerminalWindow();
 extern "C" void writeCleanUpFunction
@@ -89,9 +89,6 @@ extern "C" void displayIncorrectCommandLineArguments(int argc,
 /***** File Scope Variables *****/
 /********************************/
 string purpose="backup";  // for path $HOME/.cloudbuddy/backup/
-string landingDirectory="";
-string username="";
-string domain="";
 double storageSpaceOfFilesThatWillBeInTheBackup=0;
 globalStringS globalString;
 string searchThisListForChangesPath =
@@ -421,44 +418,9 @@ void checkTheIntegrityOfTheConfigurationFiles()
     checkThatTheConfigurationFileHasBeenInstalled
                         (dontBackupFilesThatContainThisPath,purpose);
     checkThatTheConfigurationFileHasBeenInstalled(timeStampMarkerPath,purpose);
-    retrieveUsernameAndDomain
-                        (username,domain,globalString.usernameAndDomainPath);
-    retrieveTheLandingDirectory();
+    retrieveTheUsernameAndDomain(purpose);
+    retrieveTheLandingDirectory(purpose);
     retrieveTheComputerName();
-}
-
-void retrieveTheLandingDirectory()
-{
-    bool landingDirectoryFound = false;
-    string line="";
-    ifstream landingDirectoryHandle;
-    openForReading(globalString.landingDirectoryPath,
-                   __FILE__,
-                   __LINE__,
-                   landingDirectoryHandle);
-    while (getline(landingDirectoryHandle,line))
-    {
-        if ((line[0] != '#') && // skip comment lines
-            (!line.empty()))    // skip empty lines
-        {
-            checkThatThereAreNoWhiteSpaces
-                                    (line,"landing directory line",
-                                     globalString.landingDirectoryPath);
-
-            landingDirectoryFound = true;
-            landingDirectory = line;
-        }
-    }
-    landingDirectoryHandle.close();
-    if (!landingDirectoryFound)
-    {
-        string problem=
-            "The configuration file \""+globalString.landingDirectoryPath
-            +"\" needs to contain an entry.";
-        string correctiveAction=
-            "Please add an entry.";
-        displayError(problem,correctiveAction);
-    }
 }
 
 void retrieveTheComputerName()
@@ -937,9 +899,9 @@ void createAScriptThatWillPerformTheBackup()
     // The next line is needed to suppress the one time message of: "Warning:
     // Permanently added '<domain,ip>' (ECDSA) to the list of known hosts."
     <<"-o LogLevel=error "
-    <<username<<"@"<<domain
+    <<globalString.username<<"@"<<globalString.domain
     <<"<<END_SCRIPT"<<endl
-    <<tab0<<"cd "<<landingDirectory<<endl
+    <<tab0<<"cd "<<globalString.landingDirectory<<endl
     <<tab0<<"put "<<theBackup<<endl
     // The next line
     // creates an empty file named "transfer-complete" once the 'put' command
