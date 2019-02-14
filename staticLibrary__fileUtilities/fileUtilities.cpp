@@ -59,8 +59,10 @@ extern "C" string getStringUnder(int columnNumberWanted,
                                  string &lineToBeParsed);
 extern "C" double getTotalLinesInFile(string &pathToCountLines);
 extern "C" double getSizeOfFile(string &path);
-extern "C" void retrieveTheUsernameAndDomain(string &resultsDirectory);
-extern "C" void retrieveTheLandingDirectory(string &resultsDirectory);
+extern "C" void retrieveTheUsernameAndDomain
+                    (string &resultsDirectory,string &username,string &domain);
+extern "C" void retrieveTheLandingDirectory
+                    (string &resultsDirectory, string &landingDirectory);
 extern "C" void removeLeadingWhiteSpaces(string &line);
 extern "C" void clearTheTerminalWindow();
 extern "C" void extractPathAndFileName(string &stringToParse, string &path,
@@ -420,7 +422,9 @@ double getSizeOfFile(string &path)
     return size;
 }
 
-void retrieveTheUsernameAndDomain(string &resultsDirectory)
+void retrieveTheUsernameAndDomain(string &resultsDirectory,
+                                  string &username,
+                                  string &domain)
 {
     globalStringS globalString;
     getGlobalStrings(globalString,resultsDirectory);
@@ -444,8 +448,8 @@ void retrieveTheUsernameAndDomain(string &resultsDirectory)
             if (positionOfLastAtSign != string::npos)
             {
                 usernameAndDomainFound = true;
-                globalString.username = line.substr(0,positionOfLastAtSign);
-                globalString.domain = line.substr(positionOfLastAtSign+1);
+                username = line.substr(0,positionOfLastAtSign);
+                domain = line.substr(positionOfLastAtSign+1);
             }
         }
     }
@@ -461,7 +465,8 @@ void retrieveTheUsernameAndDomain(string &resultsDirectory)
     }
 }
 
-void retrieveTheLandingDirectory(string &resultsDirectory)
+void retrieveTheLandingDirectory(string &resultsDirectory,
+                                 string &landingDirectory)
 {
     globalStringS globalString;
     getGlobalStrings(globalString,resultsDirectory);
@@ -481,7 +486,7 @@ void retrieveTheLandingDirectory(string &resultsDirectory)
                                     (line,"landing directory line",
                                      globalString.landingDirectoryPath);
             landingDirectoryFound = true;
-            globalString.landingDirectory = line;
+            landingDirectory = line;
         }
     }
     landingDirectoryHandle.close();

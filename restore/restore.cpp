@@ -38,8 +38,10 @@ using namespace std;
 /*******************************/
 /***** From Static Library *****/
 /*******************************/
-extern "C" void retrieveTheUsernameAndDomain(string &resultsDirectory);
-extern "C" void retrieveTheLandingDirectory(string &resultsDirectory);
+extern "C" void retrieveTheUsernameAndDomain
+                    (string &resultsDirectory,string &username,string &domain);
+extern "C" void retrieveTheLandingDirectory
+                    (string &resultsDirectory, string &landingDirectory);
 extern "C" void getGlobalStrings(globalStringS &globalString,string &purpose);
 extern "C" void openForWriting(string &path,
                                string fromFileName,
@@ -94,7 +96,6 @@ int main(int argc, char * const argv[])
     checkTheIntegrityOfTheConfigurationFiles();
     saveTheTerminalPid(purpose);
     createAScriptTheWillRestoreTheBackup();
-exit(EXIT_SUCCESS);
     runTheScriptThatRestoresTheBackup();
     return 0;
 }
@@ -111,18 +112,11 @@ void checkTheIntegrityOfTheConfigurationFiles()
 {
     checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.usernameAndDomainPath,purpose);
-    retrieveTheUsernameAndDomain(purpose);
-
-
-left off here
-this is coming out as blank
-cout<<globalString.username<<endl;
-
-
-
+    retrieveTheUsernameAndDomain
+                            (purpose,globalString.username,globalString.domain);
     checkThatTheConfigurationFileHasBeenInstalled
                         (globalString.landingDirectoryPath,purpose);
-    retrieveTheLandingDirectory(purpose);
+    retrieveTheLandingDirectory(purpose,globalString.landingDirectory);
 }
 
 void checkThatTheCommandLineArgumentsAreCorrect(int argc, char * const argv[])

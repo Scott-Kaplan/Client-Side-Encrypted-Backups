@@ -66,8 +66,10 @@ extern "C" string getStringUnder(int columnNumberWanted,
                                  int totalNumberOfColumns,
                                  string &lineToBeParsed);
 extern "C" double getTotalLinesInFile(string &pathToCountLines);
-extern "C" void retrieveTheUsernameAndDomain(string &resultsDirectory);
-extern "C" void retrieveTheLandingDirectory(string &resultsDirectory);
+extern "C" void retrieveTheUsernameAndDomain
+                    (string &resultsDirectory,string &username,string &domain);
+extern "C" void retrieveTheLandingDirectory
+                    (string &resultsDirectory, string &landingDirectory);
 extern "C" void removeLeadingWhiteSpaces(string &line);
 extern "C" void clearTheTerminalWindow();
 extern "C" void writeCleanUpFunction
@@ -418,8 +420,9 @@ void checkTheIntegrityOfTheConfigurationFiles()
     checkThatTheConfigurationFileHasBeenInstalled
                         (dontBackupFilesThatContainThisPath,purpose);
     checkThatTheConfigurationFileHasBeenInstalled(timeStampMarkerPath,purpose);
-    retrieveTheUsernameAndDomain(purpose);
-    retrieveTheLandingDirectory(purpose);
+    retrieveTheUsernameAndDomain
+                        (purpose,globalString.username,globalString.domain);
+    retrieveTheLandingDirectory(purpose,globalString.landingDirectory);
     retrieveTheComputerName();
 }
 
