@@ -362,7 +362,7 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab3<<"echo"<<endl
     <<tab3<<"echo \""<<startUnderline<<"Your backup was successfully restored"
     <<endUnderline<<"\""<<endl
-    <<tab3<<"echo \""<<"It can be found in - "<<restorePath<<"\""<<endl
+    <<tab3<<"echo \""<<"It can be found here - "<<restorePath<<"\""<<endl
 
     <<tab2<<"fi"<<endl // done with analyzing the output from untar
     <<tab2<<"break"<<endl // break from the while loop

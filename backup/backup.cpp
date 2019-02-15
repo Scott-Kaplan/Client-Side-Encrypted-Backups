@@ -725,6 +725,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab1<<"read -p \"$nontruncatedMessage [y/n] \" -n 1 -r"<<endl
     <<tab1<<"echo"<<endl
     <<tab1<<"if [[ ! $REPLY =~ ^[Yy]$ ]]; then"<<endl
+    <<tab2<<"echo"<<endl
     <<tab2<<"cleanUpAndExit"<<endl
     <<tab1<<"fi"<<endl
     <<tab0<<"}"<<endl<<endl
