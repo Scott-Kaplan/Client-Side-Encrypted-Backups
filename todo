@@ -1,15 +1,19 @@
 // DONE fedora (10G virtual machine)
 // DONE modify install.sh
-	// change hard code of "/home/scott" to capture everything prior to the last slash
+	// DONE change hard code of "/home/scott" to capture everything prior to the last slash
+// DONE run build.sh seperate to ensure it displays ok
 // DONE smallBackup
+// DONE smallRestore
 // largeBackup
-// run build.sh seperate to ensure it displays ok
+// largeRestore
 
 // arch
 // DONE modify install.sh
-// smallBackup
-// largeBackup
 // run build.sh seperate to ensure it displays ok
+// smallBackup
+// smallRestore
+// largeBackup
+// largeRestore
 
 // centos
 // DONE modify install.sh
