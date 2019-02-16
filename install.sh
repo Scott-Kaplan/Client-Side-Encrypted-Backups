@@ -6,26 +6,7 @@ echo
 echo "Starting the Client-Side-Encrypted-Backups installation ..."
 echo
 
-#currentUser=$SUDO_USER
-#echo $currentUser
-#echo
-
-#echo $HOME
-#echo
-#pwd
-#HOME="howdy"
-#echo $HOME
-#exit
-
-#LEFT OFF HERE
-#extract pwd for everything up to the 3rd /
-#then move this below
-	#HOME=$(pwd)
-	#echo $HOME
-	#exit
-
-
-
+# check that the user has sudo before executing this script
 if [ "$(whoami)" != "root" ];
 then
 	echo "Because this script installs some dependencies and copies built binaries into \"/usr/local/bin\", you'll need to run as superuser."
@@ -50,7 +31,7 @@ elif [ $distribution = "debian" ]; then
 	apt-get install -y g++ tree ccrypt
 	
 elif [ $distribution = "fedora" ]; then
-	# Successfully tested on Fedora version 29.  Previous Fedora versions may work, but have yet to be tested.
+	# Successfully tested on Fedora version 29.
 	echo Installing g++ ...
 	yum -y install gcc-c++
 	echo
@@ -60,26 +41,11 @@ elif [ $distribution = "fedora" ]; then
 	echo Installing ccrypt ...
 	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
 	
-	# $HOME results to /root, but we don't want that.  This corrects $HOME to be the user's home directory
-	#fullDir="$pwd"
-	#echo $fullDir
-	#exit
-	#echo
-	#echo $HOME
-	#echo
-	
-	#extract the home directory
-	#cd ~
-	#HOME=$(pwd)
-	#echo $HOME
-	#exit
-	
-	#extract the home directory from the current directory 
+	# extract the home directory from the current user's directory
+	# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora
+	# the installation won't work if the user is in a directory lower than their home directory, however, they should not be because
+	# the installation instructions on the github say to be in the Client-Side-Encrypted-Backups directory
 	HOME=$(echo $(pwd) | cut -d'/' -f1-3)
-	echo $HOME
-	exit
-	#works but it is hard coded
-	#HOME="/home/scott"
 	
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
