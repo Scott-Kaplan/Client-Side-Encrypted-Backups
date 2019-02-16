@@ -67,7 +67,19 @@ elif [ $distribution = "fedora" ]; then
 	#echo
 	#echo $HOME
 	#echo
-	HOME="/home/scott"
+	
+	#extract the home directory
+	cd ~
+	HOME=$(pwd)
+	echo $HOME
+	exit
+	
+	#extract the home directory from the current directory 
+	HOME=$(echo $(pwd) | cut -d'/' -f1-3)
+	echo $HOME
+	exit
+	#works but it is hard coded
+	#HOME="/home/scott"
 	
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
