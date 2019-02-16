@@ -300,5 +300,5 @@ then
   exit
 fi
 
-echo SUCCESS - Installation is complete.
+echo SUCCESS - The installation is complete.
 echo
