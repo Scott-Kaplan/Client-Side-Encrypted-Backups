@@ -69,10 +69,10 @@ elif [ $distribution = "fedora" ]; then
 	#echo
 	
 	#extract the home directory
-	cd ~
-	HOME=$(pwd)
-	echo $HOME
-	exit
+	#cd ~
+	#HOME=$(pwd)
+	#echo $HOME
+	#exit
 	
 	#extract the home directory from the current directory 
 	HOME=$(echo $(pwd) | cut -d'/' -f1-3)
