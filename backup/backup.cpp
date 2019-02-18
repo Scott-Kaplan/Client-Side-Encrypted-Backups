@@ -798,53 +798,38 @@ void createAScriptThatWillPerformTheBackup()
     /* bring the cursor back now that tar is done */
     <<tab2<<"tput cnorm"<<endl
 
-    /* Get the size of the output from tar.  If it is different than expected */
-    /* which is "Removing leading `/' from member names", ask the user */
-    /* whether he/she wants to proceed with the backup.  If it's the same, */
-    /* then display 100% done when complete */
-    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
-    <<endl
-
-
-LEFT OFF HERE
-create tarResults binary and run below
-
-
-// works but does not account for fedora's multiple tar warnings
-//    <<tab2<<"if [ $sizeOfFile -ne "
-//          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
-//          <<endl
-
-    // TODO: delete expectedSizeOfTheOutputFileFromRunningTheTarCommand
-    //       when have this working
-    //delete this line when have working tarResults distribution outputSize
-    <<tab2
-    <<"distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)"
-    <<endl
-    <<tab2<<"if [ $sizeOfFile -ne tarResults $distribution outputSize ]; then"
-    <<endl
-
-    <<tab3<<"echo"<<endl
-    <<tab3<<"echo $sizeOfFile"<<endl
-    <<tab3<<"echo"<<endl
-    <<tab3<<"echo"<<endl
-    <<tab3<<"echo Warning: Normally, the output from running the tar command "
-          <<"would have been -"<<endl
-    <<tab3<<"echo "<<startUnderline<<endl
-
-// works but does not account for fedora's multiple tar warnings
-//<<tab3<<"printf \""<<expectedOutputFromRunningTheTarCommand<<"\""<<endl
-
-    // TODO: delete expectedOutputFromRunningTheTarCommand
-    //       when have this working
-    //delete this line when have working tarResults distribution outputTarResults
-    <<tab3<<"printf tarResults $distribution outputTarResults"<<endl
-
-
-    <<tab3<<"echo "<<endUnderline<<endl
+    /* check tar's output, and warn the user if it was unexpected */
+    <<tab2<<"actOnTarOutput"<<endl
+    <<tab2<<"if [ -e \""<<globalString.unexpectedTarOutputPath<<"\" ]; "
+          <<"then"<<endl
     <<tab3<<"echo "<<endl
-    <<tab3<<"echo "<<endl
-    <<tab3<<"echo But, instead it was - "<<endl
+    <<tab3<<"echo Warning: The tar command output was unexpected.  It was -"
+    <<endl
+
+// TODO: remove these two, then delete all commented out code when have above working
+//       expectedSizeOfTheOutputFileFromRunningTheTarCommand
+//       expectedOutputFromRunningTheTarCommand
+
+//    /* Get the size of the output from tar.  If it is different than expected */
+//    /* which is "Removing leading `/' from member names", ask the user */
+//    /* whether he/she wants to proceed with the backup.  If it's the same, */
+//    /* then display 100% done when complete */
+//    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
+//    <<endl
+//    <<tab2<<"if [ $sizeOfFile -ne "<<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"<<endl
+//    <<tab3<<"echo"<<endl
+//    <<tab3<<"echo $sizeOfFile"<<endl
+//    <<tab3<<"echo"<<endl
+//    <<tab3<<"echo"<<endl
+//    <<tab3<<"echo Warning: Normally, the output from running the tar command "
+//          <<"would have been -"<<endl
+//    <<tab3<<"echo "<<startUnderline<<endl
+//    <<tab3<<"printf \""<<expectedOutputFromRunningTheTarCommand<<"\""<<endl
+//    <<tab3<<"echo "<<endUnderline<<endl
+//    <<tab3<<"echo "<<endl
+//    <<tab3<<"echo "<<endl
+//    <<tab3<<"echo But, instead it was - "<<endl
+
     <<tab3<<"echo "<<startUnderline<<endl
     <<tab3<<"while read line; do echo \"$line\"; done < "
     <<globalString.resultsOfTarCommand<<endl

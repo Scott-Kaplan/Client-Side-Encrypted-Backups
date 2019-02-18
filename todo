@@ -4,7 +4,7 @@
 // DONE run build.sh seperate to ensure it displays ok
 // DONE smallRestore cb ad
 // DONE largeRestore ad
-
+// rename tarResults
 // fix tar output on smallBackup.  works if say yes to unexpected tar output but need to get rid of this annoying error
 // largeBackup
 

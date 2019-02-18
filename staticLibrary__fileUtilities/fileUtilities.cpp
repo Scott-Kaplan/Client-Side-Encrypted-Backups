@@ -356,6 +356,9 @@ void getGlobalStrings(globalStringS &globalString, string &purpose)
 
     globalString.sizeOfBackupThatIsADecryptedTarBallPath =
             globalString.basePath +"sizeOfBackupThatIsADecryptedTarBall";
+
+    globalString.unexpectedTarOutputPath =
+            globalString.basePath +"unexpectedTarOutput";
 }
 
 bool fileIsEmpty(string &path)

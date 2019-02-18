@@ -84,6 +84,7 @@ typedef struct
     string landingDirectory;
     string username;
     string domain;
+    string unexpectedTarOutputPath;
 }globalStringS;
 
 #endif // FILEUTILITIES_H_INCLUDED
