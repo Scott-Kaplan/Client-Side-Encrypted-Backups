@@ -751,14 +751,14 @@ void createAScriptThatWillPerformTheBackup()
     // example
     // (tar jcf e6230-primary**2018-07-16__06:37pm --force-local
     // "$HOME/temp/test/test/testTarBall" >
-    // $HOME/.cloudbuddy/backup/tarOutputFromRunningABackupPath 2>&1 &
+    // $HOME/.cloudbuddy/backup/tarOutputPath 2>&1 &
     // echo $! > $HOME/.cloudbuddy/backup/fileThatContainsTheTarProcessId)
     <<tab0<<"(tar jcf "<<theBackup
     // This next line overides the limitation of not being allowed to include
     // one or more colons in the name of the tarball
     <<" --force-local"
     <<filteredChangedAndNewFilesIntoTarCmd<<" > "
-    <<globalString.tarOutputFromRunningABackupPath<<" 2>&1"
+    <<globalString.tarOutputPath<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
     // This is used to show the tar percentage complete from the actOnTarStatus
     // binary
@@ -797,7 +797,7 @@ void createAScriptThatWillPerformTheBackup()
     <<endl
     <<tab3<<"echo "<<startUnderline<<endl
     <<tab3<<"while read line; do echo \"$line\"; done < "
-    <<globalString.tarOutputFromRunningABackupPath<<endl
+    <<globalString.tarOutputPath<<endl
     <<tab3<<"echo "<<endUnderline<<endl
     <<tab3<<"message2=\"Do you still want to continue with the backup?\""<<endl
     <<tab3<<"giveContinuationOptionToTheUser $message2"<<endl

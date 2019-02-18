@@ -68,10 +68,10 @@ int main(int argc, char * const argv[])
         string line="";
         ifstream tarResultsHandle;
 
-string cmd="echo howdy >> "+globalString.tarOutputFromRunningABackupPath;
+string cmd="echo howdy >> "+globalString.tarOutputPath;
 if(system(cmd.c_str()));
 
-        openForReading(globalString.tarOutputFromRunningABackupPath
+        openForReading(globalString.tarOutputPath
                        ,__FILE__
                        ,__LINE__,
                        tarResultsHandle);

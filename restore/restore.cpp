@@ -301,7 +301,7 @@ void createAScriptTheWillRestoreTheBackup()
     // the next line sends all output from executing the tar command to a file
     // so the output can be analyzed to see if untar returned something
     // unexpected
-    <<" > "<<globalString.resultsOfTarCommand<<" 2>&1"
+    <<" > "<<globalString.tarOutputPath<<" 2>&1"
     // This next line saves the tar Process Id from executing the tar command.
     // When untar'ing large tarballs the pecentage complete is very useful,
     // otherwise the user just sees their session hanging and doesn't really
@@ -332,7 +332,7 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab2<<"tput cnorm"<<endl
 
     /* Get the size of the output from untar which is expected to be nothing */
-    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
+    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.tarOutputPath<<")"
     <<endl
 
     /* The backup may have not been successfully restored */
@@ -345,7 +345,7 @@ void createAScriptTheWillRestoreTheBackup()
     <<tab3<<"echo "<<endl
     <<tab3<<"echo "<<startUnderline<<endl
     <<tab3<<"while read line; do echo \"$line\"; done < "
-    <<globalString.resultsOfTarCommand<<endl
+    <<globalString.tarOutputPath<<endl
     <<tab3<<"echo "<<endUnderline<<endl
     <<tab3<<"echo "<<endl
     <<tab3<<"echo \""<<"The attempt to restore the backup can be found here - "
