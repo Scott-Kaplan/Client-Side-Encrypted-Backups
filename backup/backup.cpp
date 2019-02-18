@@ -829,8 +829,8 @@ void createAScriptThatWillPerformTheBackup()
 //    <<tab3<<"echo "<<endl
 //    <<tab3<<"echo "<<endl
 //    <<tab3<<"echo But, instead it was - "<<endl
-//    <<tab3<<"echo "<<startUnderline<<endl
 
+    <<tab3<<"echo "<<startUnderline<<endl
     <<tab3<<"while read line; do echo \"$line\"; done < "
     <<globalString.resultsOfTarCommand<<endl
     <<tab3<<"echo "<<endUnderline<<endl
