@@ -119,11 +119,16 @@ string remainingSizeInHomeDirectoryPath =
         "$HOME/.cloudbuddy/backup/remainingSizeOnTheDrive";
 string computerName="";
 string backupLabelName="";
-string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "44";
 
 // Note: In the next line, \\x60 escapes the back tick(`)
 string expectedOutputFromRunningTheTarCommand =
         "tar: Removing leading \\x60/' from member names";
+string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "44";
+
+// On fedora the tar command from fedora when doing a backup yields
+// tar: Removing leading `/' from member names
+// tar: Removing leading `/' from hard link targets
+string expectedSizeOfTheOutputFileFromRunningTheTarCommandOnFedora = "93";
 
 /*******************************/
 /***** Function Prototypes *****/
@@ -799,9 +804,21 @@ void createAScriptThatWillPerformTheBackup()
     /* then display 100% done when complete */
     <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
     <<endl
-    <<tab2<<"if [ $sizeOfFile -ne "
-          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
-          <<endl
+//LEFT OFF HERE
+//test this
+    <<tab2  <<"if [ $sizeOfFile -ne "
+            <<expectedSizeOfTheOutputFileFromRunningTheTarCommand
+            <<" && $sizeOfFile -ne "
+            <<expectedSizeOfTheOutputFileFromRunningTheTarCommandOnFedora
+            <<" ]; then"
+            <<endl
+
+// works but does not account for fedora's multiples tar warnings
+//    <<tab2<<"if [ $sizeOfFile -ne "
+//          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
+//          <<endl
+
+
     <<tab3<<"echo"<<endl
     <<tab3<<"echo $sizeOfFile"<<endl
     <<tab3<<"echo"<<endl
