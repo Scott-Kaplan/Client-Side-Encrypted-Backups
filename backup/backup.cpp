@@ -804,20 +804,25 @@ void createAScriptThatWillPerformTheBackup()
     /* then display 100% done when complete */
     <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
     <<endl
-//LEFT OFF HERE
-//test this
-//    <<tab2  <<"if [ $sizeOfFile -ne "
-//            <<expectedSizeOfTheOutputFileFromRunningTheTarCommand
-//            <<" && $sizeOfFile -ne "
-//            <<expectedSizeOfTheOutputFileFromRunningTheTarCommandOnFedora
-//            <<" ]; then"
-//            <<endl
 
-// works but does not account for fedora's multiples tar warnings
-    <<tab2<<"if [ $sizeOfFile -ne "
-          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
-          <<endl
 
+LEFT OFF HERE
+create tarResults binary and run below
+
+
+// works but does not account for fedora's multiple tar warnings
+//    <<tab2<<"if [ $sizeOfFile -ne "
+//          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
+//          <<endl
+
+    // TODO: delete expectedSizeOfTheOutputFileFromRunningTheTarCommand
+    //       when have this working
+    //delete this line when have working tarResults distribution outputSize
+    <<tab2
+    <<"distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)"
+    <<endl
+    <<tab2<<"if [ $sizeOfFile -ne tarResults $distribution outputSize ]; then"
+    <<endl
 
     <<tab3<<"echo"<<endl
     <<tab3<<"echo $sizeOfFile"<<endl
@@ -826,7 +831,16 @@ void createAScriptThatWillPerformTheBackup()
     <<tab3<<"echo Warning: Normally, the output from running the tar command "
           <<"would have been -"<<endl
     <<tab3<<"echo "<<startUnderline<<endl
-    <<tab3<<"printf \""<<expectedOutputFromRunningTheTarCommand<<"\""<<endl
+
+// works but does not account for fedora's multiple tar warnings
+//<<tab3<<"printf \""<<expectedOutputFromRunningTheTarCommand<<"\""<<endl
+
+    // TODO: delete expectedOutputFromRunningTheTarCommand
+    //       when have this working
+    //delete this line when have working tarResults distribution outputTarResults
+    <<tab3<<"printf tarResults $distribution outputTarResults"<<endl
+
+
     <<tab3<<"echo "<<endUnderline<<endl
     <<tab3<<"echo "<<endl
     <<tab3<<"echo "<<endl
