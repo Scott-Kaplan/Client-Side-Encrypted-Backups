@@ -806,17 +806,17 @@ void createAScriptThatWillPerformTheBackup()
     <<endl
 //LEFT OFF HERE
 //test this
-    <<tab2  <<"if [ $sizeOfFile -ne "
-            <<expectedSizeOfTheOutputFileFromRunningTheTarCommand
-            <<" && $sizeOfFile -ne "
-            <<expectedSizeOfTheOutputFileFromRunningTheTarCommandOnFedora
-            <<" ]; then"
-            <<endl
+//    <<tab2  <<"if [ $sizeOfFile -ne "
+//            <<expectedSizeOfTheOutputFileFromRunningTheTarCommand
+//            <<" && $sizeOfFile -ne "
+//            <<expectedSizeOfTheOutputFileFromRunningTheTarCommandOnFedora
+//            <<" ]; then"
+//            <<endl
 
 // works but does not account for fedora's multiples tar warnings
-//    <<tab2<<"if [ $sizeOfFile -ne "
-//          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
-//          <<endl
+    <<tab2<<"if [ $sizeOfFile -ne "
+          <<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"
+          <<endl
 
 
     <<tab3<<"echo"<<endl
