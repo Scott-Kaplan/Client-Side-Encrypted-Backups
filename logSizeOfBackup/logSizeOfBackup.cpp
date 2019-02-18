@@ -31,6 +31,7 @@ using namespace std;
 /***** Includes *****/
 /********************/
 #include <fstream>
+#include <iostream>
 #include <iomanip>
 #include <sstream>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
@@ -59,7 +60,7 @@ int main(int argc, char * const argv[])
     {
         /* read 2 command line arguments */
         string nameOfTheBackup = argv[1];
-        string logFilePath = argv[2];
+        string destination = argv[2];
 
         /* get the size of the backup */
         double sizeOfBackup = getSizeOfFile(nameOfTheBackup);
@@ -67,13 +68,18 @@ int main(int argc, char * const argv[])
         /* get a formatted readable size of the backup */
         string formattedSizeOfBackup = getFormattedSizeOfBackup(sizeOfBackup);
 
-        /* write the formatted size of the backup to the completed backups */
-        /* log file */
-        ofstream logSizeOfBackupHandle;
-        openForWriting(logFilePath,__FILE__,__LINE__,logSizeOfBackupHandle,
-                       CONCATENATE_OTHERWISE_CREATE_NEW_FILE);
-        logSizeOfBackupHandle<<"=> size: "<<formattedSizeOfBackup<<endl;
-        logSizeOfBackupHandle.close();
+        if (destination == "terminal")
+        {
+            cout<<formattedSizeOfBackup<<endl;
+        }
+        else /* write to the completed_backups log file */
+        {
+            ofstream logSizeOfBackupHandle;
+            openForWriting(destination,__FILE__,__LINE__,logSizeOfBackupHandle,
+                           CONCATENATE_OTHERWISE_CREATE_NEW_FILE);
+            logSizeOfBackupHandle<<"=> size: "<<formattedSizeOfBackup<<endl;
+            logSizeOfBackupHandle.close();
+        }
     }
     return 0;
 }

@@ -2,10 +2,10 @@
 // DONE modify install.sh
 	// DONE change hard code of "/home/scott" to capture everything prior to the last slash
 // DONE run build.sh seperate to ensure it displays ok
-// DONE smallBackup
-// DONE smallRestore
+// DONE smallRestore cb ad
+// DONE largeRestore ad
+// smallBackup
 // largeBackup
-// largeRestore
 
 // arch
 // DONE modify install.sh

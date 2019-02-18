@@ -875,9 +875,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab0<<"echo"<<endl
     <<tab0<<"echo \""<<startUnderline<<"Size of the backup"<<endUnderline<<"\""
     <<endl
-    <<tab0<<"tree --du -ah "<<theBackup<<".cpt | grep \" used in \" | colrm 6 "
-    // This next line trims the leading whitespaces off of the output
-    <<"| sed -e 's/^[ \t]*//'"<<endl<<endl
+    <<tab0<<"logSizeOfBackup "<<theBackup<<".cpt terminal"<<endl<<endl
 
     /* Remove the natural ccrypt extension off of the backup */
     <<tab0<<"mv "<<theBackup<<".cpt "<<theBackup<<endl
