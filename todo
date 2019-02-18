@@ -1,77 +1,73 @@
-// DONE fedora (10G virtual machine)
-// DONE modify install.sh
-	// DONE change hard code of "/home/scott" to capture everything prior to the last slash
-// DONE run build.sh seperate to ensure it displays ok
-// DONE smallRestore cb ad
-// DONE largeRestore ad
-// in logSizeOfBackup binary, also print total files in backup
-// smallBackup
-// largeBackup
-
 // arch
 // DONE modify install.sh
 // run build.sh seperate to ensure it displays ok
-// smallBackup
 // smallRestore
-// largeBackup
 // largeRestore
+// smallBackup
+// largeBackup
 
 // centos
 // DONE modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// run build.sh seperate to ensure it displays ok
 
 // DONE debian 9 (1.5G memory, 10G)
 // DONE modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// run build.sh seperate to ensure it displays ok
 
 // gentoo
 // modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// run build.sh seperate to ensure it displays ok
 
 // opensuse (5G virtual machine)
 // modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// run build.sh seperate to ensure it displays ok
 
 // slackware
 // modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// run build.sh seperate to ensure it displays ok
 
 // ubuntu 14.04
-// DONE modify install.sh
-// smallBackup
 // enable ssh public key
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// run build.sh seperate to ensure it displays ok
 
 // ubuntu 18.04
-// DONE modify install.sh
-// smallBackup
 // enable ssh public key
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// run build.sh seperate to ensure it displays ok
 
 // ubuntu 16.04
-// DONE modify install.sh
 // make copy of config file 1 that has problem
 // on 16.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
-// smallBackup
-// enable ssh public key
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
 // smallBackup
 // largeBackup
-// ensure size in log file is correct
-// run build.sh seperate to ensure it displays ok
 
 ----------------------------------------------------
 ----------------------------------------------------
@@ -466,3 +462,18 @@ void test__existenceOfAFile()
 56 // after a backup and prior to checking for "tar: Removing leading" in the actOnTarOutput.cpp, inject "howdy" into the tarOutputPath like below; then ensure that tar gives warning that the output was unexpected.
 // string cmd="echo howdy >> "+globalString.tarOutputPath;
 // if(system(cmd.c_str()));
+
+57 // in logSizeOfBackup binary, also print total files in backup
+
+58 // change hard code of "/home/scott" in install.sh to capture everything prior to the 2nd slash
+
+59
+// DONE fedora (10G virtual machine)
+// DONE modify install.sh
+// DONE run build.sh seperate to ensure it displays ok
+// DONE smallRestore cb ad
+// DONE largeRestore ad
+// DONE smallBackup ad
+// DONE largeBackup ad
+// DONE ensure size in log file is correct for both small and large backup
+// DONE ensure log size matches on destination server for both small and large backup
