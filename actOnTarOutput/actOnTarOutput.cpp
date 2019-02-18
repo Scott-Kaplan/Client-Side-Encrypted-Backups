@@ -75,7 +75,7 @@ int main(int argc, char * const argv[])
                        tarResultsHandle);
         while(getline(tarResultsHandle,line))
         {
-            if (line.find("tar: Removing leading") != string::npos)
+            if (line.find("tar: Removing leading") == string::npos)
             {
                 string createFileCmd =
                                 "touch "+globalString.unexpectedTarOutputPath;
