@@ -45,6 +45,11 @@ extern "C" void openForWriting(string &path,
                                int fromLineNumber,
                                ofstream &writeFileHandle,
                                FileWritingType FileWritingType);
+extern "C" void openForReading(string &path,
+                               string fromFileName,
+                               int fromLineNumber,
+                               ifstream &readFileHandle);
+extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 
 /*******************************/
 /***** Function Prototypes *****/
@@ -58,6 +63,10 @@ int main(int argc, char * const argv[])
 {
     if (argc == 3)
     {
+        string purpose="backup";  // for path $HOME/.cloudbuddy/backup/
+        globalStringS globalString;
+        getGlobalStrings(globalString,purpose);
+
         /* read 2 command line arguments */
         string nameOfTheBackup = argv[1];
         string destination = argv[2];
@@ -77,7 +86,20 @@ int main(int argc, char * const argv[])
             ofstream logSizeOfBackupHandle;
             openForWriting(destination,__FILE__,__LINE__,logSizeOfBackupHandle,
                            CONCATENATE_OTHERWISE_CREATE_NEW_FILE);
+
+            // write the size of the backup
             logSizeOfBackupHandle<<"=> size: "<<formattedSizeOfBackup<<endl;
+
+            // write the number of files contained in the backup
+            ifstream numberOfFilesInBackupHandle;
+            string numberOfFilesInTheBackup="";
+            openForReading(globalString.totalFilesInBackupPath
+                           ,__FILE__,__LINE__,
+                           numberOfFilesInBackupHandle);
+            getline(numberOfFilesInBackupHandle,numberOfFilesInTheBackup);
+            logSizeOfBackupHandle<<"=> files: "<<numberOfFilesInTheBackup<<endl;
+            numberOfFilesInBackupHandle.close();
+
             logSizeOfBackupHandle.close();
         }
     }

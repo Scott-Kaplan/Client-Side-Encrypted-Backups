@@ -219,6 +219,15 @@ void filterUnwantedFilesSoThatTheyWontBeInTheBackup()
     cout<<endl<<startUnderline<<"Files found (after filtering)"<<endUnderline
     <<endl<<getTotalLinesInFile(filteredChangedAndNewFilesPath)<<endl;
 
+    /* Save the total files that will be in a completed backup to a file. */
+    /* This is later used to write to the log file under the backup */
+    ofstream totalFilesInBackupHandle;
+    openForWriting(globalString.totalFilesInBackupPath,__FILE__,__LINE__,
+                   totalFilesInBackupHandle,NEW_FILE);
+    totalFilesInBackupHandle
+                    <<getTotalLinesInFile(filteredChangedAndNewFilesPath)<<endl;
+    totalFilesInBackupHandle.close();
+
     checkForIllegalCharactersInFile(filteredChangedAndNewFilesPath);
 }
 

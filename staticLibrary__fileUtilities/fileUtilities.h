@@ -85,6 +85,7 @@ typedef struct
     string username;
     string domain;
     string unexpectedTarOutputPath;
+    string totalFilesInBackupPath;
 }globalStringS;
 
 #endif // FILEUTILITIES_H_INCLUDED

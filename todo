@@ -463,3 +463,6 @@ void test__existenceOfAFile()
 55 // on 18.04, do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is one line before "Exiting" and two lines after
 // it was the same on both 14.04 & 16.04, so made it 2 above & 2 below
 
+56 // after a backup and prior to checking for "tar: Removing leading" in the actOnTarOutput.cpp, inject "howdy" into the tarOutputPath like below; then ensure that tar gives warning that the output was unexpected.
+// string cmd="echo howdy >> "+globalString.tarOutputPath;
+// if(system(cmd.c_str()));
