@@ -44,24 +44,22 @@ extern "C" void openForReading(string &path,
                                ifstream &readFileHandle);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
 
-// on fedora when doing a backup and tar'ing both .bashrc and .bashrc1 it
+// On Fedora when doing a backup and tar'ing both .bashrc and .bashrc1 it
 // returns this -
-//
 //tar: Removing leading `/' from member names
 //tar: Removing leading `/' from hard link targets
 //
-// but when just .bashrc is in the backup, it returns just this one line
+// but when just .bashrc is in the backup, it returns just this one line -
 //tar: Removing leading `/' from member names
 //
 // As a result cannot check the size of the tar output because it's variable
 // and cannot say what is nominal output because it varies.
-// so check every line of the output.  If a line has
+// So check every line of the tar output.  If a line has
 // "tar: Removing leading" it is ok.  Otherwise create a file indicator so that
 // the backup binary can inform the user that the tar output is unexpected
 
 int main(int argc, char * const argv[])
 {
-
     if (argc == 1)
     {
         string purpose="backup";  // for path $HOME/.cloudbuddy/backup/

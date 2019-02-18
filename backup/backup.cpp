@@ -120,16 +120,6 @@ string remainingSizeInHomeDirectoryPath =
 string computerName="";
 string backupLabelName="";
 
-// Note: In the next line, \\x60 escapes the back tick(`)
-string expectedOutputFromRunningTheTarCommand =
-        "tar: Removing leading \\x60/' from member names";
-string expectedSizeOfTheOutputFileFromRunningTheTarCommand = "44";
-
-// On fedora the tar command from fedora when doing a backup yields
-// tar: Removing leading `/' from member names
-// tar: Removing leading `/' from hard link targets
-string expectedSizeOfTheOutputFileFromRunningTheTarCommandOnFedora = "93";
-
 /*******************************/
 /***** Function Prototypes *****/
 /*******************************/
@@ -805,31 +795,6 @@ void createAScriptThatWillPerformTheBackup()
     <<tab3<<"echo "<<endl
     <<tab3<<"echo WARNING: The tar command output was unexpected.  It was -"
     <<endl
-
-// TODO: remove these two, then delete all commented out code when have above working
-//       expectedSizeOfTheOutputFileFromRunningTheTarCommand
-//       expectedOutputFromRunningTheTarCommand
-
-//    /* Get the size of the output from tar.  If it is different than expected */
-//    /* which is "Removing leading `/' from member names", ask the user */
-//    /* whether he/she wants to proceed with the backup.  If it's the same, */
-//    /* then display 100% done when complete */
-//    <<tab2<<"sizeOfFile=$(stat -c%s "<<globalString.resultsOfTarCommand<<")"
-//    <<endl
-//    <<tab2<<"if [ $sizeOfFile -ne "<<expectedSizeOfTheOutputFileFromRunningTheTarCommand<<" ]; then"<<endl
-//    <<tab3<<"echo"<<endl
-//    <<tab3<<"echo $sizeOfFile"<<endl
-//    <<tab3<<"echo"<<endl
-//    <<tab3<<"echo"<<endl
-//    <<tab3<<"echo Warning: Normally, the output from running the tar command "
-//          <<"would have been -"<<endl
-//    <<tab3<<"echo "<<startUnderline<<endl
-//    <<tab3<<"printf \""<<expectedOutputFromRunningTheTarCommand<<"\""<<endl
-//    <<tab3<<"echo "<<endUnderline<<endl
-//    <<tab3<<"echo "<<endl
-//    <<tab3<<"echo "<<endl
-//    <<tab3<<"echo But, instead it was - "<<endl
-
     <<tab3<<"echo "<<startUnderline<<endl
     <<tab3<<"while read line; do echo \"$line\"; done < "
     <<globalString.resultsOfTarCommand<<endl
