@@ -803,7 +803,7 @@ void createAScriptThatWillPerformTheBackup()
     <<tab2<<"if [ -e \""<<globalString.unexpectedTarOutputPath<<"\" ]; "
           <<"then"<<endl
     <<tab3<<"echo "<<endl
-    <<tab3<<"echo Warning: The tar command output was unexpected.  It was -"
+    <<tab3<<"echo WARNING: The tar command output was unexpected.  It was -"
     <<endl
 
 // TODO: remove these two, then delete all commented out code when have above working
@@ -829,8 +829,8 @@ void createAScriptThatWillPerformTheBackup()
 //    <<tab3<<"echo "<<endl
 //    <<tab3<<"echo "<<endl
 //    <<tab3<<"echo But, instead it was - "<<endl
+//    <<tab3<<"echo "<<startUnderline<<endl
 
-    <<tab3<<"echo "<<startUnderline<<endl
     <<tab3<<"while read line; do echo \"$line\"; done < "
     <<globalString.resultsOfTarCommand<<endl
     <<tab3<<"echo "<<endUnderline<<endl
