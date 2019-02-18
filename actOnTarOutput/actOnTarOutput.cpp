@@ -67,7 +67,11 @@ int main(int argc, char * const argv[])
         getGlobalStrings(globalString,purpose);
         string line="";
         ifstream tarResultsHandle;
-        openForReading(globalString.resultsOfTarCommand
+
+string cmd="echo howdy >> "+globalString.tarOutputFromRunningABackupPath;
+if(system(cmd.c_str()));
+
+        openForReading(globalString.tarOutputFromRunningABackupPath
                        ,__FILE__
                        ,__LINE__,
                        tarResultsHandle);

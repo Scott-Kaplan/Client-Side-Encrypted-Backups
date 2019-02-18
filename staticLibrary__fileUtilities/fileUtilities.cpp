@@ -351,8 +351,8 @@ void getGlobalStrings(globalStringS &globalString, string &purpose)
             globalString.basePath+
             "fileContainingprocessIdOfThisTerminalSession";
 
-    globalString.resultsOfTarCommand =
-            globalString.basePath+"resultsOfTarCommand";
+    globalString.tarOutputFromRunningABackupPath =
+            globalString.basePath+"tarOutputFromRunningABackup";
 
     globalString.sizeOfBackupThatIsADecryptedTarBallPath =
             globalString.basePath +"sizeOfBackupThatIsADecryptedTarBall";

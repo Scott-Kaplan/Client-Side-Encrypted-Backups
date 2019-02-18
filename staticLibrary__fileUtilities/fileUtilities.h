@@ -79,7 +79,7 @@ typedef struct
     string binaryThatShowsTheTarStatus;
     string binaryThatShowsTheCcryptStatus;
     string processIdOfThisTerminalSessionPath;
-    string resultsOfTarCommand;
+    string tarOutputFromRunningABackupPath;
     string sizeOfBackupThatIsADecryptedTarBallPath;
     string landingDirectory;
     string username;
