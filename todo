@@ -4,6 +4,7 @@
 // DONE run build.sh seperate to ensure it displays ok
 // DONE smallRestore cb ad
 // DONE largeRestore ad
+// in logSizeOfBackup binary, also print total files in backup
 // smallBackup
 // largeBackup
 
