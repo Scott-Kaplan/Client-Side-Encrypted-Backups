@@ -1,7 +1,7 @@
 // DONE debian 9 (1.5G memory, 10G)
 // DONE modify install.sh
 // DONE run build.sh seperate to ensure it displays ok
-// smallRestore eb
+// DONE smallRestore eb
 // largeRestore cb
 // smallBackup eb
 // largeBackup cb
