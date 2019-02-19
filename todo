@@ -1,3 +1,11 @@
+// DONE debian 9 (1.5G memory, 10G)
+// DONE modify install.sh
+// DONE run build.sh seperate to ensure it displays ok
+// smallRestore eb
+// largeRestore cb
+// smallBackup eb
+// largeBackup cb
+
 // arch
 // DONE modify install.sh
 // run build.sh seperate to ensure it displays ok
@@ -7,14 +15,6 @@
 // largeBackup
 
 // centos
-// DONE modify install.sh
-// run build.sh seperate to ensure it displays ok
-// smallRestore
-// largeRestore
-// smallBackup
-// largeBackup
-
-// DONE debian 9 (1.5G memory, 10G)
 // DONE modify install.sh
 // run build.sh seperate to ensure it displays ok
 // smallRestore

@@ -16,22 +16,30 @@ then
   exit
 fi
 
+# extract the home directory from the current user's directory
+# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora
+# the installation won't work if the user is in a directory lower than their home directory, however, they should not be because
+# the installation instructions on the github say to be in the Client-Side-Encrypted-Backups directory
+HOME=$(echo $(pwd) | cut -d'/' -f1-3)
+
+# get the distribution of linux that the user is on
+distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
+
 # The following software needs to be installed
 # g++
 # tree
 # ccrypt
 echo Installing the necessary software which is: g++, tree, ccrypt
 echo
-distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
 if [ $distribution = "arch" ]; then
 	yes | pacman -S g++ tree ccrypt
 elif [ $distribution = "centos" ]; then
 	yum -y install g++ tree ccrypt
 elif [ $distribution = "debian" ]; then
+	# Successfully tested on Debian version 9
 	apt-get install -y g++ tree ccrypt
-	
 elif [ $distribution = "fedora" ]; then
-	# Successfully tested on Fedora version 29.
+	# Successfully tested on Fedora version 29
 	echo Installing g++ ...
 	yum -y install gcc-c++
 	echo
@@ -40,13 +48,6 @@ elif [ $distribution = "fedora" ]; then
 	echo
 	echo Installing ccrypt ...
 	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
-	
-	# extract the home directory from the current user's directory
-	# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora
-	# the installation won't work if the user is in a directory lower than their home directory, however, they should not be because
-	# the installation instructions on the github say to be in the Client-Side-Encrypted-Backups directory
-	HOME=$(echo $(pwd) | cut -d'/' -f1-3)
-	
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
 else
