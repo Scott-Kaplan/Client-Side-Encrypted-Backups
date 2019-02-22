@@ -17,9 +17,7 @@ then
 fi
 
 # extract the home directory from the current user's directory
-# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora
-# the installation won't work if the user is in a directory lower than their home directory, however, they should not be because
-# the installation instructions on the github say to be in the Client-Side-Encrypted-Backups directory
+# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora & some other distros
 HOME=$(echo $(pwd) | cut -d'/' -f1-3)
 
 # get the distribution of linux that the user is on
@@ -52,10 +50,11 @@ elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
 else
   echo ERROR
-	echo    Unable to detect your linux distribution.
+	echo "  Unable to detect your linux distribution."
 	echo HOW TO FIX
-	echo    You will need to install these: g++, tree, ccrypt
-  echo    Once complete, there is no need to rerun this installation script since you will have everything installed.
+	echo "  [1] Install these if not already installed:  g++, tree, ccrypt"
+  echo "  [2] In install.sh, comment out all code within this block: \"The following software needs to be installed\"."
+  echo "  [3] Rerun install.sh via the command:  sudo ./install.sh"
   echo
   exit
 fi
