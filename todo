@@ -1,18 +1,24 @@
-// DONE debian 9 (1.5G memory, 10G)
-// DONE modify install.sh
-// DONE run build.sh seperate to ensure it displays ok
-// DONE smallRestore eb
-// DONE largeRestore cb
-// smallBackup eb
-// largeBackup cb
+// make copy of config file 1 that has problem.  Modify all files with libreoffice
+// backup
+// restore
 
-// arch
-// DONE modify install.sh
+// ubuntu 16.04 user: test
+// enable ssh public key
+//do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
 // run build.sh seperate to ensure it displays ok
 // smallRestore
 // largeRestore
 // smallBackup
 // largeBackup
+// restore largeBackup
+
+// ubuntu 18.04 user: test
+// enable ssh public key
+// smallRestore
+// largeRestore
+// smallBackup
+// largeBackup
+// restore largeBackup
 
 // centos
 // DONE modify install.sh
@@ -21,14 +27,7 @@
 // largeRestore
 // smallBackup
 // largeBackup
-
-// gentoo
-// modify install.sh
-// run build.sh seperate to ensure it displays ok
-// smallRestore
-// largeRestore
-// smallBackup
-// largeBackup
+// restore largeBackup
 
 // opensuse (5G virtual machine)
 // modify install.sh
@@ -37,6 +36,25 @@
 // largeRestore
 // smallBackup
 // largeBackup
+// restore largeBackup
+
+// arch
+// DONE modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore cb
+// largeRestore ev
+// smallBackup cb
+// largeBackup ev
+// restore largeBackup
+
+// gentoo
+// modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
+// smallBackup
+// largeBackup
+// restore largeBackup
 
 // slackware
 // modify install.sh
@@ -45,30 +63,7 @@
 // largeRestore
 // smallBackup
 // largeBackup
-
-// ubuntu 14.04 in virtualbox as user 'test'
-// enable ssh public key
-// smallRestore
-// largeRestore
-// smallBackup
-// largeBackup
-
-// ubuntu 18.04 in virtualbox as user 'test'
-// enable ssh public key
-// smallRestore
-// largeRestore
-// smallBackup
-// largeBackup
-
-// ubuntu 16.04 in virtualbox
-// enable ssh public key
-// answer 'n' to wating to continue  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
-// smallRestore
-// largeRestore
-// smallBackup
-// largeBackup
-
-// 16.04pn make copy of config file 1 that has problem, edit files in libreoffice
+// restore largeBackup
 
 ----------------------------------------------------
 ----------------------------------------------------
@@ -479,7 +474,18 @@ void test__existenceOfAFile()
 // DONE ensure size in log file is correct for both small and large backup
 // DONE ensure log size matches on destination server for both small and large backup
 
-60 // DONE if distribution isn't recognized, include instructions
-// DONE to test add this line in install.sh:  distribution=howdy
+60
+// install.sh won't work if in directory higher than home directory, but won't be because instructions say to be in Client-Side-Encrypted-Backups directory
 
-61 // # note: The installation won't work (sudo ./insall.sh) if the user is in a directory higher than their home directory.  However, the user won't be because the installation instructions on the github say to be in the Client-Side-Encrypted-Backups directory
+61
+// DONE tested placing distribution=howdy in install.sh script.  This forces the error path to be executed
+
+62
+// // DONE debian 9 (1.5G memory, 10G)
+// DONE modify install.sh
+// DONE run build.sh seperate to ensure it displays ok
+// DONE smallRestore eb
+// DONE largeRestore cb
+// DONE smallBackup eb
+// DONE largeBackup cb
+// DONE restore largeBackup cb

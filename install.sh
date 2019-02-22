@@ -17,10 +17,10 @@ then
 fi
 
 # extract the home directory from the current user's directory
-# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora & some other distros
+# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora & some other distros.
 HOME=$(echo $(pwd) | cut -d'/' -f1-3)
 
-# get the distribution of linux that the user is on
+# get the linux distribution
 distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
 
 # The following software needs to be installed
@@ -289,12 +289,14 @@ echo "Starting to build the Client-Side-Encrypted-Backups static libraries and b
 # ./actOnCcryptStatus/bin/Release/actOnCcryptStatus
 # ./restore/bin/Release/restore
 # ./logSizeOfBackup/bin/Release/logSizeOfBackup
+# ./actOnTarOutput/bin/Release/actOnTarOutput
 if [ ! -e ./staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a ] ||
    [ ! -e ./backup/bin/Release/backup ] ||
    [ ! -e ./actOnTarStatus/bin/Release/actOnTarStatus ] ||
    [ ! -e ./actOnCcryptStatus/bin/Release/actOnCcryptStatus ] ||
    [ ! -e ./restore/bin/Release/restore ] ||
-   [ ! -e ./logSizeOfBackup/bin/Release/logSizeOfBackup ];
+   [ ! -e ./logSizeOfBackup/bin/Release/logSizeOfBackup ] ||
+   [ ! -e ./actOnTarOutput/bin/Release/actOnTarOutput ];
 then
   # there is no need to display additional error messages here since build.sh displayed them
   exit
