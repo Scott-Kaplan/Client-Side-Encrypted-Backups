@@ -1,4 +1,5 @@
-// make copy of config file 1 that has problem.  Modify all files with libreoffice
+// remove dead file by making copy of the directory and deleting old.
+// Modify all files with libreoffice
 // backup
 // restore
 
