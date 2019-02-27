@@ -111,7 +111,7 @@ cat > "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes" << EOF
 # Note:
 # Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
 
-# Below are some additional examples that are commented out.
+# Below are some examples that are commented out.
 # If you'd like to use them, just remove '#' from the start of the line.
 # And you can also add as many additional ones as you need.
 
@@ -274,7 +274,6 @@ chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[7] don't_backup_files_
 echo
 echo "Creating the timeStampMarker file ..."
 echo "Done.  This is located in $HOME/.cloudbuddy/input"
-#touch $HOME/.cloudbuddy/input/timeStampMarker
 touch --date=@0 $HOME/.cloudbuddy/input/timeStampMarker # set the timestamp to epoch
 chown $currentUser:$currentUser $HOME/.cloudbuddy/input/timeStampMarker
 echo
