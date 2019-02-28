@@ -1,11 +1,23 @@
-#clear
 # Usage: sudo ./build.sh
 #!/bin/bash
 echo
 
+setupBuildDirectories()
+{
+  mkdir -p bin/Release
+  mkdir -p obj/Release
+  # The next line is so the user can build each project in an IDE and not have to be root
+  # Note that this script still needs to be executed afterwards because it copies the binaries to /usr/local/bin
+  chown $USER:$USER bin;chown $USER:$USER bin/Release;chown $USER:$USER obj;chown $USER:$USER obj/Release;
+}
+
+# extract the current local user
+USER=$(echo $(pwd) | cut -d'/' -f3-3)
+
+# ensure that this script is being executed via sudo
 if [ "$(whoami)" != "root" ];
 then
-	echo "Because this script copies built binaries into \"/usr/local/bin\", you'll need to run as superuser."
+  echo "Because this script copies built binaries into \"/usr/local/bin\", you'll need to run as superuser."
   echo "Usage:"
   echo "  sudo ./build.sh"
   echo
@@ -14,8 +26,7 @@ fi
   
 echo Building the fileUtilities static library ...
 cd ./staticLibrary__fileUtilities
-mkdir -p bin/Release
-mkdir -p obj/Release
+setupBuildDirectories
 rm -f bin/Release/libstaticLibrary__fileUtilities.a
 g++ -Wall -O2  -c fileUtilities.cpp -o obj/Release/fileUtilities.o
 ar -r -s bin/Release/libstaticLibrary__fileUtilities.a obj/Release/fileUtilities.o
@@ -23,8 +34,7 @@ ar -r -s bin/Release/libstaticLibrary__fileUtilities.a obj/Release/fileUtilities
 echo
 echo Building the backup binary ...
 cd ../backup
-mkdir -p bin/Release
-mkdir -p obj/Release
+setupBuildDirectories
 rm -f bin/Release/backup
 g++ -Wall -fexceptions -O2  -c backup.cpp -o obj/Release/backup.o
 g++ -o bin/Release/backup obj/Release/backup.o -s  ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -32,8 +42,7 @@ g++ -o bin/Release/backup obj/Release/backup.o -s  ../staticLibrary__fileUtiliti
 echo
 echo Building the actOnTarStatus binary ...
 cd ../actOnTarStatus
-mkdir -p bin/Release
-mkdir -p obj/Release
+setupBuildDirectories
 rm -f bin/Release/actOnTarStatus
 g++ -Wall -fexceptions -O2  -c actOnTarStatus.cpp -o obj/Release/actOnTarStatus.o
 g++  -o bin/Release/actOnTarStatus obj/Release/actOnTarStatus.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -41,8 +50,7 @@ g++  -o bin/Release/actOnTarStatus obj/Release/actOnTarStatus.o -s ../staticLibr
 echo
 echo Building the actOnCcryptStatus binary ...
 cd ../actOnCcryptStatus
-mkdir -p bin/Release
-mkdir -p obj/Release
+setupBuildDirectories
 rm -f bin/Release/actOnCcryptStatus
 g++ -Wall -fexceptions -O2  -c actOnCcryptStatus.cpp -o obj/Release/actOnCcryptStatus.o
 g++  -o bin/Release/actOnCcryptStatus obj/Release/actOnCcryptStatus.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -50,8 +58,7 @@ g++  -o bin/Release/actOnCcryptStatus obj/Release/actOnCcryptStatus.o -s ../stat
 echo
 echo Building the restore binary ...
 cd ../restore
-mkdir -p bin/Release
-mkdir -p obj/Release
+setupBuildDirectories
 rm -f bin/Release/restore
 g++ -Wall -fexceptions -O2  -c restore.cpp -o obj/Release/restore.o
 g++  -o bin/Release/restore obj/Release/restore.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -59,8 +66,7 @@ g++  -o bin/Release/restore obj/Release/restore.o -s ../staticLibrary__fileUtili
 echo
 echo Building the logSizeOfBackup binary ...
 cd ../logSizeOfBackup
-mkdir -p bin/Release
-mkdir -p obj/Release
+setupBuildDirectories
 rm -f bin/Release/logSizeOfBackup
 g++ -Wall -fexceptions -O2  -c logSizeOfBackup.cpp -o obj/Release/logSizeOfBackup.o
 g++  -o bin/Release/logSizeOfBackup obj/Release/logSizeOfBackup.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a
@@ -68,8 +74,7 @@ g++  -o bin/Release/logSizeOfBackup obj/Release/logSizeOfBackup.o -s ../staticLi
 echo
 echo Building the actOnTarOutput binary ...
 cd ../actOnTarOutput
-mkdir -p bin/Release
-mkdir -p obj/Release
+setupBuildDirectories
 rm -f bin/Release/actOnTarOutput
 g++ -Wall -fexceptions -O2  -c actOnTarOutput.cpp -o obj/Release/actOnTarOutput.o
 g++  -o bin/Release/actOnTarOutput obj/Release/actOnTarOutput.o -s ../staticLibrary__fileUtilities/bin/Release/libstaticLibrary__fileUtilities.a

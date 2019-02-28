@@ -6,7 +6,7 @@ echo
 echo "Starting the Client-Side-Encrypted-Backups installation ..."
 echo
 
-# check that the user has sudo before executing this script
+# ensure that this script is being executed via sudo
 if [ "$(whoami)" != "root" ];
 then
 	echo "Because this script installs some dependencies and copies built binaries into \"/usr/local/bin\", you'll need to run as superuser."
@@ -17,10 +17,10 @@ then
 fi
 
 # extract the home directory from the current user's directory
-# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora & some other distros.
+# Can't just 'cd ~' or 'cd $HOME' because that just goes to /root because of sudo on fedora & some other distros
 HOME=$(echo $(pwd) | cut -d'/' -f1-3)
 
-# get the linux distribution
+# get the distribution of linux that the user is on
 distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
 
 # The following software needs to be installed
@@ -257,7 +257,7 @@ cat > "$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this" << EOF
 # Note:
 # Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
 
-# Leave the next line as it is just a temporary file that gets generated when you do a backup.
+# Leave the next line (its just a temporary file that gets generated when you do a backup)
 fileContainingprocessIdOfThisTerminalSession
 
 # Below are some additional examples that are commented out.
