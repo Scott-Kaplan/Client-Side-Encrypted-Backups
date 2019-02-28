@@ -70,7 +70,6 @@ extern "C" void retrieveTheUsernameAndDomain
                     (string &resultsDirectory,string &username,string &domain);
 extern "C" void retrieveTheLandingDirectory
                     (string &resultsDirectory, string &landingDirectory);
-extern "C" void removeLeadingWhiteSpaces(string &line);
 extern "C" void clearTheTerminalWindow();
 extern "C" void writeCleanUpFunction
                 (string directory, ofstream &scriptThatRestoresTheBackupHandle);
@@ -86,6 +85,7 @@ extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
 extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
+extern "C" void stripInvalidCharactersFromStartOfLine(string &line);
 
 /********************************/
 /***** File Scope Variables *****/
@@ -141,7 +141,7 @@ void runTheScriptThatPerformsTheBackup();
 double getRemainingSizeInHomeDir();
 void checkThatAllDirectoriesAndFilesInConfigFile1Exist();
 void checkForIllegalCharactersInFile(string &filteredChangedAndNewFilesPath);
-void checkForIllegalCharactersInLine(string &path);
+void checkForIllegalCharactersInPath(string &path);
 
 /*********************/
 /***** Functions *****/
@@ -243,7 +243,7 @@ bool fileIsWantedBecauseBeginningOfPathIsOk(string &lineToKeepOrPitch)
                    dontBackupFilesThatStartWithThisHandle);
     while(getline(dontBackupFilesThatStartWithThisHandle,line))
     {
-        removeLeadingWhiteSpaces(line);
+        stripInvalidCharactersFromStartOfLine(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -280,7 +280,7 @@ bool fileIsWantedBecauseEndingPathIsOk(string &lineToKeepOrPitch)
 
     while(getline(dontBackupFilesThatEndWithThisHandle,line))
     {
-        removeLeadingWhiteSpaces(line);
+        stripInvalidCharactersFromStartOfLine(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -314,7 +314,7 @@ bool fileIsWantedBecauseEntirePathIsOk(string &lineToKeepOrPitch)
                    dontBackupFilesThatContainThisHandle);
     while(getline(dontBackupFilesThatContainThisHandle,line))
     {
-        removeLeadingWhiteSpaces(line);
+        stripInvalidCharactersFromStartOfLine(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -441,7 +441,7 @@ void retrieveTheComputerName()
                    computerNameHandle);
     while (getline(computerNameHandle,line))
     {
-        removeLeadingWhiteSpaces(line);
+        stripInvalidCharactersFromStartOfLine(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -574,7 +574,7 @@ void createAListOfFilesThatHaveChangedOrAreNew()
     /* this point. */
     for (int i=0;getline(searchThisListForChangesHandle,line);++i)
     {
-        removeLeadingWhiteSpaces(line);
+        stripInvalidCharactersFromStartOfLine(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -1004,11 +1004,11 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
                    checkIntegrityHandle);
     for (int i=0;getline(checkIntegrityHandle,line);++i)
     {
-        removeLeadingWhiteSpaces(line);
+        stripInvalidCharactersFromStartOfLine(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
-            checkForIllegalCharactersInLine(line);
+            checkForIllegalCharactersInPath(line);
             if (!fileExist(line,__FILE__,__LINE__,purpose) &&
                 !directoryExist(line,__FILE__,__LINE__,purpose))
             {
@@ -1024,7 +1024,7 @@ void checkThatAllDirectoriesAndFilesInConfigFile1Exist()
     checkIntegrityHandle.close();
 }
 
-void checkForIllegalCharactersInLine(string &path)
+void checkForIllegalCharactersInPath(string &path)
 {
     /* '$' and '"' are not ok.  ' is ok */
     if (path.find("\"") != string::npos)

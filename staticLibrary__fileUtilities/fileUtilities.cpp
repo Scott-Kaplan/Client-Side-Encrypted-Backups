@@ -63,7 +63,6 @@ extern "C" void retrieveTheUsernameAndDomain
                     (string &resultsDirectory,string &username,string &domain);
 extern "C" void retrieveTheLandingDirectory
                     (string &resultsDirectory, string &landingDirectory);
-extern "C" void removeLeadingWhiteSpaces(string &line);
 extern "C" void clearTheTerminalWindow();
 extern "C" void extractPathAndFileName(string &stringToParse, string &path,
                                        string &fileName);
@@ -89,6 +88,13 @@ extern "C" void checkThatThereAreNoWhiteSpaces(string &input,
 extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
+extern "C" void stripInvalidCharactersFromStartOfLine(string &line);
+
+/*******************************/
+/***** Function Prototypes *****/
+/*******************************/
+void stripLeadingWhiteSpaces(string &line);
+void stripLeadingUnicodeReplacementCharacters(string &line);
 
 /*********************/
 /***** Functions *****/
@@ -443,7 +449,7 @@ void retrieveTheUsernameAndDomain(string &resultsDirectory,
                    fillUsernameAndDomainHandle);
     while (getline(fillUsernameAndDomainHandle,line))
     {
-        removeLeadingWhiteSpaces(line);
+       stripInvalidCharactersFromStartOfLine(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -485,6 +491,7 @@ void retrieveTheLandingDirectory(string &resultsDirectory,
                    landingDirectoryHandle);
     while (getline(landingDirectoryHandle,line))
     {
+      stripLeadingUnicodeReplacementCharacters(line);
         if ((line[0] != '#') && // skip comment lines
             (!line.empty()))    // skip empty lines
         {
@@ -505,12 +512,6 @@ void retrieveTheLandingDirectory(string &resultsDirectory,
             "Please add an entry.";
         displayError(problem,correctiveAction);
     }
-}
-
-void removeLeadingWhiteSpaces(string &line)
-{
-    const string delimiter = " ";
-    line.erase(0,line.find_first_not_of(delimiter));
 }
 
 void clearTheTerminalWindow()
@@ -688,4 +689,33 @@ void displayIncorrectCommandLineArguments(int argc,
 
     cout<<endl<<"ERROR - The wrong number of parameters were entered."<<endl
     <<endl;
+}
+
+void stripInvalidCharactersFromStartOfLine(string &line)
+{
+   stripLeadingUnicodeReplacementCharacters(line);
+   stripLeadingWhiteSpaces(line);
+}
+
+void stripLeadingUnicodeReplacementCharacters(string &line)
+{
+   // For some unknown reason Libre office writer likes to inject unicode
+   // replacement characters at the beginning of each config file.  These are
+   // unrecognized characters which are represented by black diamonds with
+   // question marks in them.  This block of code removes them. */
+   int invalidStartingCharacterCounter = 0;
+   while (+line[invalidStartingCharacterCounter] < 0)
+   {
+      ++invalidStartingCharacterCounter;
+   }
+   if (invalidStartingCharacterCounter)
+   {
+      line.erase(0,invalidStartingCharacterCounter);
+   }
+}
+
+void stripLeadingWhiteSpaces(string &line)
+{
+    const string delimiter = " ";
+    line.erase(0,line.find_first_not_of(delimiter));
 }
