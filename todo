@@ -1,25 +1,13 @@
-// remove dead file by making copy of the directory and deleting old.
-// Modify all files with libreoffice
-// backup
-// restore
-
-// ubuntu 16.04 user: test
-// enable ssh public key
-//do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
-// run build.sh seperate to ensure it displays ok
-// smallRestore
-// largeRestore
-// smallBackup
-// largeBackup
-// restore largeBackup
+// increase to 4 decimal places for total files searched
 
 // ubuntu 18.04 user: test
-// enable ssh public key
 // smallRestore
-// largeRestore
+// largeRestore ev
 // smallBackup
 // largeBackup
-// restore largeBackup
+// enable ssh public key
+// smallRestore cb
+// smallBackup cb
 
 // centos
 // DONE modify install.sh
@@ -28,7 +16,6 @@
 // largeRestore
 // smallBackup
 // largeBackup
-// restore largeBackup
 
 // opensuse (5G virtual machine)
 // modify install.sh
@@ -37,7 +24,6 @@
 // largeRestore
 // smallBackup
 // largeBackup
-// restore largeBackup
 
 // arch
 // DONE modify install.sh
@@ -46,7 +32,6 @@
 // largeRestore ev
 // smallBackup cb
 // largeBackup ev
-// restore largeBackup
 
 // gentoo
 // modify install.sh
@@ -55,7 +40,6 @@
 // largeRestore
 // smallBackup
 // largeBackup
-// restore largeBackup
 
 // slackware
 // modify install.sh
@@ -64,7 +48,6 @@
 // largeRestore
 // smallBackup
 // largeBackup
-// restore largeBackup
 
 ----------------------------------------------------
 ----------------------------------------------------
@@ -490,3 +473,20 @@ void test__existenceOfAFile()
 // DONE smallBackup eb
 // DONE largeBackup cb
 // DONE restore largeBackup cb
+
+63
+// Modify all files with libreoffice
+// DONE
+
+64
+// DONE ubuntu 16.04 user: test
+// DONE it looks symmetrical -  do small backup and answer 'n' to wanting to continue.  Confirm that Exiting looks symetrical above and below.  On 14.04 its not as there is an extra line after "Exiting"
+// DONE it displays fine - run build.sh seperate to ensure it displays ok
+// DONE smallBackup cb
+// DONE smallRestore cb
+// DONE modified files with vi.  This tested another editor to ensure that no weird extra characters would have a strange affect.
+// DONE largeRestore ad
+// DONE largeBackup ev
+// DONE enable ssh public key
+// DONE smallRestore cb
+// DONE smallBackup cb
