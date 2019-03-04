@@ -257,8 +257,10 @@ cat > "$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this" << EOF
 # Note:
 # Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
 
-# Leave the next line (its just a temporary file that gets generated when you do a backup)
+# Leave these next 3 lines as they appear here (these are temporary files that get automatically deleted once a backup is performed).
 fileContainingprocessIdOfThisTerminalSession
+$HOME/.cloudbuddy/backup/changedAndNewFiles
+$HOME/.cloudbuddy/backup/backupScript
 
 # Below are some additional examples that are commented out.
 # If you'd like to use them, just remove '#' from the start of the line.
