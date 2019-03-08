@@ -33,7 +33,7 @@
 // smallBackup cb
 // largeBackup ev
 
-// gentoo
+// gentoo.  These are rolling releases.  Most recent iso is 7/4/2016.  So skip
 // modify install.sh
 // run build.sh seperate to ensure it displays ok
 // smallRestore
@@ -41,7 +41,7 @@
 // smallBackup
 // largeBackup
 
-// slackware
+// slackware.  most recent iso is 6/30/2016.  So skip.
 // modify install.sh
 // run build.sh seperate to ensure it displays ok
 // smallRestore
