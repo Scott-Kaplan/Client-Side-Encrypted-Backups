@@ -1,5 +1,3 @@
-// Your Home directory needs to have at least 2.02053e+10 bytes available.
-
 // increase to 4 decimal places for total files searched
 
 // centos
@@ -496,3 +494,5 @@ void test__existenceOfAFile()
 // largeRestore
 // smallBackup
 // largeBackup
+
+69 // DONE Fix this Your Home directory needs to have at least 2.02053e+10 bytes available.
