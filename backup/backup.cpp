@@ -86,7 +86,7 @@ extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 extern "C" void stripInvalidCharactersFromStartOfLine(string &line);
-extern "C" string getFormattedSizeOfBackup(double sizeOfBackup);
+extern "C" string getFormattedSize(double size);
 
 /********************************/
 /***** File Scope Variables *****/
@@ -671,9 +671,8 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
         string problem =
             "There isn't enough disk space to perform a backup";
         string correctiveAction =
-            "Free up at least a total of "
-            +getFormattedSizeOfBackup(spaceNeededToPerformTheBackup)
-            +" of disk space";
+            "Free up at least a total disk space of: "
+            +getFormattedSize(spaceNeededToPerformTheBackup);
         displayError(problem,correctiveAction);
     }
 }

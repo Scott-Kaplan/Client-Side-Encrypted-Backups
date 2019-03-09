@@ -90,7 +90,7 @@ extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 extern "C" void stripInvalidCharactersFromStartOfLine(string &line);
-extern "C" string getFormattedSizeOfBackup(double sizeOfBackup);
+extern "C" string getFormattedSize(double size);
 
 /*******************************/
 /***** Function Prototypes *****/
@@ -722,36 +722,36 @@ void stripLeadingWhiteSpaces(string &line)
     line.erase(0,line.find_first_not_of(delimiter));
 }
 
-string getFormattedSizeOfBackup(double sizeOfBackup)
+string getFormattedSize(double size)
 {
-    ostringstream formattedSizeOfBackup;
-    double sizeOfBackupInCategory = 0;
+    ostringstream formattedSize;
+    double sizeInCategory = 0;
 
-    if (sizeOfBackup < 1000)
+    if (size < 1000)
     {
-        formattedSizeOfBackup<<sizeOfBackup<<" bytes";
+        formattedSize<<size<<" bytes";
     }
-    else if (sizeOfBackup < 1000000)
+    else if (size < 1000000)
     {
-        sizeOfBackupInCategory = sizeOfBackup/1000;
+        sizeInCategory = size/1000;
         // In the next line, setprecision(6) equates to a maximum of 6 digits
         // xxx.xxx while the minimum can be as few as 1 digit (x)
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" KB";
+        formattedSize<<setprecision(6)<<sizeInCategory<<" KB";
     }
-    else if (sizeOfBackup < 1000000000)
+    else if (size < 1000000000)
     {
-        sizeOfBackupInCategory = sizeOfBackup/1000000;
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" MB";
+        sizeInCategory = size/1000000;
+        formattedSize<<setprecision(6)<<sizeInCategory<<" MB";
     }
-    else if (sizeOfBackup < 1000000000000)
+    else if (size < 1000000000000)
     {
-        sizeOfBackupInCategory = sizeOfBackup/1000000000;
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" GB";
+        sizeInCategory = size/1000000000;
+        formattedSize<<setprecision(6)<<sizeInCategory<<" GB";
     }
-    else if  (sizeOfBackup < 100000000000000)
+    else if  (size < 100000000000000)
     {
-        sizeOfBackupInCategory = sizeOfBackup/1000000000000;
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" TB";
+        sizeInCategory = size/1000000000000;
+        formattedSize<<setprecision(6)<<sizeInCategory<<" TB";
     }
-    return formattedSizeOfBackup.str();
+    return formattedSize.str();
 }

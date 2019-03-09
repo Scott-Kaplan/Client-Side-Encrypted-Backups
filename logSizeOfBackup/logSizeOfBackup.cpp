@@ -49,7 +49,7 @@ extern "C" void openForReading(string &path,
                                int fromLineNumber,
                                ifstream &readFileHandle);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
-extern "C" string getFormattedSizeOfBackup(double sizeOfBackup);
+extern "C" string getFormattedSize(double size);
 
 /*********************/
 /***** Functions *****/
@@ -70,7 +70,7 @@ int main(int argc, char * const argv[])
         double sizeOfBackup = getSizeOfFile(nameOfTheBackup);
 
         /* get a formatted readable size of the backup */
-        string formattedSizeOfBackup = getFormattedSizeOfBackup(sizeOfBackup);
+        string formattedSizeOfBackup = getFormattedSize(sizeOfBackup);
 
         if (destination == "terminal")
         {
