@@ -32,7 +32,6 @@ using namespace std;
 /********************/
 #include <fstream>
 #include <iostream>
-#include <iomanip>
 #include <sstream>
 #include "../staticLibrary__fileUtilities/fileUtilities.h"
 
@@ -50,11 +49,7 @@ extern "C" void openForReading(string &path,
                                int fromLineNumber,
                                ifstream &readFileHandle);
 extern "C" void getGlobalStrings(globalStringS &globalString, string &purpose);
-
-/*******************************/
-/***** Function Prototypes *****/
-/*******************************/
-string getFormattedSizeOfBackup(double sizeOfBackup);
+extern "C" string getFormattedSizeOfBackup(double sizeOfBackup);
 
 /*********************/
 /***** Functions *****/
@@ -104,38 +99,4 @@ int main(int argc, char * const argv[])
         }
     }
     return 0;
-}
-
-string getFormattedSizeOfBackup(double sizeOfBackup)
-{
-    ostringstream formattedSizeOfBackup;
-    double sizeOfBackupInCategory = 0;
-
-    if (sizeOfBackup < 1000)
-    {
-        formattedSizeOfBackup<<sizeOfBackup<<" bytes";
-    }
-    else if (sizeOfBackup < 1000000)
-    {
-        sizeOfBackupInCategory = sizeOfBackup/1000;
-        // In the next line, setprecision(6) equates to a maximum of 6 digits
-        // xxx.xxx while the minimum can be as few as 1 digit (x)
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" KB";
-    }
-    else if (sizeOfBackup < 1000000000)
-    {
-        sizeOfBackupInCategory = sizeOfBackup/1000000;
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" MB";
-    }
-    else if (sizeOfBackup < 1000000000000)
-    {
-        sizeOfBackupInCategory = sizeOfBackup/1000000000;
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" GB";
-    }
-    else if  (sizeOfBackup < 100000000000000)
-    {
-        sizeOfBackupInCategory = sizeOfBackup/1000000000000;
-        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" TB";
-    }
-    return formattedSizeOfBackup.str();
 }

@@ -1,13 +1,6 @@
-// increase to 4 decimal places for total files searched
+// Your Home directory needs to have at least 2.02053e+10 bytes available.
 
-// ubuntu 18.04 user: test
-// smallRestore
-// largeRestore ev
-// smallBackup
-// largeBackup
-// enable ssh public key
-// smallRestore cb
-// smallBackup cb
+// increase to 4 decimal places for total files searched
 
 // centos
 // DONE modify install.sh
@@ -33,21 +26,14 @@
 // smallBackup cb
 // largeBackup ev
 
-// gentoo.  These are rolling releases.  Most recent iso is 7/4/2016.  So skip
-// modify install.sh
-// run build.sh seperate to ensure it displays ok
+// ubuntu 18.04 user: test
 // smallRestore
-// largeRestore
+// largeRestore ev
 // smallBackup
 // largeBackup
-
-// slackware.  most recent iso is 6/30/2016.  So skip.
-// modify install.sh
-// run build.sh seperate to ensure it displays ok
-// smallRestore
-// largeRestore
-// smallBackup
-// largeBackup
+// enable ssh public key
+// smallRestore cb
+// smallBackup cb
 
 ----------------------------------------------------
 ----------------------------------------------------
@@ -491,5 +477,22 @@ void test__existenceOfAFile()
 // DONE smallRestore cb
 // DONE smallBackup cb
 
-65
-// DONE pn backup and restore
+65 // DONE pn backup and restore
+
+66 // DONE remove manual entry of /backupScript & /changedAndNewFiles from config file 7. run install.sh on home laptop.
+
+67 // gentoo.  These are rolling releases.  Most recent iso is 7/4/2016.  So skip as this ditribution is barely used.
+// modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
+// smallBackup
+// largeBackup
+
+68 // slackware.  most recent iso is 6/30/2016.  So skip.  So skip as this ditribution is barely used.
+// modify install.sh
+// run build.sh seperate to ensure it displays ok
+// smallRestore
+// largeRestore
+// smallBackup
+// largeBackup

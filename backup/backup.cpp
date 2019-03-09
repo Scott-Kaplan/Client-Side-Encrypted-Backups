@@ -86,6 +86,7 @@ extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 extern "C" void stripInvalidCharactersFromStartOfLine(string &line);
+extern "C" string getFormattedSizeOfBackup(double sizeOfBackup);
 
 /********************************/
 /***** File Scope Variables *****/
@@ -665,14 +666,15 @@ void checkThatThereIsEnoughDiskSpaceToPerformTheBackup()
     double spaceNeededToPerformTheBackup =
             (storageSpaceOfFilesThatWillBeInTheBackup*storageSpaceFactorNeeded);
 
-    std::cout.imbue(std::locale(""));
     if (spaceNeededToPerformTheBackup > sizeRemainingInHomeDir)
     {
-        cout<<endl<<"Sorry but there isn't enough disc space in your Home"
-              " directory to perform a backup."<<endl<<"Your Home directory"
-              " needs to have at least "
-              <<spaceNeededToPerformTheBackup<<" bytes available."<<endl<<endl;
-        exit(EXIT_SUCCESS);
+        string problem =
+            "There isn't enough disk space to perform a backup";
+        string correctiveAction =
+            "Free up at least a total of "
+            +getFormattedSizeOfBackup(spaceNeededToPerformTheBackup)
+            +" of disk space";
+        displayError(problem,correctiveAction);
     }
 }
 

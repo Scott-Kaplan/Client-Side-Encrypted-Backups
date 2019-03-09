@@ -37,6 +37,7 @@ using namespace std;
 #include <unistd.h>
 #include <string.h>
 #include <cstdlib>
+#include <iomanip>
 
 /***********************/
 /***** Share these *****/
@@ -89,6 +90,7 @@ extern "C" void displayIncorrectCommandLineArguments(int argc,
                                                     char * const argv[],
                                                     string &purpose);
 extern "C" void stripInvalidCharactersFromStartOfLine(string &line);
+extern "C" string getFormattedSizeOfBackup(double sizeOfBackup);
 
 /*******************************/
 /***** Function Prototypes *****/
@@ -718,4 +720,38 @@ void stripLeadingWhiteSpaces(string &line)
 {
     const string delimiter = " ";
     line.erase(0,line.find_first_not_of(delimiter));
+}
+
+string getFormattedSizeOfBackup(double sizeOfBackup)
+{
+    ostringstream formattedSizeOfBackup;
+    double sizeOfBackupInCategory = 0;
+
+    if (sizeOfBackup < 1000)
+    {
+        formattedSizeOfBackup<<sizeOfBackup<<" bytes";
+    }
+    else if (sizeOfBackup < 1000000)
+    {
+        sizeOfBackupInCategory = sizeOfBackup/1000;
+        // In the next line, setprecision(6) equates to a maximum of 6 digits
+        // xxx.xxx while the minimum can be as few as 1 digit (x)
+        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" KB";
+    }
+    else if (sizeOfBackup < 1000000000)
+    {
+        sizeOfBackupInCategory = sizeOfBackup/1000000;
+        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" MB";
+    }
+    else if (sizeOfBackup < 1000000000000)
+    {
+        sizeOfBackupInCategory = sizeOfBackup/1000000000;
+        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" GB";
+    }
+    else if  (sizeOfBackup < 100000000000000)
+    {
+        sizeOfBackupInCategory = sizeOfBackup/1000000000000;
+        formattedSizeOfBackup<<setprecision(6)<<sizeOfBackupInCategory<<" TB";
+    }
+    return formattedSizeOfBackup.str();
 }
