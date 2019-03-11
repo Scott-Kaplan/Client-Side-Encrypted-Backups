@@ -592,7 +592,7 @@ void createAListOfFilesThatHaveChangedOrAreNew()
             double linesInConfigFile1PercentageSearched =
                                     ((double)(i+1)/totalLinesInConfigFile1)*100;
             ostringstream percentageSearched;
-            percentageSearched<<fixed<<setprecision(4)
+            percentageSearched<<fixed<<setprecision(6)
                               <<linesInConfigFile1PercentageSearched<<"%";
             cout
             <<" "
