@@ -22,15 +22,6 @@
 // smallBackup cb
 // largeBackup ev
 
-// ubuntu 18.04 user: test
-// smallRestore
-// largeRestore ev
-// smallBackup
-// largeBackup
-// enable ssh public key
-// smallRestore cb
-// smallBackup cb
-
 ----------------------------------------------------
 ----------------------------------------------------
 ----------------------------------------------------
@@ -496,3 +487,12 @@ void test__existenceOfAFile()
 69 // DONE Fix this Your Home directory needs to have at least 2.02053e+10 bytes available.
 
 70 // DONE increase to 4 decimal places for total files searched
+
+71 // DONE ubuntu 18.04 user: test
+// DONE smallRestore ad
+// DONE largeRestore ev
+// DONE smallBackup ev
+// DONE largeBackup ad
+// DONE enable ssh public key
+// DONE smallRestore cb
+// DONE smallBackup cb
