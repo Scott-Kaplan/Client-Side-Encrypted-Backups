@@ -31,13 +31,11 @@ echo Installing the necessary software which is: g++, tree, ccrypt
 echo
 if [ $distribution = "arch" ]; then
 	yes | pacman -S g++ tree ccrypt
-elif [ $distribution = "centos" ]; then
-	yum -y install g++ tree ccrypt
 elif [ $distribution = "debian" ]; then
-	# Successfully tested on Debian version 9
+	# tested on Debian version 9
 	apt-get install -y g++ tree ccrypt
 elif [ $distribution = "fedora" ]; then
-	# Successfully tested on Fedora version 29
+	# tested on Fedora version 29
 	echo Installing g++ ...
 	yum -y install gcc-c++
 	echo
@@ -47,14 +45,15 @@ elif [ $distribution = "fedora" ]; then
 	echo Installing ccrypt ...
 	dnf install -y ccrypt  # source: https://fedora.pkgs.org/29/fedora-i386/ccrypt-1.10-18.fc29.i686.rpm.html
 elif [ $distribution = "ubuntu" ]; then
+  # tested on Ubuntu versions 14.04, 16.04, 18.04
 	apt-get install -y g++ tree ccrypt
 else
 	echo ERROR
 	echo "  Unable to detect your linux distribution."
 	echo HOW TO FIX
-	echo "  [1] Install these if not already installed:  g++, tree, ccrypt"
+	echo "  [1] If not already installed, install these-  g++, tree, ccrypt"
 	echo "  [2] In install.sh, comment out all code within this block: \"The following software needs to be installed\"."
-	echo "  [3] Rerun install.sh via the command:  sudo ./install.sh"
+	echo "  [3] Rerun this script-  sudo ./install.sh"
 	echo
 	exit
 fi
