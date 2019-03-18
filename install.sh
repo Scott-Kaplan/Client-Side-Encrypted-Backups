@@ -49,14 +49,14 @@ elif [ $distribution = "fedora" ]; then
 elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
 else
-  echo ERROR
+	echo ERROR
 	echo "  Unable to detect your linux distribution."
 	echo HOW TO FIX
 	echo "  [1] Install these if not already installed:  g++, tree, ccrypt"
-  echo "  [2] In install.sh, comment out all code within this block: \"The following software needs to be installed\"."
-  echo "  [3] Rerun install.sh via the command:  sudo ./install.sh"
-  echo
-  exit
+	echo "  [2] In install.sh, comment out all code within this block: \"The following software needs to be installed\"."
+	echo "  [3] Rerun install.sh via the command:  sudo ./install.sh"
+	echo
+	exit
 fi
 echo
 

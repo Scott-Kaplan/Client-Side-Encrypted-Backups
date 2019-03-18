@@ -202,7 +202,7 @@ bool fileExist(string &lookupFilePath,
     if(system(fileExistCmd.c_str()));
     bool theFileExists = false;
     // The above command only searches for substrings rather than entire strings
-    // The above command searching for say 'howdy', could yeilds hist like
+    // The above command searching for say 'howdy', could yield hits like
     //
     // howdy1~
     // howdy1

@@ -496,3 +496,5 @@ void test__existenceOfAFile()
 // DONE enable ssh public key
 // DONE smallRestore cb
 // DONE smallBackup cb
+
+72 // DONE opened all source/header files and all install scripts in gedit to ensure that everything looked correctly aligned
