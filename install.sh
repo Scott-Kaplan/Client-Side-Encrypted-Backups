@@ -29,9 +29,7 @@ distribution=$(awk -F'=' '/^ID=/ {print tolower($2)}' /etc/*-release)
 # ccrypt
 echo Installing the necessary software which is: g++, tree, ccrypt
 echo
-if [ $distribution = "arch" ]; then
-	yes | pacman -S g++ tree ccrypt
-elif [ $distribution = "debian" ]; then
+if [ $distribution = "debian" ]; then
 	# tested on Debian version 9
 	apt-get install -y g++ tree ccrypt
 elif [ $distribution = "fedora" ]; then
@@ -49,11 +47,11 @@ elif [ $distribution = "ubuntu" ]; then
 	apt-get install -y g++ tree ccrypt
 else
 	echo ERROR
-	echo "  Unable to detect your linux distribution."
+	echo "  Unable to complete the installation."
 	echo HOW TO FIX
-	echo "  [1] If not already installed, install these-  g++, tree, ccrypt"
+	echo "  [1] If not already installed, please install these-  g++, tree, ccrypt"
 	echo "  [2] In install.sh, comment out all code within this block: \"The following software needs to be installed\"."
-	echo "  [3] Rerun this script-  sudo ./install.sh"
+	echo "  [3] Rerun this script via this command-  sudo ./install.sh"
 	echo
 	exit
 fi
