@@ -4,8 +4,7 @@ Easy to use and zero chance of corruption
 There are a number of encrypted backup programs available, however most can't prevent against the accidental creation of bad (corrupt) backups.  Client-Side-Encrypted-Backups always produces reliable backups.  Since corruption is not possible with Client-Side-Encrypted-Backups, only one full backup is needed (the first time you do a backup).
 ## Requirements
 * A computer running Linux
-* Access to a sftp server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account on [CloudBuddy](https://cloudbuddy.cloud).<a href="http://example.com/" target="_blank">Hello, world!</a>
-[CloudBuddy](https://cloudbuddy.cloud){:target="_blank"}
+* Access to a sftp server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account on [CloudBuddy](https://cloudbuddy.cloud).
 
 ## To backup
 ```console
