@@ -1,6 +1,6 @@
 # Client Side Encrypted Backups
 
-Client-Side-Encrypted-Backups is easy to use and there is zero chance of corruption.
+Easy to use and zero chance of corruption.
 
 ## Overview
 
