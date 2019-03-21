@@ -14,7 +14,5 @@ There are a number of encrypted backup programs available, however most can't pr
 ## Usage
 #### To backup
 ```console
-foo@bar:~$ whoami
-foo
+foo@bar:~$ backup label-name|no-label
 ```
-backup label-name|no-label
