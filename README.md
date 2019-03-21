@@ -15,7 +15,8 @@ There are a number of encrypted backup programs available, however most can't pr
 ```console
 user:~$ backup label-name|no-label
 ```
-**Examples -**
+**Examples**
 ```console
 user:~$ backup no-label
+dell-laptop**2018-05-01__12:28am
 ```
