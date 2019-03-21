@@ -13,9 +13,9 @@ There are a number of encrypted backup programs available, however most can't pr
 
 ## To backup
 ```console
-> backup label-name|no-label
+:~$ backup label-name|no-label
 ```
 **Examples -**
 ```console
-> backup label-name|no-label
+> backup no-label
 ```
