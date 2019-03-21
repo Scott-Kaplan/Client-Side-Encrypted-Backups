@@ -4,7 +4,7 @@ Easy to use and zero chance of corruption
 
 ## Overview
 
-There are a number of encrypted backup programs available, however most can't prevent against the possibility of creating a bad (corrupt) backup.  Client-Side-Encrypted-Backups always produces reliable backups.  Since corruption is not possible with Client-Side-Encrypted-Backups, only one full backup is needed (the first time you do a backup).
+There are a number of encrypted backup programs available, however most can't prevent against the possibility of creating a bad (corrupt) backup.  Client-Side-Encrypted-Backups always produces reliable backups.  Since corruption is not possible when using Client-Side-Encrypted-Backups, only one full backup is needed (the first time you do a backup).
 
 ## Requirements
 
