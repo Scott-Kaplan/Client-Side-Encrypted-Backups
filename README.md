@@ -37,6 +37,6 @@ user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 ## Installation
 
 1.  Clone the repo
-	* 	git clone https://github.com/Scott-Kaplan/Client-Side-Encrypted-Backups.git
+	* 	user:~$ git clone https://github.com/Scott-Kaplan/Client-Side-Encrypted-Backups.git
 2.  cd into the **Client-Side-Encrypted-Backups** directory
 3.  sudo ./install.sh (Note: 'sudo' is required because all built binaries are copied to /usr/local/bin)
