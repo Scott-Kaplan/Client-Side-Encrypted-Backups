@@ -20,3 +20,9 @@ user:~$ backup label-name|no-label
 user:~$ backup no-label
 user:~$ backup secrets-of-the-world
 ```
+
+**Examples of what you'll see on the server **
+```console
+dell-laptop**2018-05-01__12:28am
+dell-laptop**secrets-of-the-world**2018-05-01__12:28am
+```
