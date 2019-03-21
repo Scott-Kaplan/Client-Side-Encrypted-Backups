@@ -5,6 +5,7 @@ There are a number of encrypted backup programs available, however most can't pr
 ## Requirements
 * A computer running Linux
 * Access to a sftp server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account on [CloudBuddy](https://cloudbuddy.cloud).<a href="http://example.com/" target="_blank">Hello, world!</a>
+[CloudBuddy](https://cloudbuddy.cloud){:target="_blank"}
 
 ## To backup
 ```console
