@@ -1,6 +1,6 @@
 # Client Side Encrypted Backups
 
-Easy to use and zero chance of corruption.
+Easy to use and zero chance of corruption
 
 ## Overview
 
