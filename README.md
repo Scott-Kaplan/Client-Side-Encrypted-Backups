@@ -17,5 +17,5 @@ user:~$ backup label-name|no-label
 ```
 **Examples -**
 ```console
-> backup no-label
+user:~$ backup no-label
 ```
