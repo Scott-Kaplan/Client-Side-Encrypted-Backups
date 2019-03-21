@@ -26,3 +26,13 @@ user:~$ backup secrets-of-the-world
 dell-laptop**2019-04-01__12:28am
 dell-laptop**secrets-of-the-world**2019-04-01__12:28am
 ```
+
+## To restore
+```console
+user:~$ restore name-of-backup
+```
+**Examples**
+```console
+user:~$ restore dell-laptop**2019-04-01__12:28am
+user:~$ restore dell-laptop**secrets-of-the-world**2019-04-01__12:28am
+```
