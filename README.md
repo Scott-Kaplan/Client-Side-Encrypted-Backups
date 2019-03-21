@@ -13,7 +13,7 @@ There are a number of encrypted backup programs available, however most can't pr
 
 ## To backup
 ```console
-user:~$ backup label-name|no-label
+backup label-name|no-label
 ```
 **Examples -**
 ```console
