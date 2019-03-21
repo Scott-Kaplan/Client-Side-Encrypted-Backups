@@ -13,7 +13,6 @@ There are a number of encrypted backup programs available, however most can't pr
 
 ## Usage
 #### To backup
-
+```bash
 		backup label-name|no-label
-		
-	Examples)
+```
