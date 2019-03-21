@@ -20,13 +20,11 @@ user:~$ backup label-name|no-label
 user:~$ backup no-label
 user:~$ backup secrets-of-the-world
 ```
-
 **Examples of what you'll see on the server**
 ```bash
 dell-laptop**2019-04-01__12:28am
 dell-laptop**secrets-of-the-world**2019-04-01__12:28am
 ```
-
 ## To restore
 ```console
 user:~$ restore name-of-backup
