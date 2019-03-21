@@ -18,5 +18,5 @@ user:~$ backup label-name|no-label
 **Examples**
 ```console
 user:~$ backup no-label
-dell-laptop**2018-05-01__12:28am
+user:~$ backup secrets-of-the-world
 ```
