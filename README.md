@@ -35,7 +35,6 @@ user:~$ restore dell-laptop**2019-03-21__12:28am
 user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 ```
 ## Installation
-
 1.  Clone the repo
 	* 	**git clone https://github.com/Scott-Kaplan/Client-Side-Encrypted-Backups.git**
 2.  **cd Client-Side-Encrypted-Backups**
