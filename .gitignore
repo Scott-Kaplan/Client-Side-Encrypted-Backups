@@ -47,6 +47,6 @@ largeRestore.sh
 smallBackup.sh
 smallRestore.sh
 
-actOnCcryptStatus/actOnCcryptStatus.cbp
-actOnCcryptStatus/actOnCcryptStatus.depend
-actOnCcryptStatus/actOnCcryptStatus.layout
+*.cbp
+*.depend
+*.layout
