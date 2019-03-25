@@ -58,7 +58,7 @@ scott.kaplan@cloudbuddy.cloud<br>
 	then you can setup SSH public-key authentication.  If you are using CloudBuddy to store your backups, those one time setup instructions are located [here](https://cloudbuddy.cloud/how-to-use.html).
 * A log containing all the files that you have backed up will be located here- $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
-* Client-Side-Encrypted-Backups uses [ccrypt](http://ccrypt.sourceforge.net/) which is what provides the encryption for the backups.
+* [ccrypt](http://ccrypt.sourceforge.net/) provides the encryption.
 * Here are some examples if you would like to change the timestamp of the timeStampMarker file -<br>
 	**Note**:  This will alter the default behavior of what files will be considered new or changed that will go into the backup.
 ```bash
