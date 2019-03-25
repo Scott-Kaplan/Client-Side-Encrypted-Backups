@@ -4,7 +4,7 @@ Easy to use and zero chance of corruption.
 There are a number of encrypted backup programs available, however most can't prevent corrupt backups.  Client-Side-Encrypted-Backups always produces reliable backups.  Since corruption is not possible with Client-Side-Encrypted-Backups, only one full backup is needed (the first time that you do a backup).
 ## Requirements
 * A computer running Linux
-* Access to a sftp server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account and use [CloudBuddy](https://cloudbuddy.cloud).
+* Access to a SFTP server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account and use [CloudBuddy](https://cloudbuddy.cloud).
 
 ## To Backup
 ```console
@@ -53,24 +53,9 @@ If you have questions, please contact me -
 scott.kaplan@cloudbuddy.cloud<br>651-203-7092
 
 ## Notes
-* sftp password - If you don't want to be prompted every time you do a backup (or a restore),
+* SFTP password - If you don't want to be prompted every time you do a backup (or a restore),
 	then you can setup SSH public-key authentication.  If you are using CloudBuddy to store your backups, those one time setup instructions are located [here](https://cloudbuddy.cloud/how-to-use.html).
 * A log containing all the files that you have backed up will be located here- $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
 * If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so -<br>
   $ touch path/file-name
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
