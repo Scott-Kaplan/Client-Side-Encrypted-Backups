@@ -36,7 +36,7 @@ user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 3.  **sudo ./install.sh** (Note: 'sudo' is required because all built binaries are copied to /usr/local/bin)
 
 ## Setup Instructions
-1.  Enter your information in config files [1] - [4], which are located in- $HOME/.cloudbuddy/input
+1.  Enter your information in config files [1] - [4], which are located in- $HOME/.cloudbuddy/input<br>
 	  **Note: leave config files [5] - [7] blank for this step**
 2.  Do a backup (see the **To Backup** section above for usage).  It will ask you if you approve of the files that will go into the backup.  If you see a file that you don't want to be in the backup, follow these steps:
 	- 	select: `Do not continue with the backup`
