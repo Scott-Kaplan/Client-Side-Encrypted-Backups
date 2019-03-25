@@ -62,7 +62,8 @@ scott.kaplan@cloudbuddy.cloud<br>
 * Here are some examples if you would like to change the timestamp of the timeStampMarker file -<br>
 	**Note**:  This will alter the default behavior of what files will be considered new or changed that will go into the backup.
 ```bash
-	# If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp
+	# If you would like a file to be in your next backup that hasn't changed since the previous backup
+	# you can include it by refreshing it's timestamp
 	touch path/file-name
 	
 	# Set the timestamp to Epoch ()
