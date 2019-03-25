@@ -6,7 +6,7 @@ There are a number of encrypted backup programs available, however most can't pr
 * A computer running Linux
 * Access to a sftp server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account and use [CloudBuddy](https://cloudbuddy.cloud).
 
-## To backup
+## To Backup
 ```console
 user:~$ backup label-name|no-label
 ```
@@ -20,7 +20,7 @@ user:~$ backup secrets-of-the-world
 dell-laptop**2019-03-21__12:28am
 dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 ```
-## To restore
+## To Restore
 ```console
 user:~$ restore name-of-backup
 ```
@@ -43,4 +43,12 @@ user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 	-   add it to one of these config files: [5], [6] or [7]
 	-   run again
 
-## Here to help
+## Here To Help
+I'm of the opinion that as much as possible of a person's private 'stuff'
+should be encrypted so that it cannot be viewed by others.  I've been doing backups in this manner for a while
+and decided to make it available so that others could use.    
+
+If you have questions, please contact me -
+
+scott.kaplan@cloudbuddy.cloud
+651-203-7092
