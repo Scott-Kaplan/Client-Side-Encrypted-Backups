@@ -38,7 +38,7 @@ user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 ## Setup Instructions
 1.  Enter your information in config files [1] - [4], which are located in- $HOME/.cloudbuddy/input
 	* 	**Note: leave config files [5] - [7] blank for this step**
-2.  Do a backup (see the **To Backup** section above).  It will ask you if you approve of the files that will go into the backup.  If you see a file that you don't want to be in the backup, follow these steps:
+2.  Do a backup (see the **To Backup** section above for usage).  It will ask you if you approve of the files that will go into the backup.  If you see a file that you don't want to be in the backup, follow these steps:
 	- 	select: `Do not continue with the backup`
 	-   add it to one of these config files: [5], [6] or [7]
 	-   run again
@@ -59,3 +59,8 @@ scott.kaplan@cloudbuddy.cloud<br>651-203-7092
 * By default, the first backup is a full backup and every future one thereafter is incremental.
 * If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so -<br>
   $ touch path/file-name
+* Here are some examples if you want to change the timestamp of the timeStampMarker file
+  
+  
+  
+  
