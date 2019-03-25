@@ -57,7 +57,8 @@ scott.kaplan@cloudbuddy.cloud<br>651-203-7092
 	then you can setup SSH public-key authentication.  If you are using CloudBuddy to store your backups, those one time setup instructions are located here (https://cloudbuddy.cloud/how-to-use.html).
 * A log containing all the files that you have backed up will be located here- $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
-* If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so-```bash
+* If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so-
+```bash
 user:~$ touch path/file-name```
 
 
