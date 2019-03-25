@@ -4,7 +4,7 @@ Easy to use and zero chance of corruption.
 There are a number of encrypted backup programs available, however most can't prevent corrupt backups.  Client-Side-Encrypted-Backups always produces reliable backups.  Since corruption is not possible with Client-Side-Encrypted-Backups, only one full backup is needed (the first time that you do a backup).
 ## Requirements
 * A computer running Linux
-* Access to a sftp server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account on [CloudBuddy](https://cloudbuddy.cloud).
+* Access to a sftp server (in the cloud, at your office, in your house, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can create an account and use [CloudBuddy](https://cloudbuddy.cloud).
 
 ## To backup
 ```console
@@ -34,3 +34,11 @@ user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 	* 	**git clone https://github.com/Scott-Kaplan/Client-Side-Encrypted-Backups.git**
 2.  **cd Client-Side-Encrypted-Backups**
 3.  **sudo ./install.sh** (Note: 'sudo' is required because all built binaries are copied to /usr/local/bin)
+
+## Setup Instructions
+1.  Enter your information in config files [1] - [4], which are located in- $HOME/.cloudbuddy/input
+	* 	Note: leave config files [5]-[7] blank for this step
+2.  Do a backup (see Usage above).  It will ask you if you approve of the files that will go into the backup.  If you see a file that you don't want to be in the backup, follow these steps:
+	- 	select `Do not continue with the backup`
+	-   add it to one of these config files: [5], [6] or [7]
+	-   run again
