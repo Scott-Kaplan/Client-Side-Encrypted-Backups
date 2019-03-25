@@ -42,3 +42,5 @@ user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 	- 	select: `Do not continue with the backup`
 	-   add it to one of these config files: [5], [6] or [7]
 	-   run again
+
+## Here to help
