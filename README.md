@@ -58,7 +58,7 @@ scott.kaplan@cloudbuddy.cloud<br>651-203-7092
 * A log containing all the files that you have backed up will be located here- $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
 * If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so:<br>
-	$ touch path/file-name
+	user:~$ touch path/file-name
 
 
 
