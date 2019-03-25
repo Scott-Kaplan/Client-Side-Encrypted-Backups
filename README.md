@@ -59,8 +59,8 @@ scott.kaplan@cloudbuddy.cloud<br>651-203-7092
 * By default, the first backup is a full backup and every future one thereafter is incremental.
 * If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so -<br>
   $ touch path/file-name
-* Here are some examples if you want to change the timestamp of the timeStampMarker file -
-	* Note:  This will alter the default behavior of what files are considered new or changed that will go into the backup.  Instead a backup will now include all files that have changed or are new, post the timestamp on the timeStampMarker file.
+* Here are some examples if you want to change the timestamp of the timeStampMarker file -<br>
+	Note:  This will alter the default behavior of what files are considered new or changed that will go into the backup.  Instead a backup will now include all files that have changed or are new, post the timestamp on the timeStampMarker file.
   
   
   
