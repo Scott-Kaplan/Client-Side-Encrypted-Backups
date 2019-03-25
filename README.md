@@ -59,13 +59,14 @@ scott.kaplan@cloudbuddy.cloud<br>
 * A log containing all the files that you have backed up will be located here- $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
 * [ccrypt](http://ccrypt.sourceforge.net/) provides the encryption that Client-Side-Encrypted-Backups uses.
-* If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so -<br>
-  $ touch path/file-name
 * Here are some additional examples if you want to change the timestamp of the timeStampMarker file -<br>
 	**Note**:  This will alter the default behavior of what files will be considered new or changed that will go into the backup.
 ```bash
+	# If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp
+	touch path/file-name
+	
 	# Set the timestamp to Epoch ()
-	> touch --date=@0 $HOME/.cloudbuddy/input/timeStampMarker
+	touch --date=@0 $HOME/.cloudbuddy/input/timeStampMarker
 
 	# Set the timestamp to 1/1/2000, 10pm
 	touch -d "01 Jan 2000 20:00:00" $HOME/.cloudbuddy/input/timeStampMarker
