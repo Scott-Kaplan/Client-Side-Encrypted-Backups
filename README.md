@@ -74,8 +74,3 @@ scott.kaplan@cloudbuddy.cloud<br>
 	# Set the timestamp to 3/27/2018, 12:30am
 	touch -d "27 Mar 2018 00:30:00" $HOME/.cloudbuddy/input/timeStampMarker
 ```
-	
-  
-  
-  
-  
