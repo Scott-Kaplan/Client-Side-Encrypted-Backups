@@ -50,7 +50,8 @@ and decided to make it available so that others could use.
 
 If you have questions, please contact me -
 
-scott.kaplan@cloudbuddy.cloud<br>651-203-7092
+scott.kaplan@cloudbuddy.cloud<br>
+651-203-7092
 
 ## Notes
 * SFTP password - If you don't want to be prompted every time you do a backup (or a restore),
