@@ -66,12 +66,12 @@ scott.kaplan@cloudbuddy.cloud<br>
 	# you can include it by refreshing it's timestamp
 	touch path/file-name
 	
-	# Set the timestamp to Epoch ()
+	# If you'd like to set the timestamp to Epoch ()
 	touch --date=@0 $HOME/.cloudbuddy/input/timeStampMarker
 
-	# Set the timestamp to 1/1/2000, 10pm
+	# If you'd like to set the timestamp to 1/1/2000, 10pm
 	touch -d "01 Jan 2000 20:00:00" $HOME/.cloudbuddy/input/timeStampMarker
 
-	# Set the timestamp to 3/27/2018, 12:30am
+	# If you'd like to set the timestamp to 3/27/2018, 12:30am
 	touch -d "27 Mar 2018 00:30:00" $HOME/.cloudbuddy/input/timeStampMarker
 ```
