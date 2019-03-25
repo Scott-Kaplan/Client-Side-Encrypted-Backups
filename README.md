@@ -46,7 +46,7 @@ user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
 ## Here To Help
 I'm of the opinion that as much as possible of a person's private 'stuff'
 should be encrypted so that it cannot be viewed by others.  I've been doing backups in this manner for a while
-and decided to make it available so that others could use.    
+and decided to make it available so that others could use.
 
 If you have questions, please contact me -
 
