@@ -48,7 +48,7 @@ I'm of the opinion that as much as possible of a person's private 'stuff'
 should be encrypted so that it cannot be viewed by others.  I've been doing backups in this manner for a while
 and decided to make it available so that others could use.
 
-If you have questions, please contact me -
+If you have questions, please contact me
 
 scott.kaplan@cloudbuddy.cloud<br>651-203-7092
 
@@ -57,7 +57,7 @@ scott.kaplan@cloudbuddy.cloud<br>651-203-7092
 	then you can setup SSH public-key authentication.  If you are using CloudBuddy to store your backups, those one time setup instructions are located here (https://cloudbuddy.cloud/how-to-use.html).
 * A log containing all the files that you have backed up will be located here- $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
-* If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so-
+* If you want a file to be in your next backup that hasn't changed since the previous backup, you can include it by refreshing it's timestamp like so-<
 user:~$ touch path/file-name
 
 
