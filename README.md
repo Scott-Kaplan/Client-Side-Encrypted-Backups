@@ -8,7 +8,7 @@ There are a number of encrypted backup programs available, however most can't pr
 
 ## To Backup
 ```console
-user:~$ backup label-name|no-label
+user:~$ backup no-label|label-name
 ```
 **Examples**
 ```console
