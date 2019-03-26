@@ -27,7 +27,7 @@ user:~$ restore name-of-backup
 **Examples**
 ```console
 user:~$ restore dell-laptop**2019-03-21__12:28am
-user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
+user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am 1
 ```
 ## Installation
 1.  Clone the repo
