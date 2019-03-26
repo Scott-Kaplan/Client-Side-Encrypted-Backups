@@ -56,7 +56,7 @@ scott.kaplan@cloudbuddy.cloud<br>
 ## Notes
 * If you don't want to be prompted for your SFTP passord every time you do a backup (or a restore),
 	then you can setup SSH public-key authentication.  If you are using CloudBuddy to store your backups, those one time setup instructions are located [here](https://cloudbuddy.cloud/how-to-use.html).
-* A log containing all the files that you have backed up will be located here- $HOME/.cloudbuddy/log/completed_backups
+* A log containing all the files that you have backed up will be located here: $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
 * [ccrypt](http://ccrypt.sourceforge.net/) provides the encryption for Client-Side-Encrypted-Backups.
 * Here are some examples if you would like to change the timestamp of a file (including the timeStampMarker file) -<br>
