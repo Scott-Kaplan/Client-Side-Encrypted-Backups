@@ -122,10 +122,10 @@ chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[1] search_this_list_fo
 
 cat > "$HOME/.cloudbuddy/input/[2] username_and_domain" << EOF
 # This file contains the username and domain of the server that you want your backups to be transferred to.
-# You can use CloudBuddy (https://cloudbuddy.cloud) or any other ssh server.
+# You can use CloudBuddy (https://cloudbuddy.cloud) or any other sftp server.
 
 # One line needs to be added to this file that meets this criteria-
-# <user>@<domain-of-the-ssh-server>
+# <user>@<domain-of-the-sftp-server>
 #
 # If you have a CloudBuddy account, <user> is the email address that you registered with.
 # For example, if you registered with username@example.com, then the line that would need to be added to this file is -
