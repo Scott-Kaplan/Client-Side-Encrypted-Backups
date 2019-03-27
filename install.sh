@@ -164,14 +164,14 @@ cat > "$HOME/.cloudbuddy/input/[4] computer_name" << EOF
 # One line identifying this needs to be added to this file.
 
 # Note:
-# You can use anything for the computer name as long as it is made up from any of these:
+# You can use anything for the computer name as long as it is made up from:
 # characters, numbers, hyphens, underscores, and has a length less than 32.
 
 # Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
 
-# As an example, lets say the computer that you are doing this backup from is a Dell Latitude 5530.
-# If you wanted to use dell-latitude-5530 as your computer name then, just remove the '#' from the next line
-#dell-latitude-5530
+# As an example, lets say the computer that you are doing this backup from is a HP desktop.
+# If you wanted to use HP desktop as your computer name then, just remove the '#' from the next line
+#HP-desktop
 EOF
 chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[4] computer_name"
 
