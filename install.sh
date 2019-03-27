@@ -99,7 +99,7 @@ cat > "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes" << EOF
 # Place the full path of files or directories that you would like to have checked for changes, so that they can be backed up.
 # If the path that you specify below is a directory, then all files at that level and below (i.e. recursive) will be checked.
 
-# A change is considered to be a new or updated file that comes after the timestamp of the file 'timeStampMarker'.
+# A change is considered to be a new or updated file that comes after the timestamp on the file 'timeStampMarker'.
 # The file 'timeStampMarker' can be found in this directory.
 
 # Any changed files found will be a part of the backup as long as they are not filtered out by one of the other config files.
