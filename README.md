@@ -54,7 +54,7 @@ scott.kaplan@cloudbuddy.cloud<br>
 651-203-7092
 
 ## Notes
-* If you don't want to be prompted for your SFTP password every time you do a backup (or a restore),
+* If you don't want to be prompted for your SFTP password every time that you do a backup (or a restore),
 	then you can setup SSH public-key authentication.  If you are using CloudBuddy to store your backups, those one time setup instructions are located [here](https://cloudbuddy.cloud/how-to-use.html).
 * A log containing all the files that you have backed up will be located here: $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
