@@ -247,7 +247,7 @@ cat > "$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this" << EOF
 # $HOME/projects/cookiesOLD/user/jbk
 # $HOME/projects/cookiesOLD/user/slk
 #
-# and lets also say that you don't want any files containing *cookiesOLD* in the path to be backed up.
+# and lets also say that you don't want any files containing "cookiesOLD" in the path to be backed up.
 # Then you would just remove '#' from the next line.
 #cookiesOLD
 
