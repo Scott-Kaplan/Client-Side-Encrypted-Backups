@@ -170,7 +170,7 @@ cat > "$HOME/.cloudbuddy/input/[4] computer_name" << EOF
 # Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
 
 # As an example, lets say the computer that you are doing this backup from is a HP desktop.
-# If you wanted to use HP desktop as your computer name then, just remove the '#' from the next line
+# If you wanted to use 'HP desktop' as your computer name, then just remove the '#' from the next line
 #HP-desktop
 EOF
 chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[4] computer_name"
