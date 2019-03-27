@@ -132,7 +132,7 @@ cat > "$HOME/.cloudbuddy/input/[2] username_and_domain" << EOF
 #username@example.com@cloudbuddy.cloud
 
 # Notes:
-# [1] If you'd prefer to not have to enter your sftp password each time you do a backup or restore one, you can setup SSH public-key authentication.  Those instructions are located here- https://cloudbuddy.cloud/how-to-use.html
+# [1] If you'd prefer to not have to enter your sftp password each time you do a backup or to restore one, then you can setup SSH public-key authentication.  Those instructions are located here- https://cloudbuddy.cloud/how-to-use.html
 # [2] Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
 EOF
 chown $currentUser:$currentUser "$HOME/.cloudbuddy/input/[2] username_and_domain"
