@@ -17,8 +17,8 @@ user:~$ backup secrets-of-the-world
 ```
 **Examples of what the backups will be named on the server**
 ```bash
-dell-laptop**2019-03-21__12:28am
-dell-laptop**secrets-of-the-world**2019-03-21__12:28am
+hp-desktop**2019-03-21__12:28am
+hp-desktop**secrets-of-the-world**2019-03-21__12:28am
 ```
 ## To Restore
 ```console
@@ -26,8 +26,8 @@ user:~$ restore name-of-backup
 ```
 **Examples**
 ```console
-user:~$ restore dell-laptop**2019-03-21__12:28am
-user:~$ restore dell-laptop**secrets-of-the-world**2019-03-21__12:28am
+user:~$ restore hp-desktop**2019-03-21__12:28am
+user:~$ restore hp-desktop**secrets-of-the-world**2019-03-21__12:28am
 ```
 ## Installation
 1.  Clone the repo
