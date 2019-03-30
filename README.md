@@ -15,7 +15,7 @@ user:~$ backup no-label|label-name
 user:~$ backup no-label
 user:~$ backup secrets-of-the-world
 ```
-**Examples of what the backups will be named on the server**
+**Examples of what the backup will be named on the server**
 ```bash
 hp-desktop**2019-03-21__12:28am
 hp-desktop**secrets-of-the-world**2019-03-21__12:28am
