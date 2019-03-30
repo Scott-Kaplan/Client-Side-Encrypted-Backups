@@ -41,7 +41,7 @@ user:~$ restore hp-desktop**secrets-of-the-world**2019-03-21__12:28am
 2.  Do a backup (see the **To Backup** section above for usage).  It will ask you if you approve of the files that will go into the backup.  If you see a file that you don't want to be in the backup, follow these steps:
 	- 	select: `Do not continue with the backup`
 	-   add it to one of these config files: [5], [6] or [7]
-	-   run again
+	-   backup again
 
 ## Here To Help
 I'm of the opinion that as much as possible of a person's private 'stuff'
