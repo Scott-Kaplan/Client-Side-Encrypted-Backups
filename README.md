@@ -4,7 +4,7 @@ Easy to use and zero chance of corruption.
 There are a number of encrypted backup programs available, however most can't prevent the occasional creation of a corrupt backup.  Client-Side-Encrypted-Backups always produces reliable backups.  Since corruption is not possible with Client-Side-Encrypted-Backups, only one full backup is needed (the first time that you do a backup).
 ## Requirements
 * A computer running Linux
-* Access to a SFTP server (in the cloud, at your office, at your place, anywhere).  This is were your backups will be stored.
+* Access to a SFTP server (in the cloud, at your office, at your place, anywhere).  This is where your backups will be stored.
 
 ## To Backup
 ```console
