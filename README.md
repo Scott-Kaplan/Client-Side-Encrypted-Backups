@@ -4,7 +4,7 @@ Easy to use and zero chance of corruption.
 There are a number of encrypted backup programs available, however most can't prevent the occasional creation of a corrupt backup.  Client-Side-Encrypted-Backups always produces reliable backups.  Since corruption is not possible with Client-Side-Encrypted-Backups, only one full backup is needed (the first time that you do a backup).
 ## Requirements
 * A computer running Linux
-* Access to a SFTP server (in the cloud, at your office, at your place, anywhere).  This is were your backups will be stored.  If you don't have access to one, you can use [CloudBuddy](https://cloudbuddy.cloud).
+* Access to a SFTP server (in the cloud, at your office, at your place, anywhere).  This is were your backups will be stored.
 
 ## To Backup
 ```console
@@ -43,19 +43,9 @@ user:~$ restore hp-desktop**secrets-of-the-world**2019-03-21__12:28am
 	-   add it to one of these config files: [5], [6] or [7]
 	-   run again
 
-## Here To Help
-I'm of the opinion that as much as possible of a person's private 'stuff'
-should be encrypted so that it cannot be viewed by others.  I've been doing backups in this manner for a while
-and decided to make it available so that others could use.
-
-If you have questions, please contact me -
-
-scott.kaplan@cloudbuddy.cloud<br>
-651-203-7092
-
 ## Notes
 * If you don't want to be prompted for your SFTP password every time that you do a backup (or a restore),
-	then you can setup SSH public-key authentication.  If you are using CloudBuddy to store your backups, those one time setup instructions are located [here](https://cloudbuddy.cloud/how-to-use.html).
+	then you can setup SSH public-key authentication.
 * A log containing all files that you have backed up is located here: $HOME/.cloudbuddy/log/completed_backups
 * By default, the first backup is a full backup and every future one thereafter is incremental.
 * [ccrypt](http://ccrypt.sourceforge.net/) provides the encryption for Client-Side-Encrypted-Backups.
