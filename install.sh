@@ -108,6 +108,13 @@ cat > "$HOME/.cloudbuddy/input/[1] search_this_list_for_changes" << EOF
 # Note:
 # Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
 
+# Note:
+# Leave these next 2 lines (this is so you'll always be able to restore your CloudBuddy backup settings and a list of all files that you've previously backed up in case your hard/solid state drive crashes).
+$HOME/.cloudbuddy/input
+$HOME/.cloudbuddy/log
+
+# Important Note:  There are 2 additional directories that CloudBuddy uses to perform backups and restores ($HOME/.cloudbuddy/backup and $HOME/.cloudbuddy/restore respectively).  However, these directories only contain temporary files that are purged after each backup/restore.  Therefore, it is strongly recommended that you don't add them (especially since adding them causes a segmentation fault which will cause your backups/restores to not work).
+
 # Below are some examples that are commented out.
 # If you'd like to use them, just remove '#' from the start of the line.
 # And you can also add as many additional ones as you need.
@@ -253,11 +260,6 @@ cat > "$HOME/.cloudbuddy/input/[7] don't_backup_files_that_contain_this" << EOF
 
 # Note:
 # Any line in this file that is blank or starts with a '#' is treated as a comment line and won't be processed.
-
-# Leave these next 3 lines as they appear here (these are temporary files that get automatically deleted once a backup is performed).
-fileContainingprocessIdOfThisTerminalSession
-$HOME/.cloudbuddy/backup/changedAndNewFiles
-$HOME/.cloudbuddy/backup/backupScript
 
 # Below are some additional examples that are commented out.
 # If you'd like to use them, just remove '#' from the start of the line.
